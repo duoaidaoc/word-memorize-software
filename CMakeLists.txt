@@ -14,6 +14,12 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
+        login.ui
+        login.cpp
+        login.h
+        appinit.cpp
+        appinit.h
+        settings.css
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
