@@ -1,6 +1,7 @@
 #ifndef LOGIN_H
 #define LOGIN_H
 
+#include "qlabel.h"
 #include <QWidget>
 
 namespace Ui {
@@ -20,6 +21,11 @@ private:
     void SetUp();
     QString randomselect(QString path);
     void actionSet();
+    QTimer *timer;
+private slots:
+    void label_change(int rate);
+    void set_curr_time();
+    void set_font(QLabel* obj,int size);
 };
 
 #endif // LOGIN_H

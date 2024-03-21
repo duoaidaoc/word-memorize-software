@@ -62,3 +62,8 @@ QPushButton:pressed {
     background-color: rgba(128, 0, 0, 0.6);
     border-radius: 10px;
 }
+#time_label,#deco_label{
+    background-color: rgba(128, 0, 0, 0);
+    border: none;
+    color: white;
+}

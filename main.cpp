@@ -13,6 +13,8 @@ int main(int argc, char *argv[])
         file.close();
     }
 
+
+
     QFont font("Arial", 10);
     a.setFont(font);
 

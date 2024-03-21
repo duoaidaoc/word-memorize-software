@@ -47,6 +47,9 @@ bool AppInit::eventFilter(QObject *obj, QEvent *evt)
             }
         }
     }
+    if(w->property("").toBool()){
+
+    }
 
     return QObject::eventFilter(obj, evt);
 }
