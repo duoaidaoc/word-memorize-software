@@ -19,7 +19,15 @@ set(PROJECT_SOURCES
         login.h
         appinit.cpp
         appinit.h
-        settings.css
+        morning.css
+        afternoon.css
+        night.css
+        student_main.cpp
+        student_main.h
+        student_main.ui
+        word_frame.h
+        word_frame.cpp
+        word.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

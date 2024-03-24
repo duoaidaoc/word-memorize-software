@@ -8,6 +8,11 @@
 #include <iostream>
 #include <QTimer>
 #include <QFontDatabase>
+
+extern QFont* glob_font;
+extern QString glob_login_bg_path;
+extern QString glob_hello;
+
 login::login(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::login)
@@ -16,8 +21,15 @@ login::login(QWidget *parent) :
     this->setProperty("canMove",true);
     SetUp();
     actionSet();
-    set_font(ui->time_label,30);
-    set_font(ui->deco_label,20);
+    glob_font->setPointSize(30);
+    ui->time_label->setFont(*glob_font);
+
+    glob_font->setPointSize(20);
+    ui->deco_label->setFont(*glob_font);
+
+    glob_font->setPointSize(20);
+    ui->hello_label->setFont(*glob_font);
+
     ui->login_label->setProperty("randomly_update",true);
 }
 
@@ -39,8 +51,7 @@ void login::SetUp()
     shadow->setBlurRadius(16);
 
     ui->login_frame->setGraphicsEffect(shadow);
-    QString path = "../database_crouse_design/pics/night_bg";
-    path = randomselect(path);
+    QString path = randomselect(glob_login_bg_path);
     // 设置样式表，将背景图片作为背景
     ui->login_frame->setStyleSheet(QString("#login_frame {"
                                                 "border-image: url(%1) 0 0 0 0 stretch stretch;"
@@ -52,6 +63,7 @@ void login::SetUp()
     // 创建一个 QTimer 定时器，间隔为一秒
     timer = new QTimer(this);
     ui->time_label->setFocusPolicy(Qt::NoFocus);
+    ui->hello_label->setText(glob_hello);
 }
 
 QString login::randomselect(QString path)
@@ -84,39 +96,16 @@ void login::set_curr_time()
     ui->time_label->setText(QTime::currentTime().toString());
 }
 
-void login::set_font(QLabel* obj,int size)
-{
-    QString strPath = "../database_crouse_design/ttf/No.233-上首怪兽体.ttf";
-    QFile dFontFile(strPath);
-    if(!dFontFile.open(QIODevice::ReadOnly))
-    {
-        //说明打开字体文件失败了
-        return;
-    }
-
-    int nFontId = QFontDatabase::addApplicationFontFromData(dFontFile.readAll());
-    if(nFontId == -1)
-    {
-        //说明加载字体文件失败了，该字体不可用
-        return;
-    }
-
-    QStringList lFontFamily = QFontDatabase::applicationFontFamilies(nFontId);
-    if(lFontFamily.empty())
-    {
-        //说明从字体中获取字体簇失败了
-        return;
-    }
-
-    QFont font(lFontFamily.at(0),size);
-    obj->setFont(font);
-    return ;
-}
-
 void login::actionSet()
 {
     QObject::connect(ui->close_button, &QPushButton::clicked, [](){
         QApplication::quit(); // 点击按钮时退出应用程序
+    });
+    QObject::connect(ui->reg_button, &QPushButton::clicked, this , [&](){
+        ui->stackedWidget->setCurrentIndex(1);
+    });
+    QObject::connect(ui->ret_button, &QPushButton::clicked, this , [&](){
+        ui->stackedWidget->setCurrentIndex(0);
     });
 
     int rate = 70;

@@ -1,0 +1,277 @@
+QLineEdit {
+    border: none;
+    background-color: transparent;
+    color: rgba(47, 79, 79, 1);/*DarkSlateGray*/
+    font-size: 15px;
+}
+
+QPushButton {
+    border-radius: 10px;
+    background-color: rgba(65, 105, 225, 0.3);/*RoyalBlue*/
+    color: rgba(47, 79, 79, 1);/*DarkSlateGray*/
+    transition: background-color 0.3s;
+    border: 1px solid  rgba(0, 0, 0, 0.2);
+}
+
+/* 鼠标悬停时的样式 */
+QPushButton:hover {
+    background-color: rgba(0, 191, 255, 0.5);/*DeepSkyBlue*/
+    color: white;
+    border: 1px solid  rgba(0, 0, 0, 0.2);
+}
+
+QPushButton:pressed {
+    background-color: rgba(0, 0, 139, 0.3);/*DarkBlue*/
+    color: white;
+    border: 1px solid  rgba(0, 0, 0, 0.2);
+}
+
+word_frame{
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid  rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+}
+
+QProgressBar{
+        font:9pt;
+        border-radius:7px;
+        text-align:center;
+        border:1px solid #E8EDF2;
+        background-color: rgb(255, 255, 255);
+        border-color: rgb(180, 180, 180);
+}
+QProgressBar:chunk{
+        border-radius:7px;
+        background-color:#1ABC9C;
+}
+
+
+#lexicon_label{
+    border-radius: 20px;
+}
+
+#lexicon_frame QPushButton{
+    color: rgba(255, 255, 255, 0.8);
+}
+
+#student_frame{
+    border:none;
+    border-radius: 20px;
+
+}
+
+#Word_Contents{
+    background-color: rgba(0, 0, 0, 0);
+    border:none;
+    border-radius: 20px;
+}
+#scrollArea{
+    background-color: rgba(150, 150, 150, 0.5);
+    border:5px solid rgba(50,50,50,0.3);
+    border-radius: 20px;
+}
+
+#login_frame {
+    border-radius:30px;
+}
+#acc_frame,#pwd_frame,#chk_frame{
+    background-color: rgba(255, 255, 255, 0);
+    border: 1px solid  rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+}
+#edt_frame{
+    background-color: rgba(255, 255, 255, 0.4);/*Green Yellow*/
+    border:none;
+    border-radius: 20px;
+}
+
+/*
+    * in login.cpp:
+    * ui->login_label->setFixedSize(80, 80);
+*/
+#login_label{
+    border: none;
+    border-radius: 40px;
+}
+/*
+    * in login.cpp:
+    * ui->close_button->setFixedSize(20, 20);
+*/
+
+#close_button{
+    background-color: rgba(255, 215, 0, 0.8);
+    border-radius: 10px;
+    border: none;
+}
+#min_button{
+    background-color: rgba(255, 215, 0, 0.8);
+    border-radius: 2px;
+    border: none;
+}
+#close_button:hover{
+    background-color: rgba(255, 255, 0, 0.9);
+    border-radius: 10px;
+}
+#min_button:hover{
+    background-color: rgba(255, 255, 0, 0.9);
+    border-radius: 2px;
+}
+#close_button:pressed{
+    background-color: rgba(189, 183, 107, 0.6);
+    border-radius: 10px;
+}
+#min_button:pressed {
+    background-color: rgba(189, 183, 107, 0.6);
+    border-radius: 2px;
+}
+#time_label,#hello_label{
+    color: rgba(0, 0, 0, 0.6);
+    border: none;
+}
+#deco_label{
+    background-color: rgba(255,255,255, 0.5);
+    border-radius: 10px;
+    border: none;
+    color: rgba(0,0,0, 0.5);
+    padding: 10px;
+}
+#btn_frame,#ud_frame,#btn_frame_2{
+    background-color: rgba(255, 255, 255, 0.4);/*Green Yellow*/
+    border:none;
+    border-radius: 20px;
+}
+#info_btn {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/black/gerenxinxi.png) 0 0 0 0;
+    border : none;
+}
+#info_btn:hover {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/white/gerenxinxi.png) 0 0 0 0;
+    border : none;
+}
+#info_btn:pressed {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/grey/gerenxinxi.png) 0 0 0 0;
+    border : none;
+}
+#class_btn {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/black/group.png) 0 0 0 0;
+    border : none;
+}
+#class_btn:hover {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/white/group.png) 0 0 0 0;
+    border : none;
+}
+#class_btn:pressed {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/grey/group.png) 0 0 0 0;
+    border : none;
+}
+#class_btn {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/black/group.png) 0 0 0 0;
+    border : none;
+}
+#class_btn:hover {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/white/group.png) 0 0 0 0;
+    border : none;
+}
+#class_btn:pressed {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/grey/group.png) 0 0 0 0;
+    border : none;
+}
+#task_btn {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/black/task.png) 0 0 0 0;
+    border : none;
+}
+#task_btn:hover {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/white/task.png) 0 0 0 0;
+    border : none;
+}
+#task_btn:pressed {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/grey/task.png) 0 0 0 0;
+    border : none;
+}
+#test_btn {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/black/test.png) 0 0 0 0;
+    border : none;
+}
+#test_btn:hover {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/white/test.png) 0 0 0 0;
+    border : none;
+}
+#test_btn:pressed {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/grey/test.png) 0 0 0 0;
+    border : none;
+}
+#up_btn {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/black/arrowup.png) 0 0 0 0;
+    border : none;
+}
+#up_btn:hover {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/white/arrowup.png) 0 0 0 0;
+    border : none;
+}
+#up_btn:pressed {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/grey/arrowup.png) 0 0 0 0;
+    border : none;
+}
+#down_btn {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/black/arrowdown.png) 0 0 0 0;
+    border : none;
+}
+#down_btn:hover {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/white/arrowdown.png) 0 0 0 0;
+    border : none;
+}
+#down_btn:pressed {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/grey/arrowdown.png) 0 0 0 0;
+    border : none;
+}
+#battle_btn {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/black/battle.png) 0 0 0 0;
+    border : none;
+}
+#battle_btn:hover {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/white/battle.png) 0 0 0 0;
+    border : none;
+}
+#battle_btn:pressed {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/grey/battle.png) 0 0 0 0;
+    border : none;
+}
+#setting_btn {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/black/shezhixian.png) 0 0 0 0;
+    border : none;
+}
+#setting_btn:hover {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/white/shezhixian.png) 0 0 0 0;
+    border : none;
+}
+#setting_btn:pressed {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/grey/shezhixian.png) 0 0 0 0;
+    border : none;
+}

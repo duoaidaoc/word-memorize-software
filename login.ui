@@ -43,24 +43,11 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QPushButton" name="pushButton">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>270</y>
-       <width>93</width>
-       <height>29</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>登录</string>
-     </property>
-    </widget>
     <widget class="QFrame" name="pwd_frame">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>190</y>
+       <y>170</y>
        <width>261</width>
        <height>51</height>
       </rect>
@@ -95,7 +82,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>120</y>
+       <y>110</y>
        <width>261</width>
        <height>51</height>
       </rect>
@@ -139,19 +126,114 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QStackedWidget" name="stackedWidget">
      <property name="geometry">
       <rect>
-       <x>180</x>
-       <y>270</y>
-       <width>93</width>
-       <height>29</height>
+       <x>20</x>
+       <y>220</y>
+       <width>281</width>
+       <height>111</height>
       </rect>
      </property>
-     <property name="text">
-      <string>注册</string>
+     <property name="currentIndex">
+      <number>0</number>
      </property>
+     <widget class="QWidget" name="page_9">
+      <widget class="QPushButton" name="sig_button">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>10</y>
+         <width>93</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>登录</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="reg_button">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>10</y>
+         <width>93</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>注册</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="page_10">
+      <widget class="QFrame" name="chk_frame">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>261</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLineEdit" name="chk_edit">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>241</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="inputMask">
+         <string/>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+        <property name="placeholderText">
+         <string>确认密码</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QPushButton" name="ret_button">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>70</y>
+         <width>93</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>返回</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="chk_button">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>70</y>
+         <width>93</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>确认</string>
+       </property>
+      </widget>
+     </widget>
     </widget>
+    <zorder>stackedWidget</zorder>
+    <zorder>pwd_frame</zorder>
+    <zorder>acc_frame</zorder>
+    <zorder>login_label</zorder>
    </widget>
    <widget class="QPushButton" name="close_button">
     <property name="geometry">
@@ -170,7 +252,7 @@
     <property name="geometry">
      <rect>
       <x>420</x>
-      <y>50</y>
+      <y>30</y>
       <width>171</width>
       <height>41</height>
      </rect>
@@ -185,10 +267,10 @@
    <widget class="QLabel" name="deco_label">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>130</y>
-      <width>271</width>
-      <height>201</height>
+      <x>380</x>
+      <y>170</y>
+      <width>291</width>
+      <height>191</height>
      </rect>
     </property>
     <property name="text">
@@ -197,7 +279,23 @@
          --8848钛金手机</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="hello_label">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>90</y>
+      <width>171</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>晚上好呀！</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

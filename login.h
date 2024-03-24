@@ -25,7 +25,6 @@ private:
 private slots:
     void label_change(int rate);
     void set_curr_time();
-    void set_font(QLabel* obj,int size);
 };
 
 #endif // LOGIN_H
