@@ -1,2 +1,2 @@
-# 单词小课堂
+# 百词斩pro
 ## Configure
