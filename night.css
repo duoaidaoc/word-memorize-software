@@ -9,7 +9,6 @@ QPushButton {
     border-radius: 10px;
     background-color: rgba(100, 100, 100, 0.3);
     color: white;
-    transition: background-color 0.3s;
 }
 
 /* 鼠标悬停时的样式 */
@@ -22,7 +21,6 @@ QPushButton:pressed {
     background-color: rgba(60, 60, 60, 0.3);
     color: white;
 }
-
 
 word_frame{
     background-color: rgba(200, 200, 200, 0.4);
@@ -80,7 +78,7 @@ QProgressBar:chunk{
 }
 
 #login_frame {
-    border-radius:30px;
+    border-radius: 30px;
 }
 #acc_frame,#pwd_frame,#chk_frame{
     background-color: rgba(255, 255, 255, 0);
@@ -145,7 +143,7 @@ QProgressBar:chunk{
 }
 
 #btn_frame,#ud_frame,#btn_frame_2{
-    background-color: rgba(255, 255, 255, 0.6);/*Green Yellow*/
+    background-color: rgba(255, 255, 255, 0.6);
     border:none;
     border-radius: 20px;
 }

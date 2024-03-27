@@ -8,6 +8,4 @@ typedef struct Word{
     QString info;
 }Word;
 
-
-
 #endif // WORD_H

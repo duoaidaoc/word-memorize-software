@@ -9,8 +9,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+# find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+# find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Multimedia)  # 添加Multimedia模块
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia)  # 添加Multimedia模块
+
 
 set(PROJECT_SOURCES
         main.cpp
@@ -53,7 +56,9 @@ else()
     endif()
 endif()
 
-target_link_libraries(database_crouse_design PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+# target_link_libraries(database_crouse_design PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(database_crouse_design PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia)  # 链接Multimedia模块
+
 
 set_target_properties(database_crouse_design PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

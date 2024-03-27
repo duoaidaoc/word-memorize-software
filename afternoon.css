@@ -72,7 +72,7 @@ QProgressBar:chunk{
 }
 
 #login_frame {
-    border-radius:30px;
+    border-radius: 30px;
 }
 #acc_frame,#pwd_frame,#chk_frame{
     background-color: rgba(255, 255, 255, 0);
