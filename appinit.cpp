@@ -3,6 +3,7 @@
 #include "qapplication.h"
 #include "qevent.h"
 #include "qwidget.h"
+#include "student_main.h"
 
 AppInit *AppInit::self = 0;
 AppInit *AppInit::Instance()
@@ -43,6 +44,9 @@ bool AppInit::eventFilter(QObject *obj, QEvent *evt)
         } else if (event->type() == QEvent::MouseMove) {
             if (mousePressed && (event->buttons() && Qt::LeftButton)) {
                 w->move(event->globalPos() - mousePoint);
+                if(w->objectName() == "student_main"){
+                  ((student_main*) w)->movefollower();
+                }
                 return true;
             }
         }

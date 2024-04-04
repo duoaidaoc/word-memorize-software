@@ -31,6 +31,11 @@ set(PROJECT_SOURCES
         word_frame.h
         word_frame.cpp
         word.h
+        word_display.cpp
+        word_display.h
+        word_display.ui
+        resource_manager.h
+        resource_manager.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

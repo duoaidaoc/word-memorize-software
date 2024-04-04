@@ -8,10 +8,7 @@
 #include <iostream>
 #include <QTimer>
 #include <QFontDatabase>
-
-extern QFont* glob_font;
-extern QString glob_login_bg_path;
-extern QString glob_hello;
+#include "resource_manager.h"
 
 login::login(QWidget *parent) :
     QWidget(parent),
@@ -29,7 +26,6 @@ login::login(QWidget *parent) :
 
     glob_font->setPointSize(20);
     ui->hello_label->setFont(*glob_font);
-
     ui->login_label->setProperty("randomly_update",true);
 }
 
@@ -51,7 +47,8 @@ void login::SetUp()
     shadow->setBlurRadius(16);
 
     ui->login_frame->setGraphicsEffect(shadow);
-    QString path = randomselect(glob_login_bg_path);
+    auto man = resource_manager::getInstance();
+    auto path = man->bg_pic_randomselect();
     // 设置样式表，将背景图片作为背景
     ui->login_frame->setStyleSheet(QString("#login_frame {"
                                                 "border-image: url(%1) 0 0 0 0 stretch stretch;"
@@ -65,26 +62,10 @@ void login::SetUp()
     ui->time_label->setFocusPolicy(Qt::NoFocus);
     ui->hello_label->setText(glob_hello);
 }
-
-QString login::randomselect(QString path)
-{
-    QDir dir(path);
-    QStringList filters;
-    filters << "*.jpg" << "*.png"; // 只筛选 jpg 和 png 格式的图片
-    QStringList imageFiles = dir.entryList(filters, QDir::Files);
-
-    // 随机选择一张图片
-    if (!imageFiles.isEmpty()) {
-        int randomIndex = QRandomGenerator::global()->bounded(imageFiles.size());
-        path = dir.filePath(imageFiles[randomIndex]);
-    }
-    return path;
-}
-
 void login::label_change(int x){
     if(rand()%100 >= x){
-        QString path = "../database_crouse_design/pics/login_label";
-        path = randomselect(path);
+        auto man = resource_manager::getInstance();
+        QString path = man->pf_pic_randomselect();
         ui->login_label->setStyleSheet(QString("#login_label {"
                                                "border-image: url(%1) 0 0 0 0;"
                                                "}").arg(path));

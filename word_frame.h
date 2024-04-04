@@ -8,6 +8,11 @@
 #include <qpushbutton.h>
 #include <QMediaPlayer>
 #include <QAudioOutput>
+#include <QMouseEvent>
+#include <QEvent>
+#include <QWidget>
+#include "word_display.h"
+
 
 class word_frame : public QFrame
 {
@@ -15,6 +20,8 @@ class word_frame : public QFrame
 public:
     explicit word_frame(QWidget* parent = 0);
     void set_content(const Word& wd);
+    void mousePressEvent(QMouseEvent* event) override;
+
 private:
     QHBoxLayout* hb;
     QPushButton* sound_btn;
@@ -22,6 +29,7 @@ private:
     QMediaPlayer *player;
     QAudioOutput *audioOutput;
     Word content;
+
 };
 
 #endif // WORD_FRAME_H

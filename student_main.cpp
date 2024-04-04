@@ -1,13 +1,8 @@
 #include "student_main.h"
-#include "qdir.h"
-#include "qpainter.h"
 #include "ui_student_main.h"
 #include <QGraphicsDropShadowEffect>
-#include <QRandomGenerator>
+#include "resource_manager.h"
 
-extern QFont* glob_font;
-extern QString glob_login_bg_path;
-extern QString glob_hello;
 
 student_main::student_main(QWidget *parent) :
     QWidget(parent),
@@ -34,7 +29,8 @@ void student_main::setup()
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     // 透明背景
     this->setAttribute(Qt::WA_TranslucentBackground, true);
-    QString path = randomselect(glob_login_bg_path);
+    auto man = resource_manager::getInstance();
+    auto path = man->bg_pic_randomselect();
     ui->student_frame->setStyleSheet(QString("#student_frame {"
                                            "border-image: url(%1) 0 0 0 0 stretch stretch;"
                                            "}").arg(path));
@@ -76,20 +72,19 @@ void student_main::addword(const Word &word)
         wd->set_content(word);
         layout->addWidget(wd);
     }
-
 }
 
-QString student_main::randomselect(QString path)
+void student_main::setfollower(QWidget *f)
 {
-    QDir dir(path);
-    QStringList filters;
-    filters << "*.jpg" << "*.png"; // 只筛选 jpg 和 png 格式的图片
-    QStringList imageFiles = dir.entryList(filters, QDir::Files);
+    follower = f;
+    movefollower();
+}
 
-    // 随机选择一张图片
-    if (!imageFiles.isEmpty()) {
-        int randomIndex = QRandomGenerator::global()->bounded(imageFiles.size());
-        path = dir.filePath(imageFiles[randomIndex]);
+void student_main::movefollower()
+{
+    if(!follower->isVisible()){
+      QPoint p = pos() + ui->student_frame->pos();
+      follower->move(p.x() + ui->student_frame->width() + 10,p.y());
+      //follower->move(pos());
     }
-    return path;
 }

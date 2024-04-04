@@ -22,22 +22,8 @@ QPushButton:pressed {
     color: white;
 }
 
-word_frame{
-    background-color: rgba(200, 200, 200, 0.4);
-    border: 1px solid  rgba(0, 0, 0, 0.3);
-    border-radius: 20px;
-}
-
 QLabel{
     color: white;
-}
-
-word_frame QLabel{
-    color: black;
-}
-
-word_frame QPushButton{
-    background-color: rgba(255, 255, 255, 0.5);
 }
 
 QProgressBar{
@@ -51,6 +37,29 @@ QProgressBar{
 QProgressBar:chunk{
         border-radius:7px;
         background-color:#1ABC9C;
+}
+
+word_frame{
+    background-color: rgba(200, 200, 200, 0.4);
+    border: 1px solid  rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+}
+word_frame:hover{
+    background-color: rgba(220, 220, 220, 0.4);
+    border: 1px solid  rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+}
+
+word_frame QLabel{
+    color: black;
+}
+
+word_frame QPushButton{
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+word_display #frame{
+    border-radius: 20px;
 }
 
 #lexicon_label{
