@@ -18,14 +18,16 @@ login::login(QWidget *parent) :
     this->setProperty("canMove",true);
     SetUp();
     actionSet();
-    glob_font->setPointSize(30);
-    ui->time_label->setFont(*glob_font);
+    auto man = resource_manager::getInstance();
+    auto glob_font = man->get_glob_font();
+    glob_font.setPointSize(30);
+    ui->time_label->setFont(glob_font);
 
-    glob_font->setPointSize(20);
-    ui->deco_label->setFont(*glob_font);
+    glob_font.setPointSize(20);
+    ui->deco_label->setFont(glob_font);
 
-    glob_font->setPointSize(20);
-    ui->hello_label->setFont(*glob_font);
+    glob_font.setPointSize(20);
+    ui->hello_label->setFont(glob_font);
     ui->login_label->setProperty("randomly_update",true);
 }
 
@@ -49,6 +51,7 @@ void login::SetUp()
     ui->login_frame->setGraphicsEffect(shadow);
     auto man = resource_manager::getInstance();
     auto path = man->bg_pic_randomselect();
+
     // 设置样式表，将背景图片作为背景
     ui->login_frame->setStyleSheet(QString("#login_frame {"
                                                 "border-image: url(%1) 0 0 0 0 stretch stretch;"
@@ -60,15 +63,15 @@ void login::SetUp()
     // 创建一个 QTimer 定时器，间隔为一秒
     timer = new QTimer(this);
     ui->time_label->setFocusPolicy(Qt::NoFocus);
-    ui->hello_label->setText(glob_hello);
+    ui->hello_label->setText(man->get_glob_hello());
 }
 void login::label_change(int x){
     if(rand()%100 >= x){
         auto man = resource_manager::getInstance();
-        QString path = man->pf_pic_randomselect();
+        label_path = man->pf_pic_randomselect();
         ui->login_label->setStyleSheet(QString("#login_label {"
                                                "border-image: url(%1) 0 0 0 0;"
-                                               "}").arg(path));
+                                               "}").arg(label_path));
     }
 }
 

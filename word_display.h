@@ -18,11 +18,20 @@ public:
     ~word_display();
     void set_content(const Word &wd);
     void enter();
+protected:
+    void paintEvent(QPaintEvent *event)override;
 private:
     Ui::word_display *ui;
     Word wd;
     QPropertyAnimation *animation;
     QPropertyAnimation* moveAnimation;
+    QImage* img;
+    int paint_cnt;
+
+    QImage grabFrameImage();
+    QPixmap screen_shot();
+
+
 };
 
 #endif // WORD_DISPLAY_H

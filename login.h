@@ -20,6 +20,7 @@ private:
     void SetUp();
     void actionSet();
     QTimer *timer;
+    QString label_path;
 private slots:
     void label_change(int rate);
     void set_curr_time();

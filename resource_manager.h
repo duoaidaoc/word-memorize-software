@@ -6,13 +6,8 @@
 #include <QFont>
 #include <QString>
 #include <QRandomGenerator>
-
-extern QFont* glob_font;
-extern QString glob_bg_path;
-extern QString glob_hello;
-extern QString glob_profile_picture_path;
-extern QString glob_audio_path;
-
+#include "QFontDatabase"
+#include <QColor>
 
 class resource_manager
 {
@@ -24,12 +19,29 @@ public:
     QString bg_pic_randomselect();
     QString pf_pic_randomselect();
     QString audio_select(const QString &eng);
+    QString get_noise_pic();
+    QString get_glob_stylecss_path();
+    QString get_glob_bg_path();
+    QString get_glob_hello();
+    QString get_glob_profile_picture_path();
+    QString get_glob_audio_path();
+
+    QFont get_glob_font();
+    QColor get_color();
 
 private:
     resource_manager();
     static resource_manager* instance;
     QString randomselect(QString path);
 
+    QFont glob_font;
+    QString glob_bg_path;
+    QString glob_hello;
+    QString glob_profile_picture_path;
+    QString glob_audio_path;
+    QString glob_stylecss_path;
+
+    int sel;
 };
 
 

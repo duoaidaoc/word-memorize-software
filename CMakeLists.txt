@@ -14,6 +14,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Multimedia)  # 添加Multimedia模块
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia)  # 添加Multimedia模块
 
+# 解决提升类无法include的难题
+INCLUDE_DIRECTORIES(
+    ${PROJECT_SOURCE_DIR}
+)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -36,6 +40,9 @@ set(PROJECT_SOURCES
         word_display.ui
         resource_manager.h
         resource_manager.cpp
+        acrylicframe.h
+        acrylicframe.cpp
+        Image_processing.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
