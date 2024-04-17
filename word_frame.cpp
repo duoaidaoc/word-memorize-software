@@ -1,10 +1,7 @@
 
 #include "word_frame.h"
 #include "resource_manager.h"
-#include "student_main.h"
 #include <QDebug>
-
-extern word_display* glob_display;
 
 word_frame::word_frame(QWidget* parent): QFrame(parent)
 {
@@ -16,15 +13,15 @@ word_frame::word_frame(QWidget* parent): QFrame(parent)
     hb->addWidget(word_label);
     this->setFixedHeight(100);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    glob_display->set_content(content);
 }
 
-void word_frame::set_content(const Word &wd)
+void word_frame::set_content(const Word &wd, int seq_)
 {
     content = wd;
-    word_label->setText(content.eng + content.info);
+    word_label->setText(content.eng + " " + content.info);
     player = new QMediaPlayer(this);
     audioOutput = new QAudioOutput(this);
+    seq = seq_;
 
     QObject::connect(player, &QMediaPlayer::errorOccurred, [&](){
         qDebug() << "Error: " << player->errorString();
@@ -38,19 +35,20 @@ void word_frame::set_content(const Word &wd)
     QObject::connect(sound_btn,&QPushButton::clicked,[&](){
         player->setPosition(0);
         player->play();
-        qDebug() << "triggered";
     });
 }
 
 void word_frame::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-      glob_display->enter();
-      glob_display->show();
-      qDebug() << "Huh?";
+      emit set_display_content(content, seq);
     }
 }
 
+Word word_frame::get_content()
+{
+    return content;
+}
 
 
 

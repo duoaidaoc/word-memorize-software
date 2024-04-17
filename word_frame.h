@@ -11,7 +11,6 @@
 #include <QMouseEvent>
 #include <QEvent>
 #include <QWidget>
-#include "word_display.h"
 
 
 class word_frame : public QFrame
@@ -19,8 +18,11 @@ class word_frame : public QFrame
     Q_OBJECT
 public:
     explicit word_frame(QWidget* parent = 0);
-    void set_content(const Word& wd);
+    void set_content(const Word& wd, int seq_ = 0);
     void mousePressEvent(QMouseEvent* event) override;
+    Word get_content();
+signals:
+    void set_display_content(const Word &wd ,int _seq);
 
 private:
     QHBoxLayout* hb;
@@ -29,7 +31,7 @@ private:
     QMediaPlayer *player;
     QAudioOutput *audioOutput;
     Word content;
-
+    int seq;
 };
 
 #endif // WORD_FRAME_H

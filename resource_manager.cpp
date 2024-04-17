@@ -79,7 +79,7 @@ resource_manager::resource_manager()
 {
     QTime current_time = QTime::currentTime();
     sel = current_time.hour();
-    sel = 18;
+    sel = 20;
     if (sel < 6 || sel >= 19) {
         //晚上
         glob_stylecss_path = "../database_crouse_design/night.css";
@@ -87,12 +87,12 @@ resource_manager::resource_manager()
         glob_hello = "晚上好啊！";
     } else if (sel < 14) {
         //上午
-        glob_stylecss_path = "../database_crouse_design/morning.css";
+        glob_stylecss_path = "../database_crouse_design/day.css";
         glob_bg_path = "../database_crouse_design/pics/morning_bg";
         glob_hello = "上午好啊！";
     } else if (sel < 19) {
         //下午
-        glob_stylecss_path = "../database_crouse_design/afternoon.css";
+        glob_stylecss_path = "../database_crouse_design/day.css";
         glob_bg_path = "../database_crouse_design/pics/afternoon_bg";
         glob_hello = "下午好啊！";
     }

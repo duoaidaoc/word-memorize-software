@@ -288,3 +288,7 @@ word_display #frame{
     border-image: url(../database_crouse_design/pics/icon/grey/shezhixian.png) 0 0 0 0;
     border: none;
 }
+#div_line{
+    background-color: rgba(0,0,0,255);
+    border: none;
+}

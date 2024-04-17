@@ -4,6 +4,8 @@
 #include <QWidget>
 #include "word.h"
 #include <QPropertyAnimation>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 
 namespace Ui {
 class word_display;
@@ -16,22 +18,25 @@ class word_display : public QWidget
 public:
     explicit word_display(QWidget *parent = nullptr);
     ~word_display();
-    void set_content(const Word &wd);
+    void set_content(const Word &wd, int seq_ = 0);
     void enter();
+    void set_nexpos(QPoint p);
 protected:
     void paintEvent(QPaintEvent *event)override;
 private:
     Ui::word_display *ui;
-    Word wd;
-    QPropertyAnimation *animation;
-    QPropertyAnimation* moveAnimation;
+  QPropertyAnimation *alpha_animation;
+    QPropertyAnimation* move_Animation;
     QImage* img;
-    int paint_cnt;
+    QPoint nexpos;
+    QMediaPlayer *player;
+    QAudioOutput *audioOutput;
 
-    QImage grabFrameImage();
-    QPixmap screen_shot();
+    Word wd;
+    int seq;
 
-
+signals:
+    void upd_page(int seq_);
 };
 
 #endif // WORD_DISPLAY_H

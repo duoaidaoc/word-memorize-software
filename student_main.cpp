@@ -2,6 +2,8 @@
 #include "ui_student_main.h"
 #include <QGraphicsDropShadowEffect>
 #include "resource_manager.h"
+#include "word_display.h"
+
 
 
 student_main::student_main(QWidget *parent) :
@@ -10,7 +12,7 @@ student_main::student_main(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setProperty("canMove",true);
-    Word wd = {"abandon","abandon.txt","v. 抛弃、放弃"};
+    Word wd = {"abandon","abandon.txt ","v. 抛弃、放弃"};
     setup();
     setaction();
     addword(wd);
@@ -44,6 +46,7 @@ void student_main::setup()
     ui->lexicon_label->setStyleSheet(QString("#lexicon_label {"
                                              "border-image: url(%1) 0 0 0 0 stretch stretch;"
                                              "}").arg("../database_crouse_design/pics/tmp.png"));
+    display = new word_display();
 }
 
 void student_main::setaction()
@@ -69,22 +72,38 @@ void student_main::addword(const Word &word)
 {
     for(int i = 1;i<=10;i++){
         word_frame* wd = new word_frame(ui->Word_Contents);
-        wd->set_content(word);
+        word_frames.push_back(wd);
+        wd->set_content(word, word_frames.size() - 1);
         layout->addWidget(wd);
+        QObject::connect(wd, &word_frame::set_display_content, this, &student_main::show_display);
+        QObject::connect(display, &word_display::upd_page, this, &student_main::update_display);
     }
 }
 
-void student_main::setfollower(QWidget *f)
+void student_main::update_display(int seq_)
 {
-    follower = f;
-    movefollower();
+    int n = word_frames.size();
+    seq_ = (seq_ + n) % n;
+    display->set_content(word_frames[seq_]->get_content(), seq_);
 }
 
-void student_main::movefollower()
+void student_main::show_display(const Word &wd,int seq)
 {
-    if(!follower->isVisible()){
-      QPoint p = pos() + ui->student_frame->pos();
-      follower->move(p.x() + ui->student_frame->width() + 10,p.y());
-      //follower->move(pos());
+    if(seq < 0){
+        throw std::runtime_error("seq isn't initialized.");
     }
+
+    if(!display->isVisible()){
+        movedisplay();
+    }
+    display->set_content(wd, seq);
+    display->enter();
+    display->show();
+
+}
+
+void student_main::movedisplay()
+{
+    QPoint p = pos() + ui->student_frame->pos();
+    display->set_nexpos({p.x() + ui->student_frame->width() + 10,p.y()});
 }

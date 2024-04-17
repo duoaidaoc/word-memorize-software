@@ -26,8 +26,7 @@ set(PROJECT_SOURCES
         login.h
         appinit.cpp
         appinit.h
-        morning.css
-        afternoon.css
+        day.css
         night.css
         student_main.cpp
         student_main.h

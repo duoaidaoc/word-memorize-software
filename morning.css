@@ -288,3 +288,52 @@ word_display #frame{
     border-image: url(../database_crouse_design/pics/icon/grey/shezhixian.png) 0 0 0 0;
     border: none;
 }
+#sound_btn {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/black/yinliang.png) 0 0 0 0;
+    border : none;
+}
+#sound_btn:hover {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/white/yinliang.png) 0 0 0 0;
+    border : none;
+}
+#sound_btn:pressed {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/grey/yinliang.png) 0 0 0 0;
+    border : none;
+}
+#div_line{
+    background-color: rgba(0,0,0,255);
+    border: none;
+}
+#al_btn {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/black/arrowleft.png) 0 0 0 0;
+    border : none;
+}
+#al_btn:hover {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/white/arrowleft.png) 0 0 0 0;
+    border : none;
+}
+#al_btn:pressed {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/grey/arrowleft.png) 0 0 0 0;
+    border : none;
+}
+#ar_btn {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/black/arrowright.png) 0 0 0 0;
+    border : none;
+}
+#ar_btn:hover {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/white/arrowright.png) 0 0 0 0;
+    border : none;
+}
+#ar_btn:pressed {
+    background-color: none;
+    border-image: url(../database_crouse_design/pics/icon/grey/arrowright.png) 0 0 0 0;
+    border : none;
+}

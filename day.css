@@ -1,47 +1,46 @@
 QLineEdit {
     border: none;
     background-color: transparent;
-    color: white;
+    color: rgba(47, 79, 79, 1);
     font-size: 15px;
 }
 
 QPushButton {
     border-radius: 10px;
-    background-color: rgba(100, 100, 100, 0.3);
-    color: white;
+    background-color: rgba(65, 105, 225, 0.3);
+    color: rgba(47, 79, 79, 1);
+    border: 1px solid  rgba(0, 0, 0, 0.2);
 }
 
 /* 鼠标悬停时的样式 */
 QPushButton:hover {
-    background-color: rgba(200, 200, 200, 0.5);
+    background-color: rgba(0, 191, 255, 0.5);/*DeepSkyBlue*/
     color: white;
+    border: 1px solid  rgba(0, 0, 0, 0.2);
 }
 
 QPushButton:pressed {
-    background-color: rgba(60, 60, 60, 0.3);
+    background-color: rgba(0, 0, 139, 0.3);/*DarkBlue*/
     color: white;
-}
-
-QLabel{
-    color: white;
+    border: 1px solid  rgba(0, 0, 0, 0.2);
 }
 
 QProgressBar{
-        font:9pt;
-        border-radius:7px;
-        text-align:center;
-        border:1px solid #E8EDF2;
+        font: 9pt;
+        border-radius: 7px;
+        text-align: center;
+        border: 1px solid #E8EDF2;
         background-color: rgb(255, 255, 255);
         border-color: rgb(180, 180, 180);
 }
 QProgressBar:chunk{
-        border-radius:7px;
-        background-color:#1ABC9C;
+        border-radius: 7px;
+        background-color: #1ABC9C;
 }
 
 word_frame{
-    background-color: rgba(200, 200, 200, 0.4);
-    border: 1px solid  rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid  rgba(200, 200, 200, 0.3);
     border-radius: 20px;
 }
 word_frame:hover{
@@ -58,12 +57,16 @@ word_frame QPushButton{
     background-color: rgba(255, 255, 255, 0.5);
 }
 
+word_display #frame{
+    border-radius: 20px;
+}
+
 #lexicon_label{
     border-radius: 20px;
 }
 
-#line{
-    background-color: rgba(255, 255, 255, 1);
+#lexicon_frame QPushButton{
+    color: rgba(255, 255, 255, 0.8);
 }
 
 #student_frame{
@@ -77,22 +80,20 @@ word_frame QPushButton{
     border-radius: 20px;
 }
 #scrollArea{
-    background-color: rgba(255, 255, 255, 0.5);
-    border:5px solid rgba(255,255,255,0.3);
+    background-color: rgba(200, 200, 255, 0.5);
+    border:5px solid rgba(100, 100, 100, 0.3);
     border-radius: 20px;
 }
-
 #login_frame {
     border-radius: 30px;
 }
 #acc_frame,#pwd_frame,#chk_frame{
     background-color: rgba(255, 255, 255, 0);
-    border: 1px solid  rgba(255, 255, 255, 0.5);
+    border: 1px solid  rgba(0, 0, 0, 0.3);
     border-radius: 20px;
 }
-
 #edt_frame{
-    background-color: rgba(200, 200, 200, 0.4);
+    background-color: rgba(255, 255, 255, 0.4);/*Green Yellow*/
     border:none;
     border-radius: 20px;
 }
@@ -111,190 +112,190 @@ word_frame QPushButton{
 */
 
 #close_button{
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 215, 0, 0.8);
     border-radius: 10px;
+    border: none;
 }
 #min_button{
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 215, 0, 0.8);
     border-radius: 2px;
+    border: none;
 }
-
 #close_button:hover{
-    background-color: rgba(200, 200, 200, 1);
+    background-color: rgba(255, 255, 0, 0.9);
     border-radius: 10px;
 }
 #min_button:hover{
-    background-color: rgba(200, 200, 200, 1);
+    background-color: rgba(255, 255, 0, 0.9);
     border-radius: 2px;
 }
 #close_button:pressed{
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(189, 183, 107, 0.6);
     border-radius: 10px;
 }
 #min_button:pressed {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(189, 183, 107, 0.6);
     border-radius: 2px;
 }
 #time_label,#hello_label{
-    background-color: rgba(128, 0, 0, 0);
+    color: rgba(0, 0, 0, 0.6);
     border: none;
-    color: white;
 }
 #deco_label{
-    background-color: rgba(128, 0, 0, 0);
-    border: 3px solid  rgba(255, 255, 255, 0.5);
-    border-radius : 10px;
-    color: white;
+    background-color: rgba(255,255,255, 0.5);
+    border-radius: 10px;
+    border: none;
+    color: rgba(0,0,0, 0.5);
+    padding: 10px;
 }
-
 #btn_frame,#ud_frame,#btn_frame_2{
-    background-color: rgba(255, 255, 255, 0.6);
-    border:none;
+    background-color: rgba(255, 255, 255, 0.4);/*Green Yellow*/
+    border: none;
     border-radius: 20px;
 }
 #info_btn {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/black/gerenxinxi.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #info_btn:hover {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/white/gerenxinxi.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #info_btn:pressed {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/grey/gerenxinxi.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #class_btn {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/black/group.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #class_btn:hover {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/white/group.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #class_btn:pressed {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/grey/group.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #class_btn {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/black/group.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #class_btn:hover {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/white/group.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #class_btn:pressed {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/grey/group.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #task_btn {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/black/task.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #task_btn:hover {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/white/task.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #task_btn:pressed {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/grey/task.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #test_btn {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/black/test.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #test_btn:hover {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/white/test.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #test_btn:pressed {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/grey/test.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #up_btn {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/black/arrowup.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #up_btn:hover {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/white/arrowup.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #up_btn:pressed {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/grey/arrowup.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #down_btn {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/black/arrowdown.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #down_btn:hover {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/white/arrowdown.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #down_btn:pressed {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/grey/arrowdown.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #battle_btn {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/black/battle.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #battle_btn:hover {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/white/battle.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #battle_btn:pressed {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/grey/battle.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #setting_btn {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/black/shezhixian.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #setting_btn:hover {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/white/shezhixian.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #setting_btn:pressed {
     background-color: none;
     border-image: url(../database_crouse_design/pics/icon/grey/shezhixian.png) 0 0 0 0;
-    border : none;
+    border: none;
 }
 #sound_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/yinliang.png) 0 0 0 0;
+    border-image: url(../database_crouse_design/pics/icon/black/yinliang.png) 0 0 0 0;
     border : none;
 }
 #sound_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/yinliang.png) 0 0 0 0;
+    border-image: url(../database_crouse_design/pics/icon/white/yinliang.png) 0 0 0 0;
     border : none;
 }
 #sound_btn:pressed {
@@ -303,17 +304,17 @@ word_frame QPushButton{
     border : none;
 }
 #div_line{
-    background-color: rgba(255,255,255,255);
+    background-color: rgba(0,0,0,255);
     border: none;
 }
 #al_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/arrowleft.png) 0 0 0 0;
+    border-image: url(../database_crouse_design/pics/icon/black/arrowleft.png) 0 0 0 0;
     border : none;
 }
 #al_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/arrowleft.png) 0 0 0 0;
+    border-image: url(../database_crouse_design/pics/icon/white/arrowleft.png) 0 0 0 0;
     border : none;
 }
 #al_btn:pressed {
@@ -323,12 +324,12 @@ word_frame QPushButton{
 }
 #ar_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/arrowright.png) 0 0 0 0;
+    border-image: url(../database_crouse_design/pics/icon/black/arrowright.png) 0 0 0 0;
     border : none;
 }
 #ar_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/arrowright.png) 0 0 0 0;
+    border-image: url(../database_crouse_design/pics/icon/white/arrowright.png) 0 0 0 0;
     border : none;
 }
 #ar_btn:pressed {
@@ -338,12 +339,12 @@ word_frame QPushButton{
 }
 #close_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/close.png) 0 0 0 0;
+    border-image: url(../database_crouse_design/pics/icon/black/close.png) 0 0 0 0;
     border : none;
 }
 #close_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/close.png) 0 0 0 0;
+    border-image: url(../database_crouse_design/pics/icon/white/close.png) 0 0 0 0;
     border : none;
 }
 #close_btn:pressed {
