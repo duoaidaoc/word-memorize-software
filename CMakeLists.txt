@@ -42,6 +42,10 @@ set(PROJECT_SOURCES
         acrylicframe.h
         acrylicframe.cpp
         Image_processing.h
+        database.h
+        database.cpp
+        table.h
+        role.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -68,7 +72,11 @@ else()
 endif()
 
 # target_link_libraries(database_crouse_design PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-target_link_libraries(database_crouse_design PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia)  # 链接Multimedia模块
+target_link_libraries(database_crouse_design PRIVATE 
+    Qt${QT_VERSION_MAJOR}::Widgets 
+    Qt${QT_VERSION_MAJOR}::Multimedia 
+    Qt${QT_VERSION_MAJOR}::Sql
+)  # 链接Multimedia模块
 
 
 set_target_properties(database_crouse_design PROPERTIES
