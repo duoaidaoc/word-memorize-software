@@ -24,6 +24,15 @@ int main(int argc, char *argv[])
   teacher.SetProfilePhotoUrl("djdjdjjdjd");
   teacher.registerRole();
 
+  db::Teacher teacher2(database);
+  teacher2.SetId(9);
+  teacher2.SetName("Alic");
+  teacher2.SetPassword("ieieie");
+  teacher2.SetProfilePhotoUrl("cncnncnc");
+  teacher2.registerRole();
+
+  teacher.cancelRole();
+
   qDebug() << "-------- 创建学生信息 --------\n";
   // 创建学生对象并注册
   db::Student student(database);
@@ -32,6 +41,15 @@ int main(int argc, char *argv[])
   student.SetPassword("djdjdjjdjddddddd");
   student.SetProfilePhotoUrl("eeueueuL");
   student.registerRole();
+
+  db::Student student2(database);
+  student2.SetId(89);
+  student2.SetName("MIKE");
+  student2.SetPassword("eieiiedjjcncn");
+  student2.SetProfilePhotoUrl("llwlwl");
+  student2.registerRole();
+
+  student.cancelRole();
 
   qDebug() << "-------- 数据库测试结束 ========\n";
 
