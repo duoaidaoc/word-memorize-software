@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
   QApplication a(argc, argv);
-  // database test
+  //========================================== 数据库测试 ==========================================//
   // 创建数据库对象
   qDebug() << "======== 开始数据库测试 ========\n";
   qDebug() << "-------- 创建数据库 --------\n";
@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
   teacher2.registerRole();
 
   teacher.cancelRole();
+  teacher2.displayInfo();
 
   qDebug() << "-------- 创建学生信息 --------\n";
   // 创建学生对象并注册
@@ -50,25 +51,27 @@ int main(int argc, char *argv[])
   student2.registerRole();
 
   student.cancelRole();
+  student2.displayInfo();
 
   qDebug() << "-------- 数据库测试结束 ========\n";
 
-    auto man = resource_manager::getInstance();
-    a.setFont(man->get_glob_font());
+  //========================================== 前端测试 ==========================================//
+  auto man = resource_manager::getInstance();
+  a.setFont(man->get_glob_font());
 
 
-    QFile file(man->get_glob_stylecss_path());
-    if (file.open(QFile::ReadOnly)) {
-        QString qss = QLatin1String(file.readAll());
-        qApp->setStyleSheet(qss);
-        file.close();
-    }
+  QFile file(man->get_glob_stylecss_path());
+  if (file.open(QFile::ReadOnly)) {
+      QString qss = QLatin1String(file.readAll());
+      qApp->setStyleSheet(qss);
+      file.close();
+  }
 
-    login* loginpage = new login();
-    loginpage->show();
-    student_main* stm = new student_main();
-    stm->show();
+  login* loginpage = new login();
+  loginpage->show();
+  student_main* stm = new student_main();
+  stm->show();
 
-    AppInit::Instance()->start();
-    return a.exec();
+  AppInit::Instance()->start();
+  return a.exec();
 }
