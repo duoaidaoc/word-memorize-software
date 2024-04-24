@@ -13,7 +13,7 @@ auto db::Teacher::addTeacher(QSqlQuery &q,
                              const qint64 &id,
                              const QString &name,
                              const QString &password,
-                             const QString &profile_photo_url) -> QVariant{
+                             const QString &profile_photo_url) -> QVariant {
   q.addBindValue(id);
   q.addBindValue(name);
   q.addBindValue(password);
@@ -23,12 +23,31 @@ auto db::Teacher::addTeacher(QSqlQuery &q,
   return q.lastInsertId();
 }
 
-bool db::Teacher::deleteTeacher(QSqlQuery &q, const qint64 &id) {
+auto db::Teacher::deleteTeacher(QSqlQuery &q, const qint64 &id) -> bool {
   q.addBindValue(id);
   return q.exec();
 }
 
+void db::Teacher::displayTeacher(QSqlQuery &q, const qint64 &id) {
+  q.addBindValue(id);
+  if (!q.exec()) {
+    qWarning() << "Query failed:" << q.lastError().text();
+  } else {
+    qDebug() <<"------ 打印老师信息 -----\n";
+    while (q.next()) {
+      // 获取每一列的值
+      qint64 id = q.value("id").toLongLong();
+      QString name = q.value("name").toString();
+      QString profilePhotoUrl = q.value("profile_photo_url").toString();
+
+      qDebug() << "id: " << id << "name: " << name << "profilePhotoUrl: " << profilePhotoUrl << "\n";
+    }
+    qDebug() <<"------ 结束打印老师信息 -----\n";
+  }
+}
+
 //--------------------------- semantic functions --------------------------//
+// 增删改查
 auto db::Teacher::registerRole() -> QVariant {
   // 初始化query。
   QSqlQuery query(returnDatabase());
@@ -50,6 +69,16 @@ auto db::Teacher::cancelRole() ->void {
   }
 }
 
+auto db::Teacher::displayInfo() ->void {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(dispalyTeacherRole)) {
+    throw std::runtime_error("Failed to prepare TearcherTable insert sql");
+  }
+
+  displayTeacher(query, GetId());
+}
+
+// 扩展操作
 auto db::Teacher::createClass() -> QVariant {
   return false;
 }
@@ -64,7 +93,7 @@ auto db::Student::addStudent(QSqlQuery &q,
                              const qint64 &id,
                              const QString &name,
                              const QString &password,
-                             const QString &profile_photo_url) -> QVariant{
+                             const QString &profile_photo_url) -> QVariant {
   q.addBindValue(id);
   q.addBindValue(name);
   q.addBindValue(password);
@@ -74,12 +103,31 @@ auto db::Student::addStudent(QSqlQuery &q,
   return q.lastInsertId();
 }
 
-bool db::Student::deleteStudent(QSqlQuery &q, const qint64 &id) {
+auto db::Student::deleteStudent(QSqlQuery &q, const qint64 &id) -> bool {
   q.addBindValue(id);
   return q.exec();
 }
 
+void db::Student::displayStudent(QSqlQuery &q, const qint64 &id) {
+  q.addBindValue(id);
+  if (!q.exec()) {
+    qWarning() << "Query failed:" << q.lastError().text();
+  } else {
+    qDebug() <<"------ 打印学生信息 -----\n";
+    while (q.next()) {
+      // 获取每一列的值
+      qint64 id = q.value("id").toLongLong();
+      QString name = q.value("name").toString();
+      QString profilePhotoUrl = q.value("profile_photo_url").toString();
+
+      qDebug() << "id: " << id << "name: " << name << "profilePhotoUrl: " << profilePhotoUrl << "\n";
+    }
+    qDebug() <<"------ 结束打印学生信息 -----\n";
+  }
+}
+
 //--------------------------- semantic functions --------------------------//
+// 增删改查
 auto db::Student::registerRole() -> QVariant {
   // 初始化query。
   QSqlQuery query(returnDatabase());
@@ -101,6 +149,16 @@ auto db::Student::cancelRole() ->void {
   }
 }
 
+auto db::Student::displayInfo() ->void {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(dispalyStduentRole)) {
+    throw std::runtime_error("Failed to prepare TearcherTable insert sql");
+  }
+
+  displayStudent(query, GetId());
+}
+
+// 扩展操作
 auto db::Student::joinClass() -> QVariant {
 
 }
