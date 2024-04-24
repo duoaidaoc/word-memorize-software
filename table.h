@@ -18,6 +18,10 @@ public:
             throw std::runtime_error("Database connection is not open!");
         }
     }
+
+    auto returnDatabase() -> QSqlDatabase& {
+      return db_.returnDatabase();
+    }
 };
 } // end db
 

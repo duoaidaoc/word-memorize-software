@@ -59,13 +59,6 @@ private:
         )
     )");
 
-    // 插入表格SQL语句
-    const QLatin1String insertStudentTable = QLatin1String(R"(
-        insert into students(id, name, password, profile_photo_url) values(?, ?, ?, ?)
-    )");
-    const QLatin1String insertTeacherTable = QLatin1String(R"(
-        insert into students(id, name, password, profile_photo_url) values(?, ?, ?, ?)
-    )");
     const QLatin1String insertWordBook = QLatin1String(R"(
         insert into wordbank(id, name, picture_url) values(?, ?, ?)
     )");
