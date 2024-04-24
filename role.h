@@ -16,6 +16,7 @@ private:
 public:
     explicit Role(Database& db) : Table(db) {}
     virtual QVariant registerRole() = 0;
+    virtual void cancelRole() = 0;
 
     void SetId(const qint64& id) { id_ = id; }
     void SetName(const QString& name) { name_ = name; }
@@ -35,13 +36,20 @@ private:
     const QLatin1String insertTeacherTable = QLatin1String(R"(
         insert into teachers(id, name, password, profile_photo_url) values(?, ?, ?, ?)
     )");
+    const QLatin1String deleteTeacherRole = QLatin1String(R"(
+        DELETE FROM teachers WHERE id = ?
+    )");
 
-    // 添加教师语义操作
+    // 教师语义操作
     static QVariant addTeacher(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
+    static bool deleteTeacher(QSqlQuery &q, const qint64 &id);
 
 public:
     explicit Teacher(Database& db) : Role(db) {}
+
     QVariant registerRole() override;
+    void cancelRole() override;
+
     QVariant createClass();
     QVariant deleteClass();
 };
@@ -52,13 +60,21 @@ private:
     const QLatin1String insertStudentTable = QLatin1String(R"(
         insert into students(id, name, password, profile_photo_url) values(?, ?, ?, ?)
     )");
+    const QLatin1String deleteStudentRole = QLatin1String(R"(
+        DELETE FROM students WHERE id = ?
+    )");
 
-    // 添加学生语义操作
+
+    // 学生语义操作
     static QVariant addStudent(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
+    static bool deleteStudent(QSqlQuery &q, const qint64 &id);
 
 public:
     explicit Student(Database& db) : Role(db) {}
+
     QVariant registerRole() override;
+    void cancelRole() override;
+
     QVariant joinClass();
     QVariant leaveClass();
 };
