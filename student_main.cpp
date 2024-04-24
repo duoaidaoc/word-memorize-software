@@ -45,7 +45,7 @@ void student_main::setup()
 
     ui->lexicon_label->setStyleSheet(QString("#lexicon_label {"
                                              "border-image: url(%1) 0 0 0 0 stretch stretch;"
-                                             "}").arg("../database_crouse_design/pics/tmp.png"));
+                                             "}").arg("../word-memorize-software/pics/tmp.png"));
     display = new word_display();
 }
 

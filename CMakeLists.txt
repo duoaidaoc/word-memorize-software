@@ -11,8 +11,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 # find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Multimedia)  # 添加Multimedia模块
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia)  # 添加Multimedia模块
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Multimedia Sql)  # 添加Multimedia模块
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia Sql)  # 添加Multimedia模块
 
 # 解决提升类无法include的难题
 INCLUDE_DIRECTORIES(
@@ -46,10 +46,11 @@ set(PROJECT_SOURCES
         database.cpp
         table.h
         role.h
+        role.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(database_crouse_design
+qt_add_executable(database_crouse_design
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )

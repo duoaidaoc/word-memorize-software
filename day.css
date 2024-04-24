@@ -155,152 +155,152 @@ word_display #frame{
 }
 #info_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/gerenxinxi.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/gerenxinxi.png) 0 0 0 0;
     border: none;
 }
 #info_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/gerenxinxi.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/gerenxinxi.png) 0 0 0 0;
     border: none;
 }
 #info_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/gerenxinxi.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/gerenxinxi.png) 0 0 0 0;
     border: none;
 }
 #class_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/group.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/group.png) 0 0 0 0;
     border: none;
 }
 #class_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/group.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/group.png) 0 0 0 0;
     border: none;
 }
 #class_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/group.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/group.png) 0 0 0 0;
     border: none;
 }
 #class_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/group.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/group.png) 0 0 0 0;
     border: none;
 }
 #class_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/group.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/group.png) 0 0 0 0;
     border: none;
 }
 #class_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/group.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/group.png) 0 0 0 0;
     border: none;
 }
 #task_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/task.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/task.png) 0 0 0 0;
     border: none;
 }
 #task_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/task.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/task.png) 0 0 0 0;
     border: none;
 }
 #task_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/task.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/task.png) 0 0 0 0;
     border: none;
 }
 #test_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/test.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/test.png) 0 0 0 0;
     border: none;
 }
 #test_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/test.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/test.png) 0 0 0 0;
     border: none;
 }
 #test_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/test.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/test.png) 0 0 0 0;
     border: none;
 }
 #up_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/arrowup.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/arrowup.png) 0 0 0 0;
     border: none;
 }
 #up_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/arrowup.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/arrowup.png) 0 0 0 0;
     border: none;
 }
 #up_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/arrowup.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/arrowup.png) 0 0 0 0;
     border: none;
 }
 #down_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/arrowdown.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/arrowdown.png) 0 0 0 0;
     border: none;
 }
 #down_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/arrowdown.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/arrowdown.png) 0 0 0 0;
     border: none;
 }
 #down_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/arrowdown.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/arrowdown.png) 0 0 0 0;
     border: none;
 }
 #battle_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/battle.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/battle.png) 0 0 0 0;
     border: none;
 }
 #battle_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/battle.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/battle.png) 0 0 0 0;
     border: none;
 }
 #battle_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/battle.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/battle.png) 0 0 0 0;
     border: none;
 }
 #setting_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/shezhixian.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/shezhixian.png) 0 0 0 0;
     border: none;
 }
 #setting_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/shezhixian.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/shezhixian.png) 0 0 0 0;
     border: none;
 }
 #setting_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/shezhixian.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/shezhixian.png) 0 0 0 0;
     border: none;
 }
 #sound_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/yinliang.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/yinliang.png) 0 0 0 0;
     border : none;
 }
 #sound_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/yinliang.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/yinliang.png) 0 0 0 0;
     border : none;
 }
 #sound_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/yinliang.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/yinliang.png) 0 0 0 0;
     border : none;
 }
 #div_line{
@@ -309,46 +309,46 @@ word_display #frame{
 }
 #al_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/arrowleft.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/arrowleft.png) 0 0 0 0;
     border : none;
 }
 #al_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/arrowleft.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/arrowleft.png) 0 0 0 0;
     border : none;
 }
 #al_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/arrowleft.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/arrowleft.png) 0 0 0 0;
     border : none;
 }
 #ar_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/arrowright.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/arrowright.png) 0 0 0 0;
     border : none;
 }
 #ar_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/arrowright.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/arrowright.png) 0 0 0 0;
     border : none;
 }
 #ar_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/arrowright.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/arrowright.png) 0 0 0 0;
     border : none;
 }
 #close_btn {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/black/close.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/black/close.png) 0 0 0 0;
     border : none;
 }
 #close_btn:hover {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/white/close.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/white/close.png) 0 0 0 0;
     border : none;
 }
 #close_btn:pressed {
     background-color: none;
-    border-image: url(../database_crouse_design/pics/icon/grey/close.png) 0 0 0 0;
+    border-image: url(../word-memorize-software/pics/icon/grey/close.png) 0 0 0 0;
     border : none;
 }

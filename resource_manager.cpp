@@ -13,7 +13,7 @@ QString resource_manager::audio_select(const QString &eng){
 
 QString resource_manager::get_noise_pic()
 {
-    return QString("../database_crouse_design/pics/noise.png");
+    return QString("../word-memorize-software/pics/noise.png");
 }
 
 QString resource_manager::get_glob_stylecss_path()
@@ -82,28 +82,28 @@ resource_manager::resource_manager()
     sel = 20;
     if (sel < 6 || sel >= 19) {
         //晚上
-        glob_stylecss_path = "../database_crouse_design/night.css";
-        glob_bg_path = "../database_crouse_design/pics/night_bg";
+        glob_stylecss_path = "../word-memorize-software/night.css";
+        glob_bg_path = "../word-memorize-software/pics/night_bg";
         glob_hello = "晚上好啊！";
     } else if (sel < 14) {
         //上午
-        glob_stylecss_path = "../database_crouse_design/day.css";
-        glob_bg_path = "../database_crouse_design/pics/morning_bg";
+        glob_stylecss_path = "../word-memorize-software/day.css";
+        glob_bg_path = "../word-memorize-software/pics/morning_bg";
         glob_hello = "上午好啊！";
     } else if (sel < 19) {
         //下午
-        glob_stylecss_path = "../database_crouse_design/day.css";
-        glob_bg_path = "../database_crouse_design/pics/afternoon_bg";
+        glob_stylecss_path = "../word-memorize-software/day.css";
+        glob_bg_path = "../word-memorize-software/pics/afternoon_bg";
         glob_hello = "下午好啊！";
     }
-    QFile dFontFile("../database_crouse_design/ttf/shangshou-monster.ttf");
+    QFile dFontFile("../word-memorize-software/ttf/shangshou-monster.ttf");
     dFontFile.open(QIODevice::ReadOnly);
     int nFontId = QFontDatabase::addApplicationFontFromData(dFontFile.readAll());
     QStringList lFontFamily = QFontDatabase::applicationFontFamilies(nFontId);
     glob_font = QFont(lFontFamily.at(0), 15);
 
-    glob_profile_picture_path = "../database_crouse_design/pics/login_label";
-    glob_audio_path = "../database_crouse_design/audios";
+    glob_profile_picture_path = "../word-memorize-software/pics/login_label";
+    glob_audio_path = "../word-memorize-software/audios";
 }
 
 resource_manager* resource_manager::instance = NULL;
