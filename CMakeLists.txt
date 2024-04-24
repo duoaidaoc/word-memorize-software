@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(database_crouse_design VERSION 0.1 LANGUAGES CXX)
+project(word-memorize-software VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -50,37 +50,37 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-qt_add_executable(database_crouse_design
+qt_add_executable(word-memorize-software
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET database_crouse_design APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET word-memorize-software APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(database_crouse_design SHARED
+        add_library(word-memorize-software SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(database_crouse_design
+        add_executable(word-memorize-software
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
-# target_link_libraries(database_crouse_design PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-target_link_libraries(database_crouse_design PRIVATE 
+# target_link_libraries(word-memorize-software PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(word-memorize-software PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets 
     Qt${QT_VERSION_MAJOR}::Multimedia 
     Qt${QT_VERSION_MAJOR}::Sql
 )  # 链接Multimedia模块
 
 
-set_target_properties(database_crouse_design PROPERTIES
+set_target_properties(word-memorize-software PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -88,10 +88,10 @@ set_target_properties(database_crouse_design PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-install(TARGETS database_crouse_design
+install(TARGETS word-memorize-software
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(database_crouse_design)
+    qt_finalize_executable(word-memorize-software)
 endif()
