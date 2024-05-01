@@ -1,4 +1,5 @@
 #include "role.h"
+#include "class.h"
 
 /*
     qint64 id_;
@@ -46,6 +47,16 @@ void db::Teacher::displayTeacher(QSqlQuery &q, const qint64 &id) {
   }
 }
 
+auto db::Teacher::addTeacherClass(QSqlQuery &q,
+                             const qint64 &teacher_id,
+                             const qint64 &class_id) -> QVariant {
+  q.addBindValue(teacher_id);
+  q.addBindValue(class_id);
+  q.exec();
+
+  return q.lastInsertId();
+}
+
 //--------------------------- semantic functions --------------------------//
 // 增删改查
 auto db::Teacher::registerRole() -> QVariant {
@@ -79,11 +90,26 @@ auto db::Teacher::displayInfo() ->void {
 }
 
 // 扩展操作
-auto db::Teacher::createClass() -> QVariant {
-  return false;
+// @todo
+auto db::Teacher::createClass(const qint64 &class_id, const QString &class_name, const QString &class_cue) -> QVariant {
+  Class class_(returnDB());
+  class_.SetId(class_id);
+  class_.SetName(class_name);
+  class_.SetCue(class_cue);
+
+  // @todo 在老师class表格中插入条目。
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(insertTeacherClassTable)) {
+    throw std::runtime_error("Failed to prepare TearcherClassTable insert sql");
+  }
+  addTeacherClass(query, GetId(), class_id);
+
+  // 将创建的班级在班级表中插入。
+  return class_.registerClass();
 }
 
-auto db::Teacher::deleteClass() -> QVariant {
+// @todo
+auto db::Teacher::deleteClass(const qint64 &class_id) -> QVariant {
   return false;
 }
 

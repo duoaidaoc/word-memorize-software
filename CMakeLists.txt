@@ -47,6 +47,8 @@ set(PROJECT_SOURCES
         table.h
         role.h
         role.cpp
+        class.h
+        class.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

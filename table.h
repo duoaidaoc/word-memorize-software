@@ -22,6 +22,10 @@ public:
     auto returnDatabase() -> QSqlDatabase& {
       return db_.returnDatabase();
     }
+
+    auto returnDB() -> Database& {
+      return db_;
+    }
 };
 } // end db
 

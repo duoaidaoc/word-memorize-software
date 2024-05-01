@@ -53,7 +53,10 @@ int main(int argc, char *argv[])
   student.cancelRole();
   student2.displayInfo();
 
-  qDebug() << "-------- 数据库测试结束 ========\n";
+  qDebug() << "-------- 测试老师创建班级 --------\n";
+  teacher2.createClass(2023, "english1", "nnnnnnn");
+
+  qDebug() << "-------- 数据库测试结束 -------\n";
 
   //========================================== 前端测试 ==========================================//
   auto man = resource_manager::getInstance();
