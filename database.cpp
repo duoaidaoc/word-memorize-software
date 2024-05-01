@@ -41,6 +41,24 @@ bool db::Database::initDataBase() {
         qWarning() << "Failed to create word table:" << query.lastError().text();
         return false;
     }
+
+    /*
+    if (!tables.contains("class", Qt::CaseInsensitive) && !query.exec(createClassTable)) {
+      qWarning() << "Failed to create class table:" << query.lastError().text();
+      return false;
+    }
+
+    if (!tables.contains("teacherclass", Qt::CaseInsensitive) && !query.exec(createWordTable)) {
+      qWarning() << "Failed to create word table:" << query.lastError().text();
+      return false;
+    }
+
+    if (!tables.contains("studentclass", Qt::CaseInsensitive) && !query.exec(createWordTable)) {
+      qWarning() << "Failed to create word table:" << query.lastError().text();
+      return false;
+    }
+*/
+
     return true;
 }
 

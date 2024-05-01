@@ -352,3 +352,7 @@ word_display #frame{
     border-image: url(../word-memorize-software/pics/icon/grey/close.png) 0 0 0 0;
     border : none;
 }
+
+#info_frame,#lexicon_frame,#detail_frame{
+    background-color: rgba(0,0,0,0);
+}

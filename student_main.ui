@@ -203,7 +203,7 @@
      </widget>
     </widget>
     <widget class="QWidget" name="page_7">
-     <widget class="QFrame" name="frame">
+     <widget class="QFrame" name="detail_frame">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -218,7 +218,7 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>10</x>
