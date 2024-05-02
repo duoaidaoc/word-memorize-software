@@ -4,7 +4,20 @@
 bool db::Database::createDatabase(const QString &dbName) {
     db_ = QSqlDatabase::addDatabase("QSQLITE");
     db_.setDatabaseName(dbName); // 使用传入的数据库名称参数
-    return db_.open();
+    if (!db_.open()) {
+      qDebug() << "Error: connection with database fail";
+      return false;
+    } else {
+      qDebug() << "Database: connection ok";
+      QSqlQuery query(db_);
+      if (!query.exec("PRAGMA foreign_keys = ON")) {
+        qDebug() << "Error: failed to enable foreign keys support";
+      } else {
+        qDebug() << "Foreign keys support enabled";
+      }
+
+      return true;
+    }
 }
 
 // 查询数据库中是否有tableName表。

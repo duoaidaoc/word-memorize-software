@@ -62,6 +62,13 @@ int main(int argc, char *argv[])
   student2.joinClass(2021);
   //student2.joinClass(2020);               // 会报错，并且导致崩溃
 
+  qDebug() << "-------- 测试老师删除班级 --------\n";
+  // 需要支持级联删除。
+  // 老师删除对应如下操作：
+  // 1. class表格里面删除
+  // 2. teacherclass表格里面删除
+  // 3. studentclass表格里面删除
+
   qDebug() << "-------- 测试学生退出班级 --------\n";
   student2.leaveClass(2021);
 

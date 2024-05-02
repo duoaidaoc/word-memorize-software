@@ -69,6 +69,7 @@ private:
             teacher_id BIGINT,
             class_id   BIGINT,
             primary key(teacher_id, class_id)
+            FOREIGN KEY(class_id) REFERENCES class(id) ON DELETE CASCADE
         )
     )");
 
@@ -77,6 +78,7 @@ private:
             student_id BIGINT,
             class_id   BIGINT,
             primary key(student_id, class_id)
+            FOREIGN KEY(class_id) REFERENCES class(id) ON DELETE CASCADE
         )
     )");
 
