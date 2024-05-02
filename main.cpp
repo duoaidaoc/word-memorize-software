@@ -85,7 +85,15 @@ int main(int argc, char *argv[])
   teacher2.deleteClass(2029);
   teacher.deleteClass(2020);
 
-  //qDebug() << "-------- 数据库测试结束 -------\n";
+  qDebug() << "-------- 测试老师给班级添加计划 --------\n";
+  teacher2.createTask(2, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+
+  qDebug() << "-------- 测试老师给计划添加单词本 --------\n";
+
+  qDebug() << "-------- 测试学生背计划，背单词 --------\n";
+
+  qDebug() << "-------- 数据库测试结束 -------\n";
+
 
   //========================================== 前端测试 ==========================================//
   auto man = resource_manager::getInstance();

@@ -1,5 +1,6 @@
 #include "role.h"
 #include "class.h"
+#include "task.h"
 
 /*
     qint64 id_;
@@ -91,6 +92,18 @@ auto db::Teacher::teacherDeleteStudentClassTable(QSqlQuery &q, const qint64 &cla
   }
 }
 
+auto db::Teacher::addTeacherTaskClass(QSqlQuery &q,
+                                  const qint64 &teacher_id,
+                                  const qint64 &task_id,
+                                  const qint64 &class_id) -> QVariant {
+  q.addBindValue(teacher_id);
+  q.addBindValue(task_id);
+  q.addBindValue(class_id);
+  q.exec();
+
+  return q.lastInsertId();
+}
+
 //--------------------------- semantic functions --------------------------//
 // 增删改查
 auto db::Teacher::registerRole() -> QVariant {
@@ -171,6 +184,26 @@ auto db::Teacher::deleteClass(const qint64 &class_id) -> bool {
   }
 
   return false;
+}
+
+// 老师创建任务
+auto db::Teacher::createTask(const qint64 &task_id, const qint64 &class_id,
+                             const QDateTime &create_time, const QDateTime &deadline, const QTime &time_limit) -> QVariant {
+  Task task_(returnDB());
+  task_.SetId(task_id);
+  task_.SetCreateTime(create_time);
+  task_.SetDeadline(deadline);
+  task_.SetTime(time_limit);
+
+  // @todo 在班级task中插入。
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(insertAssignementDistribution)) {
+    throw std::runtime_error("Failed to prepare TeacherClassTask insert sql");
+  }
+  addTeacherTaskClass(query, GetId(), task_id, class_id);
+
+  // 将创建的班级在班级表中插入。
+  return task_.registerTask();
 }
 
 //====================================== Student part =====================================//
