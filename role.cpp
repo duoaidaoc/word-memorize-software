@@ -134,6 +134,18 @@ auto db::Student::deleteStudent(QSqlQuery &q, const qint64 &id) -> bool {
   return q.exec();
 }
 
+auto db::Student::addStudentClass(QSqlQuery &q,
+                                  const qint64 &student_id,
+                                  const qint64 &class_id) -> QVariant {
+  q.addBindValue(student_id);
+  q.addBindValue(class_id);
+  if (!q.exec()) {
+    qDebug() << "Error inserting data:" << q.lastError().text();
+    return QVariant(); // Return an empty QVariant or handle the error as needed
+  }
+  return q.lastInsertId();
+}
+
 void db::Student::displayStudent(QSqlQuery &q, const qint64 &id) {
   q.addBindValue(id);
   if (!q.exec()) {
@@ -149,6 +161,18 @@ void db::Student::displayStudent(QSqlQuery &q, const qint64 &id) {
       qDebug() << "id: " << id << "name: " << name << "profilePhotoUrl: " << profilePhotoUrl << "\n";
     }
     qDebug() <<"------ 结束打印学生信息 -----\n";
+  }
+}
+
+auto db::Student::deleteStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id) -> bool {
+  q.addBindValue(student_id);
+  q.addBindValue(class_id);
+  if (!q.exec()) {
+    qDebug() << "Delete operation failed:" << q.lastError().text();
+    return false;  // 删除失败返回false
+  }
+  else {
+    return true;
   }
 }
 
@@ -185,10 +209,22 @@ auto db::Student::displayInfo() ->void {
 }
 
 // 扩展操作
-auto db::Student::joinClass() -> QVariant {
-
+// 学生加入班级，只需要单纯的将studnet_id和class_id插入表格即可。
+auto db::Student::joinClass(const qint64 &class_id) -> QVariant {
+  // @todo 在老师class表格中插入条目。
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(insertStudentClassTable)) {
+    throw std::runtime_error("Failed to prepare TearcherClassTable insert sql");
+  }
+  return addStudentClass(query, GetId(), class_id);
 }
 
-auto db::Student::leaveClass() -> QVariant {
-
+auto db::Student::leaveClass(const qint64 &class_id) -> QVariant {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(deleteStudentFromClass)) {
+    throw std::runtime_error("Failed to prepare TearcherTable insert sql");
+  }
+  if(!deleteStudentClass(query, GetId(), class_id)) {
+    qWarning() << "Student failed to leave class: " << GetId() << "\n";
+  }
 }

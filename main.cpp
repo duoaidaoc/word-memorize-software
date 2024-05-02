@@ -55,8 +55,17 @@ int main(int argc, char *argv[])
 
   qDebug() << "-------- 测试老师创建班级 --------\n";
   teacher2.createClass(2023, "english1", "nnnnnnn");
+  teacher2.createClass(2021, "english2", "mmmmmmm");
 
-  qDebug() << "-------- 数据库测试结束 -------\n";
+  qDebug() << "-------- 测试学生加入班级 --------\n";
+  student2.joinClass(2023);                 // todo: 不能重复添加，是在db出解决还是逻辑中解决。
+  student2.joinClass(2021);
+  //student2.joinClass(2020);               // 会报错，并且导致崩溃
+
+  qDebug() << "-------- 测试学生退出班级 --------\n";
+  student2.leaveClass(2021);
+
+  //qDebug() << "-------- 数据库测试结束 -------\n";
 
   //========================================== 前端测试 ==========================================//
   auto man = resource_manager::getInstance();

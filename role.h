@@ -42,7 +42,6 @@ private:
     const QLatin1String dispalyTeacherRole = QLatin1String(R"(
         SELECT * FROM teachers WHERE id = ?
     )");
-
     const QLatin1String insertTeacherClassTable = QLatin1String(R"(
         insert into teacherclass(teacher_id, class_id) values(?, ?)
     )");
@@ -79,11 +78,19 @@ private:
     const QLatin1String dispalyStduentRole = QLatin1String(R"(
         SELECT * FROM students WHERE id = ?
     )");
+    const QLatin1String insertStudentClassTable = QLatin1String(R"(
+        insert into studentclass(student_id, class_id) values(?, ?)
+    )");
+    const QLatin1String deleteStudentFromClass = QLatin1String(R"(
+        DELETE FROM studentclass WHERE student_id = ? AND class_id = ?
+    )");
 
     // 学生语义操作
     static QVariant addStudent(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
     static bool deleteStudent(QSqlQuery &q, const qint64 &id);
     static void displayStudent(QSqlQuery &q, const qint64 &id);
+    static QVariant addStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id);
+    static bool deleteStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id);
 
 public:
     explicit Student(Database& db) : Role(db) {}
@@ -94,8 +101,8 @@ public:
     void displayInfo() override;
 
     // 扩展操作
-    QVariant joinClass();
-    QVariant leaveClass();
+    QVariant joinClass(const qint64 &class_id);
+    QVariant leaveClass(const qint64 &class_id);
 };
 } // end db
 
