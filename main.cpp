@@ -56,10 +56,19 @@ int main(int argc, char *argv[])
   qDebug() << "-------- 测试老师创建班级 --------\n";
   teacher2.createClass(2023, "english1", "nnnnnnn");
   teacher2.createClass(2021, "english2", "mmmmmmm");
+  teacher2.createClass(2024, "english3", "mmmmmmm");
+  teacher2.createClass(2026, "english4", "mmmmmmm");
+  teacher2.createClass(2027, "english5", "mmmmmmm");
+  teacher2.createClass(2028, "english6", "mmmmmmm");
+  teacher2.createClass(2029, "english7", "mmmmmmm");
+  teacher2.createClass(2020, "english8", "mmmmmmm");
 
   qDebug() << "-------- 测试学生加入班级 --------\n";
   student2.joinClass(2023);                 // todo: 不能重复添加，是在db出解决还是逻辑中解决。
   student2.joinClass(2021);
+  student2.joinClass(2020);
+  student2.joinClass(2028);
+  student2.joinClass(2029);
   //student2.joinClass(2020);               // 会报错，并且导致崩溃
 
   qDebug() << "-------- 测试老师删除班级 --------\n";
@@ -68,9 +77,13 @@ int main(int argc, char *argv[])
   // 1. class表格里面删除
   // 2. teacherclass表格里面删除
   // 3. studentclass表格里面删除
+  teacher2.deleteClass(2023);
+  teacher2.deleteClass(2028);
 
   qDebug() << "-------- 测试学生退出班级 --------\n";
   student2.leaveClass(2021);
+  teacher2.deleteClass(2029);
+  teacher.deleteClass(2020);
 
   //qDebug() << "-------- 数据库测试结束 -------\n";
 

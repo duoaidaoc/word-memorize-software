@@ -46,11 +46,26 @@ private:
         insert into teacherclass(teacher_id, class_id) values(?, ?)
     )");
 
+    const QLatin1String teacherDeleteClass = QLatin1String(R"(
+        DELETE FROM class WHERE id = ?
+    )");
+
+    const QLatin1String teacherDeleteTeacherClass = QLatin1String(R"(
+        DELETE FROM teacherclass WHERE teacher_id = ? AND class_id = ?
+    )");
+
+    const QLatin1String teacherDeleteStudentClass = QLatin1String(R"(
+        DELETE FROM studentclass WHERE class_id = ?
+    )");
+
     // 教师语义操作
     static QVariant addTeacher(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
     static bool deleteTeacher(QSqlQuery &q, const qint64 &id);
     static void displayTeacher(QSqlQuery &q, const qint64 &id);
     static QVariant addTeacherClass(QSqlQuery &q, const qint64 &teacher_id, const qint64 &class_id);
+    static bool teacherDeleteClassTable(QSqlQuery &q, const qint64 &class_id);
+    static int teacherDeleteTeacherClassTable(QSqlQuery &q, const qint64 &teacher_id, const qint64 &class_id);
+    static bool teacherDeleteStudentClassTable(QSqlQuery &q, const qint64 &class_id);
 
 public:
     explicit Teacher(Database& db) : Role(db) {}
@@ -64,7 +79,7 @@ public:
     // 老师创建班级需要：Class_id, Class_name, Class_cue
     QVariant createClass(const qint64 &class_id, const QString &class_name, const QString &class_cue);
     // 老师删除班级只需要：Class_id
-    QVariant deleteClass(const qint64 &class_id);
+    bool deleteClass(const qint64 &class_id);
 };
 
 class Student : public Role {
@@ -102,7 +117,7 @@ public:
 
     // 扩展操作
     QVariant joinClass(const qint64 &class_id);
-    QVariant leaveClass(const qint64 &class_id);
+    bool leaveClass(const qint64 &class_id);
 };
 } // end db
 

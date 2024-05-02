@@ -57,6 +57,40 @@ auto db::Teacher::addTeacherClass(QSqlQuery &q,
   return q.lastInsertId();
 }
 
+auto db::Teacher::teacherDeleteClassTable(QSqlQuery &q, const qint64 &class_id) -> bool {
+  q.addBindValue(class_id);
+  if (!q.exec()) {
+    qDebug() << "Delete operation failed:" << q.lastError().text();
+    return false;  // 删除失败返回false
+  }
+  else {
+    return true;
+  }
+}
+
+auto db::Teacher::teacherDeleteTeacherClassTable(QSqlQuery &q, const qint64 &teacher_id, const qint64 &class_id) -> int {
+  q.addBindValue(teacher_id);
+  q.addBindValue(class_id);
+  if (!q.exec()) {
+    qDebug() << "Delete operation failed:" << q.lastError().text();
+    return 0;
+  }
+  else {
+    return q.numRowsAffected();
+  }
+}
+
+auto db::Teacher::teacherDeleteStudentClassTable(QSqlQuery &q, const qint64 &class_id) -> bool {
+  q.addBindValue(class_id);
+  if (!q.exec()) {
+    qDebug() << "Delete operation failed:" << q.lastError().text();
+    return false;  // 删除失败返回false
+  }
+  else {
+    return true;
+  }
+}
+
 //--------------------------- semantic functions --------------------------//
 // 增删改查
 auto db::Teacher::registerRole() -> QVariant {
@@ -109,7 +143,33 @@ auto db::Teacher::createClass(const qint64 &class_id, const QString &class_name,
 }
 
 // @todo
-auto db::Teacher::deleteClass(const qint64 &class_id) -> QVariant {
+// 需要删除三张表格：
+// （1）class表格。
+// （2）teacherclass表格里面所有带有class_id的。
+// （3）studentclass表格里面所有带有class_id的。
+auto db::Teacher::deleteClass(const qint64 &class_id) -> bool {
+  QSqlQuery query(returnDatabase());
+
+  if(!query.prepare(teacherDeleteTeacherClass)) {
+    throw std::runtime_error("Failed to prepare teacherclass delete sql");
+  }
+  int rowsDeleted = teacherDeleteTeacherClassTable(query, GetId(), class_id);
+
+  // 考虑到安全性，老师先删除老师班级表格，如果可以删除，说明班级存在，且老师有权限删除该表格。
+  // 删除行数大于零，则老师有权限删除班级表格和学生班级表格。
+  if(rowsDeleted > 0) {
+    if(!query.prepare(teacherDeleteClass)) {
+      throw std::runtime_error("Failed to prepare class delete sql");
+    }
+    if(!teacherDeleteClassTable(query, class_id)) {
+      qWarning() << "Student failed to leave class: " << GetId() << "\n";
+    }
+    if(!query.prepare(teacherDeleteStudentClass)) {
+      throw std::runtime_error("Failed to prepare studentclass delete sql");
+    }
+    return teacherDeleteStudentClassTable(query, class_id);
+  }
+
   return false;
 }
 
@@ -219,12 +279,15 @@ auto db::Student::joinClass(const qint64 &class_id) -> QVariant {
   return addStudentClass(query, GetId(), class_id);
 }
 
-auto db::Student::leaveClass(const qint64 &class_id) -> QVariant {
+auto db::Student::leaveClass(const qint64 &class_id) -> bool {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(deleteStudentFromClass)) {
     throw std::runtime_error("Failed to prepare TearcherTable insert sql");
   }
   if(!deleteStudentClass(query, GetId(), class_id)) {
     qWarning() << "Student failed to leave class: " << GetId() << "\n";
+    return false;
   }
+
+  return true;
 }
