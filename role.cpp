@@ -104,6 +104,30 @@ auto db::Teacher::addTeacherTaskClass(QSqlQuery &q,
   return q.lastInsertId();
 }
 
+auto db::Teacher::teacherDeleteAssignmentDistributionTable(QSqlQuery &q, const qint64 &teacher_id, const qint64 &task_id, const qint64 &class_id) -> int {
+  q.addBindValue(teacher_id);
+  q.addBindValue(task_id);
+  q.addBindValue(class_id);
+  if (!q.exec()) {
+    qDebug() << "Delete operation failed:" << q.lastError().text();
+    return 0;
+  }
+  else {
+    return q.numRowsAffected();
+  }
+}
+
+auto db::Teacher::teacherDeleteTaskTable(QSqlQuery &q, const qint64 &task_id) -> bool {
+  q.addBindValue(task_id);
+  if (!q.exec()) {
+    qDebug() << "Delete operation failed:" << q.lastError().text();
+    return false;  // 删除失败返回false
+  }
+  else {
+    return true;
+  }
+}
+
 //--------------------------- semantic functions --------------------------//
 // 增删改查
 auto db::Teacher::registerRole() -> QVariant {
@@ -197,13 +221,38 @@ auto db::Teacher::createTask(const qint64 &task_id, const qint64 &class_id,
 
   // @todo 在班级task中插入。
   QSqlQuery query(returnDatabase());
-  if(!query.prepare(insertAssignementDistribution)) {
+  if(!query.prepare(insertAssignmentDistribution)) {
     throw std::runtime_error("Failed to prepare TeacherClassTask insert sql");
   }
   addTeacherTaskClass(query, GetId(), task_id, class_id);
 
   // 将创建的班级在班级表中插入。
   return task_.registerTask();
+}
+
+// @todo
+// 需要删除三张表格：
+// （1）class表格。
+// （2）teacherclass表格里面所有带有class_id的。
+// （3）studentclass表格里面所有带有class_id的。
+auto db::Teacher::deleteTask(const qint64 &task_id, const qint64 &class_id) -> bool {
+  QSqlQuery query(returnDatabase());
+
+  if(!query.prepare(teacherDeleteAssignmentDistribution)) {
+    throw std::runtime_error("Failed to prepare assignmentDistribution delete sql");
+  }
+  int rowsDeleted = teacherDeleteAssignmentDistributionTable(query, GetId(), task_id, class_id);
+
+  // 考虑到安全性，老师先删除老师班级表格，如果可以删除，说明班级存在，且老师有权限删除该表格。
+  // 删除行数大于零，则老师有权限删除班级表格和学生班级表格。
+  if(rowsDeleted > 0) {
+    if(!query.prepare(teacherDeleteTask)) {
+      throw std::runtime_error("Failed to prepare task delete sql");
+    }
+    return teacherDeleteTaskTable(query, task_id);
+  }
+
+  return false;
 }
 
 //====================================== Student part =====================================//

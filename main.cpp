@@ -87,6 +87,8 @@ int main(int argc, char *argv[])
 
   qDebug() << "-------- 测试老师给班级添加计划 --------\n";
   teacher2.createTask(2, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+  teacher2.deleteTask(2, 2020);
+  teacher2.createTask(2, 2024, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
 
   qDebug() << "-------- 测试老师给计划添加单词本 --------\n";
 

@@ -58,8 +58,16 @@ private:
         DELETE FROM studentclass WHERE class_id = ?
     )");
 
-    const QLatin1String insertAssignementDistribution = QLatin1String(R"(
+    const QLatin1String insertAssignmentDistribution = QLatin1String(R"(
         insert into AssignmentDistributionTable(teacher_id, task_id, class_id) values(?, ?, ?)
+    )");
+
+    const QLatin1String teacherDeleteAssignmentDistribution = QLatin1String(R"(
+        DELETE FROM AssignmentDistributionTable WHERE teacher_id = ? AND task_id = ? AND class_id = ?
+    )");
+
+    const QLatin1String teacherDeleteTask = QLatin1String(R"(
+        DELETE FROM tasktable WHERE id = ?
     )");
 
     // 教师语义操作
@@ -71,6 +79,8 @@ private:
     static int teacherDeleteTeacherClassTable(QSqlQuery &q, const qint64 &teacher_id, const qint64 &class_id);
     static bool teacherDeleteStudentClassTable(QSqlQuery &q, const qint64 &class_id);
     static QVariant addTeacherTaskClass(QSqlQuery &q, const qint64 &teacher_id, const qint64 &task_id, const qint64 &class_id);
+    static int teacherDeleteAssignmentDistributionTable(QSqlQuery &q, const qint64 &teacher_id, const qint64 &task_id, const qint64 &class_id);
+    static bool teacherDeleteTaskTable(QSqlQuery &q, const qint64 &task_id);
 
 public:
     explicit Teacher(Database& db) : Role(db) {}
@@ -87,6 +97,8 @@ public:
     bool deleteClass(const qint64 &class_id);
     // 老师创建任务：需要和班级绑定。
     QVariant createTask(const qint64 &task_id, const qint64 &class_id, const QDateTime &create_time, const QDateTime &deadline, const QTime &time_limit);
+    // 老师删除班级里面的人物。
+    bool deleteTask(const qint64 &task_id, const qint64 &class_id);
 };
 
 class Student : public Role {
