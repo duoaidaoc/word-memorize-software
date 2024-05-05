@@ -55,6 +55,13 @@ set(PROJECT_SOURCES
         words.cpp
         system.h
         system.cpp
+        class_frame.h
+        class_frame.cpp
+        task_frame.h
+        task_frame.cpp
+        classcue_frame.h
+        classcue_frame.cpp
+        classcue_frame.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
