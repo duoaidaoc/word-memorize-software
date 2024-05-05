@@ -1,7 +1,4 @@
 #include "role.h"
-#include "class.h"
-#include "task.h"
-#include "words.h"
 
 /*
     qint64 id_;

@@ -6,6 +6,7 @@
 #include <QDir>
 #include "resource_manager.h"
 #include "role.h"
+#include "system.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +16,9 @@ int main(int argc, char *argv[])
   qDebug() << "======== 开始数据库测试 ========\n";
   qDebug() << "-------- 创建数据库 --------\n";
   db::Database database("wordmemorize.db");
+
+  // 初始化服务器系统，服务器端。
+  db::System system(database);
 
   qDebug() << "-------- 创建教师信息 --------\n";
   db::Teacher teacher(database);
@@ -99,6 +103,11 @@ int main(int argc, char *argv[])
   teacher2.createTaskWord(3, 14, "accccc", "抛弃", "aaaaa", "bbbbb");
   teacher2.createTaskWord(3, 15, "accccc", "抛弃", "aaaaa", "bbbbb");
 
+  qDebug() <<"-------- 测试系统生成自带的题库 --------\n";
+  system.createWordBank(1, "牛津", "djdjdjjdjdjdjdj");
+  system.importWordBank(1, 16, "oxford", "牛津", "ddddd", "dddddddd");
+  system.importWordBank(1, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
+
   qDebug() << "-------- 测试学生背计划，背单词 --------\n";
 
   qDebug() << "-------- 数据库测试结束 -------\n";
@@ -107,7 +116,6 @@ int main(int argc, char *argv[])
   //========================================== 前端测试 ==========================================//
   auto man = resource_manager::getInstance();
   a.setFont(man->get_glob_font());
-
 
   QFile file(man->get_glob_stylecss_path());
   if (file.open(QFile::ReadOnly)) {

@@ -4,6 +4,9 @@
 #include "table.h"
 #include <QString>
 #include <QVariant>
+#include "class.h"
+#include "task.h"
+#include "words.h"
 
 namespace db {
 class Role : public Table {

@@ -53,6 +53,8 @@ set(PROJECT_SOURCES
         task.cpp
         words.h
         words.cpp
+        system.h
+        system.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

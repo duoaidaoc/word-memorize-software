@@ -109,6 +109,7 @@ private:
     )");
 
     // 学生学习词库
+    // todo
     const QLatin1String createStudentWordBank = QLatin1String(R"(
         CREATE TABLE IF NOT EXISTS StudentWordBankTable (
             student_id BIGINT,
@@ -118,6 +119,7 @@ private:
     )");
 
     // 学生任务进度表格
+    // todo
     const QLatin1String createStudentTaskProgressTable = QLatin1String(R"(
         CREATE TABLE IF NOT EXISTS StudentTaskProgress (
             student_id BIGINT,
@@ -129,6 +131,7 @@ private:
     )");
 
     // 学生单词进度表格
+    // todo
     const QLatin1String createStudentWordLearningTable = QLatin1String(R"(
         CREATE TABLE IF NOT EXISTS StudentWordLearning (
             student_id BIGINT,
@@ -145,13 +148,6 @@ private:
             word_id    BIGINT,
             PRIMARY KEY (word_bank_id, word_id)
         )
-    )");
-
-    const QLatin1String insertWordBook = QLatin1String(R"(
-        insert into wordbank(id, name, picture_url) values(?, ?, ?)
-    )");
-    const QLatin1String insertWordTable = QLatin1String(R"(
-        insert into words(id, english, chinese, phonetic, audio_url) values(?, ?, ?, ?, ?)
     )");
 
 public:
@@ -176,6 +172,11 @@ public:
 
     auto isOpen() -> bool {
         return db_.open();
+    }
+
+    // 系统自行生成词库，用来学生直接匹配比赛。
+    void generateWordBank() {
+
     }
 };
 } // end db

@@ -51,6 +51,30 @@ public:
   const QString GetPhonetic() const { return phonetic_; }
   const QString GetAudioUrl() const { return audio_url_; }
 };
+
+class WordBank : Table {
+private:
+  qint64 word_bank_id_;
+  qint64 word_id_;
+
+  const QLatin1String insertWordBankTable = QLatin1String(R"(
+        insert into WordBankRelationTable(word_bank_id, word_id) values(?, ?)
+    )");
+
+  static QVariant addWordBank(QSqlQuery& q,
+                          const qint64& word_bank_id,
+                          const qint64& word_id);
+
+public:
+  explicit WordBank(Database& db) : Table(db) {}
+  QVariant registerWordBank();
+
+  void setWordBankId(const qint64 &id) { word_bank_id_ = id; }
+  void setWordId(const qint64 &id) { word_id_ = id; }
+
+  const qint64 GetWordBankId() { return word_bank_id_; }
+  const qint64 GetWordId() { return word_id_; }
+};
 } // end namespace db
 
 #endif  // WORDS_H
