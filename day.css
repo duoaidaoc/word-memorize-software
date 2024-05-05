@@ -3,6 +3,7 @@ QLineEdit {
     background-color: transparent;
     color: rgba(47, 79, 79, 1);
     font-size: 15px;
+    font-family: Arial, sans-serif;
 }
 
 QPushButton {
@@ -38,18 +39,18 @@ QProgressBar:chunk{
         background-color: #1ABC9C;
 }
 
-word_frame{
+word_frame, class_frame, task_frame{
     background-color: rgba(255, 255, 255, 0.5);
     border: 1px solid  rgba(200, 200, 200, 0.3);
     border-radius: 20px;
 }
-word_frame:hover{
+word_frame:hover, class_frame:hover, task_frame:hover{
     background-color: rgba(220, 220, 220, 0.4);
     border: 1px solid  rgba(0, 0, 0, 0.3);
     border-radius: 20px;
 }
 
-word_frame QLabel{
+word_frame QLabel, class_frame QLabel, task_frame QLabel{
     color: black;
 }
 
@@ -80,18 +81,19 @@ QScrollArea{
     border-radius: 20px;
 }
 
-#word_contents,#class_contents{
-    background-color: rgba(0, 0, 0, 0);
-    border:none;
+#word_contents, #class_contents, #task_contents ,#class_detail_contents{
+    background-color: rgba(220, 220, 200, 0.5);
+    border:1px solid rgba(50,50,50,0.7);
     border-radius: 20px;
 }
 
 #login_frame {
     border-radius: 30px;
 }
-#acc_frame,#pwd_frame,#chk_frame{
+
+#acc_frame,#pwd_frame,#chk_frame,#cue_frame{
     background-color: rgba(255, 255, 255, 0);
-    border: 1px solid  rgba(0, 0, 0, 0.3);
+    border: 2px solid  rgba(0, 0, 0, 0.3);
     border-radius: 20px;
 }
 #edt_frame{
@@ -354,7 +356,32 @@ QScrollArea{
     border-image: url(../word-memorize-software/pics/icon/grey/close.png) 0 0 0 0;
     border : none;
 }
+#class_add_btn {
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/black/add.png) 0 0 0 0;
+    border : none;
+}
+#class_add_btn:hover {
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/white/add.png) 0 0 0 0;
+    border : none;
+}
+#class_add_btn:pressed {
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/grey/add.png) 0 0 0 0;
+    border : none;
+}
 
-#info_frame,#lexicon_frame,#detail_frame{
+#info_frame,#lexicon_frame{
     background-color: rgba(0,0,0,0);
+}
+
+#detail_frame{
+    background-color: rgba(220, 220, 200, 0.5);
+    border:1px solid rgba(50, 50, 50, 0.7);
+    border-radius: 20px;
+}
+
+#student_display{
+    background-color: transparent;
 }

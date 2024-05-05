@@ -55,6 +55,17 @@ QColor resource_manager::get_color()
       return QColor(255,255,255,63);
     }
 }
+
+QColor resource_manager::get_reversed_color()
+{
+    if (sel < 6 || sel >= 19){
+      return QColor(255,255,255,200);
+    }
+    else{
+      return QColor(0,0,0,200);
+    }
+}
+
 resource_manager* resource_manager::getInstance() {
     if(!instance){
         instance = new resource_manager();
@@ -104,6 +115,7 @@ resource_manager::resource_manager()
 
     glob_profile_picture_path = "../word-memorize-software/pics/login_label";
     glob_audio_path = "../word-memorize-software/audios";
+
 }
 
 resource_manager* resource_manager::instance = NULL;

@@ -45,7 +45,7 @@ bool AppInit::eventFilter(QObject *obj, QEvent *evt)
             if (mousePressed && (event->buttons() && Qt::LeftButton)) {
                 w->move(event->globalPos() - mousePoint);
                 if(w->objectName() == "student_main"){
-                  ((student_main*) w)->movedisplay();
+                  ((student_main*) w)->move_display();
                 }
                 return true;
             }

@@ -29,7 +29,8 @@ public:
     QFont get_glob_font();
     QColor get_color();
 
-private:
+    QColor get_reversed_color();
+  private:
     resource_manager();
     static resource_manager* instance;
     QString randomselect(QString path);

@@ -13,6 +13,7 @@ word_frame::word_frame(QWidget* parent): QFrame(parent)
     hb->addWidget(word_label);
     this->setFixedHeight(100);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
 }
 
 void word_frame::set_content(const Word &wd, int seq_)

@@ -151,10 +151,10 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="start_page">
-     <widget class="QLabel" name="label_6">
+     <widget class="QLabel" name="start_label">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -172,7 +172,7 @@
      </widget>
     </widget>
     <widget class="QWidget" name="word_page">
-     <widget class="QScrollArea" name="scrollArea">
+     <widget class="QScrollArea" name="scrollArea_word">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -319,12 +319,12 @@
      </widget>
     </widget>
     <widget class="QWidget" name="class_page">
-     <widget class="QScrollArea" name="scrollArea_2">
+     <widget class="QScrollArea" name="scrollArea_class">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>451</width>
+        <width>481</width>
         <height>401</height>
        </rect>
       </property>
@@ -342,11 +342,11 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>449</width>
+         <width>479</width>
          <height>399</height>
         </rect>
        </property>
-       <widget class="QLabel" name="label_13">
+       <widget class="QLabel" name="class_label">
         <property name="geometry">
          <rect>
           <x>160</x>
@@ -364,18 +364,179 @@
        </widget>
       </widget>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="class_add_btn">
       <property name="geometry">
        <rect>
-        <x>480</x>
-        <y>30</y>
-        <width>51</width>
-        <height>51</height>
+        <x>510</x>
+        <y>20</y>
+        <width>31</width>
+        <height>31</height>
        </rect>
       </property>
       <property name="text">
        <string/>
       </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="task_page">
+     <widget class="QScrollArea" name="scrollArea_task">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>531</width>
+        <height>401</height>
+       </rect>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="task_contents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>529</width>
+         <height>399</height>
+        </rect>
+       </property>
+       <widget class="QLabel" name="task_label">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>180</y>
+          <width>171</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>暂无任务</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="class_detail_page">
+     <widget class="QFrame" name="class_detail_contents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>551</width>
+        <height>401</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="label_6">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>80</width>
+         <height>80</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>classpic
+(默认图片)</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_14">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>60</y>
+         <width>200</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>teacher name</string>
+       </property>
+      </widget>
+      <widget class="QScrollArea" name="student_scroll">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>120</y>
+         <width>531</width>
+         <height>271</height>
+        </rect>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="student_display">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>529</width>
+          <height>269</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QLabel" name="label_13">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>20</y>
+         <width>200</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>class name</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_15">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>20</y>
+         <width>80</width>
+         <height>80</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>学生人数:
+42人</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QFrame" name="div_line">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>110</y>
+         <width>551</width>
+         <height>2</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+      </widget>
      </widget>
     </widget>
    </widget>

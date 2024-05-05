@@ -2,6 +2,9 @@
 #define STUDENT_MAIN_H
 
 #include <QWidget>
+#include "class_frame.h"
+#include "classcue_frame.h"
+#include "task_frame.h"
 #include "word_frame.h"
 #include "word_display.h"
 
@@ -16,15 +19,23 @@ class student_main : public QWidget
 public:
     explicit student_main(QWidget *parent = nullptr);
     ~student_main();
-    void movedisplay();
+    void move_display();
 private:
     Ui::student_main *ui;
 
-    QVBoxLayout *layout;
-    QFrame *v_line,*h_line;
-    word_display *display;
+    QVBoxLayout *word_layout,*class_layout,*task_layout;
     std::vector<word_frame* >word_frames;
+    std::vector<class_frame* >class_frames;
+    std::vector<task_frame* >task_frames;
 
+    QFrame *v_line,*h_line;
+    word_display *w_display;
+
+    QVBoxLayout* student_fixed_layout;
+    QHBoxLayout* student_appending_layout[2];
+
+
+    classcue_frame *c_frame;
     void setup();
     void setaction();
     void addword(const Word &word);
