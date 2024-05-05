@@ -94,6 +94,10 @@ int main(int argc, char *argv[])
 
   qDebug() << "-------- 测试老师给计划添加单词 --------\n";
   teacher2.createTaskWord(3, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(3, 12, "accccc", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(3, 13, "accccc", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(3, 14, "accccc", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(3, 15, "accccc", "抛弃", "aaaaa", "bbbbb");
 
   qDebug() << "-------- 测试学生背计划，背单词 --------\n";
 

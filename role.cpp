@@ -275,7 +275,7 @@ auto db::Teacher::createTaskWord(const qint64 &task_id, const qint64 &word_id,
                         const QString &phonetic,
                         const QString &audio_url) -> QVariant {
   Word word_(returnDB());
-  word_.SetId(task_id);
+  word_.SetId(word_id);
   word_.SetEnglish(english);
   word_.SetChinese(chinese);
   word_.SetPhonetic(phonetic);
