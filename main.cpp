@@ -116,8 +116,8 @@ int main(int argc, char *argv[])
       file.close();
   }
 
-  login* loginpage = new login();
-  loginpage->show();
+//  login* loginpage = new login();
+//  loginpage->show();
   student_main* stm = new student_main();
   stm->show();
 

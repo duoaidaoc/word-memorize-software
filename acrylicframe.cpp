@@ -29,21 +29,3 @@ void AcrylicFrame::paintEvent(QPaintEvent *event)
   auto painter_2 = QPainter(this);
   painter_2.fillRect(rect(), acrylicBrush);
 }
-
-QPixmap AcrylicFrame::screen_shot()
-{
-  // 获取当前小部件的位置和大小
-  QRect widgetRect = this->geometry();
-
-  // 获取主屏幕
-  QScreen *primaryScreen = QGuiApplication::primaryScreen();
-
-  // 捕捉当前小部件框定范围内的屏幕截图
-  QPixmap screenshot = primaryScreen->grabWindow(0,
-                                          widgetRect.x(),
-                                          widgetRect.y(),
-                                          widgetRect.width(),
-                                          widgetRect.height());
-
-  return screenshot;
-}

@@ -61,6 +61,12 @@ word_display #frame{
     border-radius: 20px;
 }
 
+QScrollArea{
+    background-color: rgba(255, 255, 255, 0.5);
+    border:5px;
+    border-radius: 20px;
+}
+
 #lexicon_label{
     border-radius: 20px;
 }
@@ -74,16 +80,12 @@ word_display #frame{
     border-radius: 20px;
 }
 
-#Word_Contents{
+#word_contents,#class_contents{
     background-color: rgba(0, 0, 0, 0);
     border:none;
     border-radius: 20px;
 }
-#scrollArea{
-    background-color: rgba(200, 200, 255, 0.5);
-    border:5px solid rgba(100, 100, 100, 0.3);
-    border-radius: 20px;
-}
+
 #login_frame {
     border-radius: 30px;
 }

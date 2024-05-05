@@ -25,7 +25,7 @@ student_main::~student_main()
 
 void student_main::setup()
 {
-    layout = new QVBoxLayout(ui->Word_Contents);
+    layout = new QVBoxLayout(ui->word_contents);
     layout->setAlignment(Qt::AlignTop|Qt::AlignLeft);
     // 无边框
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
@@ -66,12 +66,18 @@ void student_main::setaction()
     QObject::connect(ui->down_btn,&QPushButton::clicked,[&](){
         ui->stackedWidget_3->setCurrentIndex(ui->stackedWidget_3->currentIndex() ^ 1);
     });
+    QObject::connect(ui->info_btn,&QPushButton::clicked,[&](){
+      ui->stackedWidget_2->setCurrentIndex(2);
+    });
+    QObject::connect(ui->class_btn,&QPushButton::clicked,[&](){
+      ui->stackedWidget_2->setCurrentIndex(3);
+    });
 }
 
 void student_main::addword(const Word &word)
 {
     for(int i = 1;i<=10;i++){
-        word_frame* wd = new word_frame(ui->Word_Contents);
+        word_frame* wd = new word_frame(ui->word_contents);
         word_frames.push_back(wd);
         wd->set_content(word, word_frames.size() - 1);
         layout->addWidget(wd);

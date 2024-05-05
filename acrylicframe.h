@@ -14,7 +14,6 @@ public:
 protected:
   void paintEvent(QPaintEvent* event) override;
 private:
-  QPixmap screen_shot();
 
 
   QColor tintColor;
