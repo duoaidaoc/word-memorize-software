@@ -1,6 +1,7 @@
 #include "role.h"
 #include "class.h"
 #include "task.h"
+#include "words.h"
 
 /*
     qint64 id_;
@@ -128,6 +129,16 @@ auto db::Teacher::teacherDeleteTaskTable(QSqlQuery &q, const qint64 &task_id) ->
   }
 }
 
+auto db::Teacher::addTaskWord(QSqlQuery &q,
+                              const qint64 &task_id,
+                              const qint64 &word_id) -> QVariant {
+  q.addBindValue(task_id);
+  q.addBindValue(word_id);
+  q.exec();
+
+  return q.lastInsertId();
+}
+
 //--------------------------- semantic functions --------------------------//
 // 增删改查
 auto db::Teacher::registerRole() -> QVariant {
@@ -143,7 +154,7 @@ auto db::Teacher::registerRole() -> QVariant {
 auto db::Teacher::cancelRole() ->void {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(deleteTeacherRole)) {
-    throw std::runtime_error("Failed to prepare TearcherTable insert sql");
+    throw std::runtime_error("Failed to prepare TearcherTable cancel role sql");
   }
 
   if(!deleteTeacher(query, GetId())) {
@@ -154,7 +165,7 @@ auto db::Teacher::cancelRole() ->void {
 auto db::Teacher::displayInfo() ->void {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(dispalyTeacherRole)) {
-    throw std::runtime_error("Failed to prepare TearcherTable insert sql");
+    throw std::runtime_error("Failed to prepare teacher display sql");
   }
 
   displayTeacher(query, GetId());
@@ -211,8 +222,11 @@ auto db::Teacher::deleteClass(const qint64 &class_id) -> bool {
 }
 
 // 老师创建任务
-auto db::Teacher::createTask(const qint64 &task_id, const qint64 &class_id,
-                             const QDateTime &create_time, const QDateTime &deadline, const QTime &time_limit) -> QVariant {
+auto db::Teacher::createTask(const qint64 &task_id,
+                             const qint64 &class_id,
+                             const QDateTime &create_time,
+                             const QDateTime &deadline,
+                             const QTime &time_limit) -> QVariant {
   Task task_(returnDB());
   task_.SetId(task_id);
   task_.SetCreateTime(create_time);
@@ -253,6 +267,30 @@ auto db::Teacher::deleteTask(const qint64 &task_id, const qint64 &class_id) -> b
   }
 
   return false;
+}
+
+auto db::Teacher::createTaskWord(const qint64 &task_id, const qint64 &word_id,
+                        const QString &english,
+                        const QString &chinese,
+                        const QString &phonetic,
+                        const QString &audio_url) -> QVariant {
+  Word word_(returnDB());
+  word_.SetId(task_id);
+  word_.SetEnglish(english);
+  word_.SetChinese(chinese);
+  word_.SetPhonetic(phonetic);
+  word_.SetAudioUrl(audio_url);
+
+  // @todo 在班级task中插入。
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(insertTaskWordTable)) {
+    throw std::runtime_error("Failed to prepare TaskWord insert sql");
+  }
+
+  addTaskWord(query, task_id, word_id);
+
+  // 将创建的班级在班级表中插入。
+  return word_.registerWord();
 }
 
 //====================================== Student part =====================================//
@@ -322,9 +360,10 @@ auto db::Student::deleteStudentClass(QSqlQuery &q, const qint64 &student_id, con
 // 增删改查
 auto db::Student::registerRole() -> QVariant {
   // 初始化query。
+
   QSqlQuery query(returnDatabase());
   if(!query.prepare(insertStudentTable)) {
-    throw std::runtime_error("Failed to prepare TearcherTable insert sql");
+    throw std::runtime_error("Failed to prepare student register sql");
   }
 
   return addStudent(query, GetId(), GetName(), GetPassword(), GetProfilePhotoUrl());
@@ -333,7 +372,7 @@ auto db::Student::registerRole() -> QVariant {
 auto db::Student::cancelRole() ->void {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(deleteStudentRole)) {
-    throw std::runtime_error("Failed to prepare TearcherTable insert sql");
+    throw std::runtime_error("Failed to prepare TearcherTable delete sql");
   }
 
   if(!deleteStudent(query, GetId())) {
@@ -344,7 +383,7 @@ auto db::Student::cancelRole() ->void {
 auto db::Student::displayInfo() ->void {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(dispalyStduentRole)) {
-    throw std::runtime_error("Failed to prepare TearcherTable insert sql");
+    throw std::runtime_error("Failed to prepare TearcherTable display sql");
   }
 
   displayStudent(query, GetId());
@@ -364,7 +403,7 @@ auto db::Student::joinClass(const qint64 &class_id) -> QVariant {
 auto db::Student::leaveClass(const qint64 &class_id) -> bool {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(deleteStudentFromClass)) {
-    throw std::runtime_error("Failed to prepare TearcherTable insert sql");
+    throw std::runtime_error("Failed to prepare student leave class sql");
   }
   if(!deleteStudentClass(query, GetId(), class_id)) {
     qWarning() << "Student failed to leave class: " << GetId() << "\n";

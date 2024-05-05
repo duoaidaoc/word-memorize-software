@@ -87,10 +87,13 @@ int main(int argc, char *argv[])
 
   qDebug() << "-------- 测试老师给班级添加计划 --------\n";
   teacher2.createTask(2, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
-  teacher2.deleteTask(2, 2020);
-  teacher2.createTask(2, 2024, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
 
-  qDebug() << "-------- 测试老师给计划添加单词本 --------\n";
+  qDebug() << "-------- 测试老师给班级去除计划 --------\n";
+  teacher2.deleteTask(2, 2020);
+  teacher2.createTask(3, 2024, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+
+  qDebug() << "-------- 测试老师给计划添加单词 --------\n";
+  teacher2.createTaskWord(3, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
 
   qDebug() << "-------- 测试学生背计划，背单词 --------\n";
 

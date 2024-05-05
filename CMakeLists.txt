@@ -50,14 +50,15 @@ set(PROJECT_SOURCES
         class.h
         class.cpp
         task.h
-
+        task.cpp
+        words.h
+        words.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 qt_add_executable(word-memorize-software
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        task.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET word-memorize-software APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

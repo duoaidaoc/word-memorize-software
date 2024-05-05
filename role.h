@@ -45,29 +45,26 @@ private:
     const QLatin1String insertTeacherClassTable = QLatin1String(R"(
         insert into teacherclass(teacher_id, class_id) values(?, ?)
     )");
-
     const QLatin1String teacherDeleteClass = QLatin1String(R"(
         DELETE FROM class WHERE id = ?
     )");
-
     const QLatin1String teacherDeleteTeacherClass = QLatin1String(R"(
         DELETE FROM teacherclass WHERE teacher_id = ? AND class_id = ?
     )");
-
     const QLatin1String teacherDeleteStudentClass = QLatin1String(R"(
         DELETE FROM studentclass WHERE class_id = ?
     )");
-
     const QLatin1String insertAssignmentDistribution = QLatin1String(R"(
         insert into AssignmentDistributionTable(teacher_id, task_id, class_id) values(?, ?, ?)
     )");
-
     const QLatin1String teacherDeleteAssignmentDistribution = QLatin1String(R"(
         DELETE FROM AssignmentDistributionTable WHERE teacher_id = ? AND task_id = ? AND class_id = ?
     )");
-
     const QLatin1String teacherDeleteTask = QLatin1String(R"(
         DELETE FROM tasktable WHERE id = ?
+    )");
+    const QLatin1String insertTaskWordTable = QLatin1String(R"(
+        insert into TaskWordTable(word_id, task_id) values(?, ?)
     )");
 
     // 教师语义操作
@@ -81,6 +78,7 @@ private:
     static QVariant addTeacherTaskClass(QSqlQuery &q, const qint64 &teacher_id, const qint64 &task_id, const qint64 &class_id);
     static int teacherDeleteAssignmentDistributionTable(QSqlQuery &q, const qint64 &teacher_id, const qint64 &task_id, const qint64 &class_id);
     static bool teacherDeleteTaskTable(QSqlQuery &q, const qint64 &task_id);
+    static QVariant addTaskWord(QSqlQuery &q, const qint64 &task_id, const qint64 &word_id);
 
 public:
     explicit Teacher(Database& db) : Role(db) {}
@@ -99,6 +97,12 @@ public:
     QVariant createTask(const qint64 &task_id, const qint64 &class_id, const QDateTime &create_time, const QDateTime &deadline, const QTime &time_limit);
     // 老师删除班级里面的人物。
     bool deleteTask(const qint64 &task_id, const qint64 &class_id);
+    // 老师给任务添加单词
+    QVariant createTaskWord(const qint64 &task_id, const qint64 &word_id,
+                            const QString &english,
+                            const QString &chinese,
+                            const QString &phonetic,
+                            const QString &audio_url);
 };
 
 class Student : public Role {
