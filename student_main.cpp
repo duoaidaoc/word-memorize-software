@@ -53,6 +53,7 @@ void student_main::setup()
 
     c_frame = new classcue_frame();
     w_display = new word_display();
+    que_widget = new question();
 
     student_fixed_layout = new QVBoxLayout(ui->student_display);
     student_appending_layout[0] = new QHBoxLayout;
@@ -61,6 +62,8 @@ void student_main::setup()
     student_fixed_layout->addLayout(student_appending_layout[1]);
     ui->student_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->student_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->wordlib_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->wordlib_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void student_main::setaction()
@@ -92,6 +95,17 @@ void student_main::setaction()
     QObject::connect(ui->class_add_btn,&QPushButton::clicked,[&](){
       c_frame->show();
     });
+    QObject::connect(ui->change_btn,&QPushButton::clicked,[&](){
+      ui->stackedWidget_2->setCurrentIndex(6);
+    });
+    QObject::connect(ui->test_btn,&QPushButton::clicked,[&](){
+      // TODO():
+      // 得到单词列表
+      // 生成题目列表
+      // 将题目列表放置到que_widget中
+      // que_widget将题目准备好
+      que_widget->show();
+    });
 }
 
 void student_main::addword(const Word &word)
@@ -109,14 +123,26 @@ void student_main::addword(const Word &word)
     class_frames.push_back(cf);
     class_layout->addWidget(cf);
     QObject::connect(cf, &class_frame::set_display_content, [&](CClass cls){
-      //重置ui->student_vlayout中的frame
+      // TODO():
+      // 重置ui->student_vlayout中的frame
       ui->stackedWidget_2->setCurrentIndex(5);
-      //根据cls设置新的ui->student_vlayout中的frame
+      // 根据cls设置新的ui->student_vlayout中的frame
     });
 
     task_frame* tf = new task_frame(ui->task_contents);
     task_frames.push_back(tf);
     task_layout->addWidget(tf);
+
+    QObject::connect(tf, &task_frame::set_display_content, [&](Task tsk){
+      // TODO():
+      // 得到单词列表
+      // 生成题目列表
+      // 将题目列表放置到que_widget中
+      // que_widget将题目准备好
+      // (和上文可以打包复用)
+      que_widget->show();
+    });
+
     ui->class_label->hide();
     ui->task_label->hide();
 
@@ -128,6 +154,13 @@ void student_main::addword(const Word &word)
         itemFrame->setFixedSize(80, 100); // 固定大小为 80*100
         itemFrame->setStyleSheet("background-color: lightblue"); // 设置背景色
         student_appending_layout[i % 2]->addWidget(itemFrame);
+    }
+    QHBoxLayout *hbox = new QHBoxLayout(ui->wordlib_display);
+    for (int i = 0; i < 10; ++i) { // 添加九个 QFrame 作为示例
+        QFrame *itemFrame = new QFrame;
+        itemFrame->setFixedSize(80, 100); // 固定大小为 80*100
+        itemFrame->setStyleSheet("background-color: lightblue"); // 设置背景色
+        hbox->addWidget(itemFrame);
     }
 }
 

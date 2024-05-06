@@ -50,7 +50,7 @@
       <x>100</x>
       <y>100</y>
       <width>200</width>
-      <height>60</height>
+      <height>40</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -63,7 +63,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>15</y>
+       <y>5</y>
        <width>180</width>
        <height>30</height>
       </rect>

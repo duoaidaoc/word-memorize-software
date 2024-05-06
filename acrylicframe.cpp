@@ -1,8 +1,6 @@
 
 #include "acrylicframe.h"
-#include "qapplication.h"
 #include "qpainter.h"
-#include "qscreen.h"
 #include "resource_manager.h"
 
 AcrylicFrame::AcrylicFrame(QWidget *parent) : QFrame(parent)

@@ -1,4 +1,4 @@
-
+#include <qevent.h>
 #include "task_frame.h"
 
 task_frame::task_frame(QWidget* parent): QFrame(parent)
@@ -10,5 +10,12 @@ task_frame::task_frame(QWidget* parent): QFrame(parent)
     taskinfo->setText(QString("taskname"));
     hb->addWidget(taskinfo);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+}
+
+void task_frame::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+      emit set_display_content(tsk);
+    }
 }
 

@@ -8,22 +8,22 @@ QLineEdit {
 
 QPushButton {
     border-radius: 10px;
-    background-color: rgba(65, 105, 225, 0.3);
+    background-color: rgba(65, 105, 225, 0.6);
     color: rgba(47, 79, 79, 1);
-    border: 1px solid  rgba(0, 0, 0, 0.2);
+    border: 1px solid  rgba(255, 255, 255, 0.4);
 }
 
 /* 鼠标悬停时的样式 */
 QPushButton:hover {
     background-color: rgba(0, 191, 255, 0.5);/*DeepSkyBlue*/
     color: white;
-    border: 1px solid  rgba(0, 0, 0, 0.2);
+    border: 1px solid  rgba(0, 0, 0, 0.4);
 }
 
 QPushButton:pressed {
     background-color: rgba(0, 0, 139, 0.3);/*DarkBlue*/
     color: white;
-    border: 1px solid  rgba(0, 0, 0, 0.2);
+    border: 1px solid  rgba(0, 0, 0, 0.4);
 }
 
 QProgressBar{
@@ -341,17 +341,17 @@ QScrollArea{
     border-image: url(../word-memorize-software/pics/icon/grey/arrowright.png) 0 0 0 0;
     border : none;
 }
-#close_btn {
+#close_btn,#close_btn_2 {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/black/close.png) 0 0 0 0;
     border : none;
 }
-#close_btn:hover {
+#close_btn:hover,#close_btn_2:hover {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/white/close.png) 0 0 0 0;
     border : none;
 }
-#close_btn:pressed {
+#close_btn:pressed,#close_btn_2:pressed {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/grey/close.png) 0 0 0 0;
     border : none;
@@ -384,4 +384,16 @@ QScrollArea{
 
 #student_display{
     background-color: transparent;
+}
+
+#eng_frame{
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 40px;
+    border: none;
+}
+
+#chn_label,#eng_label{
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 20px;
+    border: none;
 }

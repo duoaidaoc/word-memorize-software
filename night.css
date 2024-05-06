@@ -7,18 +7,21 @@ QLineEdit {
 
 QPushButton {
     border-radius: 10px;
-    background-color: rgba(100, 100, 100, 0.3);
+    background-color: rgba(200, 200, 200, 0.6);
+    border: 1px solid  rgba(255, 255, 255, 0.4);
     color: white;
 }
 
 /* 鼠标悬停时的样式 */
 QPushButton:hover {
-    background-color: rgba(200, 200, 200, 0.5);
+    background-color: rgba(230, 230, 230, 0.7);
+    border: 1px solid  rgba(255, 255, 255, 0.4);
     color: white;
 }
 
 QPushButton:pressed {
     background-color: rgba(60, 60, 60, 0.3);
+    border: 1px solid  rgba(60, 60, 60, 0.5);
     color: white;
 }
 
@@ -74,7 +77,7 @@ QScrollArea{
     background-color: rgba(255, 255, 255, 1);
 }
 
-#student_frame{
+#student_frame, #wordlib_frame{
     border:none;
     border-radius: 20px;
 }
@@ -85,10 +88,10 @@ QScrollArea{
     border-radius: 20px;
 }
 
-#login_frame, #cue_frame  {
+#login_frame{
     border-radius: 30px;
 }
-#acc_frame,#pwd_frame,#chk_frame{
+#acc_frame,#pwd_frame,#chk_frame,#cue_frame{
     background-color: rgba(255, 255, 255, 0);
     border: 1px solid  rgba(255, 255, 255, 0.5);
     border-radius: 20px;
@@ -339,17 +342,17 @@ QScrollArea{
     border-image: url(../word-memorize-software/pics/icon/grey/arrowright.png) 0 0 0 0;
     border : none;
 }
-#close_btn {
+#close_btn,#close_btn_2 {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/white/close.png) 0 0 0 0;
     border : none;
 }
-#close_btn:hover {
+#close_btn:hover,#close_btn_2:hover {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/black/close.png) 0 0 0 0;
     border : none;
 }
-#close_btn:pressed {
+#close_btn:pressed,#close_btn_2:pressed {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/grey/close.png) 0 0 0 0;
     border : none;
@@ -380,6 +383,18 @@ QScrollArea{
     border-radius: 20px;
 }
 
-#student_display{
+#student_display,#wordlib_display{
     background-color: transparent;
+}
+
+#eng_frame{
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 40px;
+    border: none;
+}
+
+#chn_label,#eng_label{
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 20px;
+    border: none;
 }

@@ -3,19 +3,20 @@
 #define WORD_H
 
 typedef struct Word{
-    QString eng;
-    QString sound_url;
-    QString info;
+  QString eng;
+  QString sound_url;
+  QString info;
 }Word;
 
 typedef struct CClass{
-    QString id;
-    QString name;
-    QString cue;
+  QString id;
+  QString name;
+  QString cue;
 }CClass;
 
 typedef struct Task{
-    QString name;
+  QString name;
 }Task;
+
 
 #endif // WORD_H

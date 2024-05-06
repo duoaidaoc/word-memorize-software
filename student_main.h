@@ -7,6 +7,7 @@
 #include "task_frame.h"
 #include "word_frame.h"
 #include "word_display.h"
+#include "question.h"
 
 namespace Ui {
 class student_main;
@@ -36,6 +37,7 @@ private:
 
 
     classcue_frame *c_frame;
+    question* que_widget;
     void setup();
     void setaction();
     void addword(const Word &word);
