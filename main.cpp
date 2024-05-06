@@ -81,7 +81,6 @@ int main(int argc, char *argv[])
   // 1. class表格里面删除
   // 2. teacherclass表格里面删除
   // 3. studentclass表格里面删除
-  teacher2.deleteClass(2023);
   teacher2.deleteClass(2028);
 
   qDebug() << "-------- 测试学生退出班级 --------\n";
@@ -108,7 +107,8 @@ int main(int argc, char *argv[])
   system.importWordBank(1, 16, "oxford", "牛津", "ddddd", "dddddddd");
   system.importWordBank(1, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
 
-  qDebug() << "-------- 测试学生背计划，背单词 --------\n";
+  qDebug() << "-------- 测试学生显示所在的班级 --------\n";
+  student2.infoStudentClass();
 
   qDebug() << "-------- 数据库测试结束 -------\n";
 

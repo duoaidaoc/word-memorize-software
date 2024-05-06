@@ -341,6 +341,23 @@ void db::Student::displayStudent(QSqlQuery &q, const qint64 &id) {
   }
 }
 
+auto db::Student::displayStudentClass(QSqlQuery &q, const qint64 &student_id) ->QList<QPair<qint64, QString>> {
+  QList<QPair<qint64, QString>> classesList;
+
+  q.addBindValue(student_id);
+  if (!q.exec()) {
+    qDebug() << "Error executing displayStudentClassquery:" << q.lastError().text();
+    return classesList; // 返回空列表
+  }
+  while (q.next()) {
+    long long classId = q.value("id").toLongLong();
+    QString className = q.value("name").toString();
+    classesList.append(qMakePair(classId, className));
+  }
+
+  return classesList;
+}
+
 auto db::Student::deleteStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id) -> bool {
   q.addBindValue(student_id);
   q.addBindValue(class_id);
@@ -408,4 +425,20 @@ auto db::Student::leaveClass(const qint64 &class_id) -> bool {
   }
 
   return true;
+}
+
+auto db::Student::infoStudentClass() -> QList<QPair<qint64, QString>> {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(retrieveStudentClasses)) {
+    throw std::runtime_error("Failed to prepare student info class sql");
+  }
+  QList<QPair<qint64, QString>> classList = displayStudentClass(query, GetId());
+
+  qDebug() <<"**************\n";
+  for (const auto &pair : classList) {
+    qDebug() << "Class ID:" << pair.first << ", Class Name:" << pair.second;
+  }
+  qDebug() <<"**************\n";
+
+  return classList;
 }

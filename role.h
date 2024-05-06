@@ -125,6 +125,11 @@ private:
     const QLatin1String deleteStudentFromClass = QLatin1String(R"(
         DELETE FROM studentclass WHERE student_id = ? AND class_id = ?
     )");
+    const QLatin1String retrieveStudentClasses = QLatin1String(R"(
+        SELECT class.id AS id, class.name AS name
+        FROM studentclass JOIN class ON studentclass.class_id = class.id
+        WHERE studentclass.student_id = ?
+    )");
 
     // 学生语义操作
     static QVariant addStudent(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
@@ -132,7 +137,7 @@ private:
     static void displayStudent(QSqlQuery &q, const qint64 &id);
     static QVariant addStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id);
     static bool deleteStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id);
-
+    static QList<QPair<qint64, QString>> displayStudentClass(QSqlQuery &q, const qint64 &student_id);
 public:
     explicit Student(Database& db) : Role(db) {}
 
@@ -144,6 +149,8 @@ public:
     // 扩展操作
     QVariant joinClass(const qint64 &class_id);
     bool leaveClass(const qint64 &class_id);
+
+    QList<QPair<qint64, QString>> infoStudentClass();
 };
 } // end db
 
