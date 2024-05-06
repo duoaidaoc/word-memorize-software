@@ -9,7 +9,7 @@ typedef struct Word{
 }Word;
 
 typedef struct CClass{
-  QString id;
+  qint64 id;
   QString name;
   QString cue;
 }CClass;

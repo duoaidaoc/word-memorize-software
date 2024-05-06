@@ -1,5 +1,6 @@
 #include <QPainter>
 #include <QPainterPath>
+#include <QMessageBox>
 
 #include "classcue_frame.h"
 #include "ui_classcue_frame.h"
@@ -27,7 +28,8 @@ classcue_frame::classcue_frame(QWidget *parent) :
     this->hide();
   });
   QObject::connect(ui->lineEdit,&QLineEdit::editingFinished,[&](){
-    if(ui->lineEdit->text() != ""){
+    QString code = ui->lineEdit->text();
+    if(code != ""){
       qDebug()<<"ok";
       /*
         查询班级是否存在并且加入班级。
@@ -38,6 +40,18 @@ classcue_frame::classcue_frame(QWidget *parent) :
       /*
         不存在，弹出班级不存在的错误信息。
       */
+      qint64 int_code = code.toLongLong();
+      auto man = resource_manager::getInstance();
+      auto &manba = man->get_student();
+      QVariant a = manba.joinClass(int_code);
+      if(a.isNull()){
+        // TODO():把这个类写成自己的报错窗口。
+        QMessageBox::about(nullptr,"warning","班级码不正确");
+      }
+      else{
+        emit UpdateClass();
+      }
+      this->hide();
     }
   });
 

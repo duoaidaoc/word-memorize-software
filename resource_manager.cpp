@@ -66,6 +66,38 @@ QColor resource_manager::get_reversed_color()
     }
 }
 
+void resource_manager::init_database()
+{
+    database = new db::Database("wordmemorize.db");
+}
+
+db::Database& resource_manager::get_database()
+{
+    return *database;
+}
+
+void resource_manager::init_student()
+{
+    // @测试版本 正确的应该是在数据库中查询 student id 的所有信息
+    student = new db::Student(*database);
+    student->SetId(2021211230);
+    student->SetName("Mamba");
+    student->SetPassword("djdjdjjdjddddddd");
+    student->SetProfilePhotoUrl("eeueueuL");
+    student->registerRole();
+    student->joinClass(2023);// todo: 不能重复添加，是在db出解决还是逻辑中解决。
+    student->joinClass(2021);
+    student->joinClass(2020);
+    student->joinClass(2028);
+    student->joinClass(2029);
+    student->joinClass(2020);
+}
+
+db::Student &resource_manager::get_student()
+{
+    return *student;
+}
+
 resource_manager* resource_manager::getInstance() {
     if(!instance){
         instance = new resource_manager();

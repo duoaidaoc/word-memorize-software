@@ -62,6 +62,12 @@ set(PROJECT_SOURCES
         classcue_frame.h
         classcue_frame.cpp
         classcue_frame.ui
+        question.h
+        question.cpp
+        question.ui
+        teacher_main.h
+        teacher_main.cpp
+        teacher_main.ui
         util.h
 )
 

@@ -9,6 +9,7 @@
 #include "word_display.h"
 #include "question.h"
 
+
 namespace Ui {
 class student_main;
 }
@@ -36,14 +37,18 @@ private:
     QHBoxLayout* student_appending_layout[2];
 
 
-    classcue_frame *c_frame;
+    classcue_frame *Ccue_frame;
     question* que_widget;
+
+
     void setup();
     void setaction();
     void addword(const Word &word);
+    void init_student();
 private slots:
     void show_display(const Word &wd, int seq);
     void update_display(int seq_ = 0);
+    void update_class();
 };
 
 #endif // STUDENT_MAIN_H

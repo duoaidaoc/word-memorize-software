@@ -19,6 +19,8 @@ protected:
 private:
   Ui::classcue_frame *ui;
   QImage bg;
+signals:
+  void UpdateClass();
 };
 
 #endif // CLASSCUE_FRAME_H

@@ -8,14 +8,18 @@
 #include "role.h"
 #include "system.h"
 
+
+
 int main(int argc, char *argv[])
 {
   QApplication a(argc, argv);
-  //========================================== 数据库测试 ==========================================//
-  // 创建数据库对象
-  qDebug() << "======== 开始数据库测试 ========\n";
-  qDebug() << "-------- 创建数据库 --------\n";
-  db::Database database("wordmemorize.db");
+  auto man = resource_manager::getInstance();
+//  ========================================== 数据库测试 ==========================================//
+//   创建数据库对象
+  man->init_database();
+  auto &database = man->get_database();
+//  qDebug() << "======== 开始数据库测试 ========\n";
+//  qDebug() << "-------- 创建数据库 --------\n";
 
   // 初始化服务器系统，服务器端。
   db::System system(database);
@@ -40,30 +44,30 @@ int main(int argc, char *argv[])
 
   qDebug() << "-------- 创建学生信息 --------\n";
   // 创建学生对象并注册
-  db::Student student(database);
-  student.SetId(4);
-  student.SetName("Alice");
-  student.SetPassword("djdjdjjdjddddddd");
-  student.SetProfilePhotoUrl("eeueueuL");
-  student.registerRole();
+//  db::Student student(database);
+//  student.SetId(4);
+//  student.SetName("Alice");
+//  student.SetPassword("djdjdjjdjddddddd");
+//  student.SetProfilePhotoUrl("eeueueuL");
+//  student.registerRole();
 
-  db::Student student2(database);
-  student2.SetId(89);
-  student2.SetName("MIKE");
-  student2.SetPassword("eieiiedjjcncn");
-  student2.SetProfilePhotoUrl("llwlwl");
-  student2.registerRole();
+//  db::Student student2(database);
+//  student2.SetId(89);
+//  student2.SetName("MIKE");
+//  student2.SetPassword("eieiiedjjcncn");
+//  student2.SetProfilePhotoUrl("llwlwl");
+//  student2.registerRole();
 
-  student.cancelRole();
-  student2.displayInfo();
+//  student.cancelRole();
+//  student2.displayInfo();
 
-  db::Student student3(database);
-  student3.SetId(90);
-  student3.SetName("Leon");
-  student3.SetPassword("eieiiedjjcncn");
-  student3.SetProfilePhotoUrl("llwlwl");
-  student3.registerRole();
-  student3.displayInfo();
+//  db::Student student3(database);
+//  student3.SetId(90);
+//  student3.SetName("Leon");
+//  student3.SetPassword("eieiiedjjcncn");
+//  student3.SetProfilePhotoUrl("llwlwl");
+//  student3.registerRole();
+//  student3.displayInfo();
 
   qDebug() << "-------- 测试老师创建班级 --------\n";
   teacher2.createClass(2023, "english1", "nnnnnnn");
@@ -74,14 +78,15 @@ int main(int argc, char *argv[])
   teacher2.createClass(2028, "english6", "mmmmmmm");
   teacher2.createClass(2029, "english7", "mmmmmmm");
   teacher2.createClass(2020, "english8", "mmmmmmm");
+  teacher2.createClass(100000, "english10", "mmmmmmm");
 
   qDebug() << "-------- 测试学生加入班级 --------\n";
-  student2.joinClass(2023);                 // todo: 不能重复添加，是在db出解决还是逻辑中解决。
-  student2.joinClass(2021);
-  student2.joinClass(2020);
-  student2.joinClass(2028);
-  student2.joinClass(2029);
-  student3.joinClass(2020);
+//  student2.joinClass(2023);                 // todo: 不能重复添加，是在db出解决还是逻辑中解决。
+//  student2.joinClass(2021);
+//  student2.joinClass(2020);
+//  student2.joinClass(2028);
+//  student2.joinClass(2029);
+//  student3.joinClass(2020);
   //student2.joinClass(2020);               // 会报错，并且导致崩溃
 
   qDebug() << "-------- 测试老师删除班级 --------\n";
@@ -93,7 +98,7 @@ int main(int argc, char *argv[])
   teacher2.deleteClass(2028);
 
   qDebug() << "-------- 测试学生退出班级 --------\n";
-  student2.leaveClass(2021);
+//  student2.leaveClass(2021);
   teacher2.deleteClass(2029);
   teacher.deleteClass(2020);
 
@@ -116,22 +121,22 @@ int main(int argc, char *argv[])
   system.importWordBank(1, 16, "oxford", "牛津", "ddddd", "dddddddd");
   system.importWordBank(1, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
 
-  qDebug() << "-------- 测试学生显示所在的班级 --------\n";
-  // 返回的是QList<QPair<qint64, QString>>
-  student2.infoStudentClass();
+//  qDebug() << "-------- 测试学生显示所在的班级 --------\n";
+//  // 返回的是QList<QPair<qint64, QString>>
+//  student2.infoStudentClass();
 
-  qDebug() << "-------- 测试学生显示所在的班级的详细信息 --------\n";
-  // param1: Class ID
-  // 返回的是该class的老师信息。QList<TeacherInfo>
-  student2.infoClassDetails(2020);
-  // 返回的是该class的学生成员信息。QList<StudentInfo>
-  student2.infoClassMembers(2020);
+//  qDebug() << "-------- 测试学生显示所在的班级的详细信息 --------\n";
+//  // param1: Class ID
+//  // 返回的是该class的老师信息。QList<TeacherInfo>
+//  student2.infoClassDetails(2020);
+//  // 返回的是该class的学生成员信息。QList<StudentInfo>
+//  student2.infoClassMembers(2020);
 
   qDebug() << "-------- 数据库测试结束 -------\n";
 
 
-  //========================================== 前端测试 ==========================================//
-  auto man = resource_manager::getInstance();
+//  //========================================== 前端测试 ==========================================//
+
   a.setFont(man->get_glob_font());
 
   QFile file(man->get_glob_stylecss_path());

@@ -9,6 +9,9 @@
 #include "QFontDatabase"
 #include <QColor>
 
+#include "database.h"
+#include "role.h"
+
 class resource_manager
 {
 public:
@@ -25,11 +28,15 @@ public:
     QString get_glob_hello();
     QString get_glob_profile_picture_path();
     QString get_glob_audio_path();
-
     QFont get_glob_font();
     QColor get_color();
-
     QColor get_reversed_color();
+
+    void init_database();
+    db::Database &get_database();
+    void init_student();
+    db::Student &get_student();
+
   private:
     resource_manager();
     static resource_manager* instance;
@@ -41,7 +48,8 @@ public:
     QString glob_profile_picture_path;
     QString glob_audio_path;
     QString glob_stylecss_path;
-
+    db::Database *database;
+    db::Student *student;
     int sel;
 };
 
