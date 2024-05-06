@@ -135,12 +135,16 @@ private:
         SELECT teachers.id, teachers.name, teachers.profile_photo_url
         FROM teachers
         INNER JOIN teacherclass ON teachers.id = teacherclass.teacher_id
-        WHERE teacherclass.class_id IN (
-            SELECT class_id
-            FROM studentclass
-            WHERE class_id = ?
-        )
+        WHERE teacherclass.class_id = ?
     )");
+
+    const QLatin1String retrieveClassMember = QLatin1String(R"(
+        SELECT students.id, students.name, students.profile_photo_url
+        FROM students
+        INNER JOIN studentclass ON students.id = studentclass.student_id
+        WHERE studentclass.class_id = ?
+    )");
+
 
     // 学生语义操作
     static QVariant addStudent(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
@@ -150,6 +154,7 @@ private:
     static bool deleteStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id);
     static QList<QPair<qint64, QString>> displayStudentClass(QSqlQuery &q, const qint64 &student_id);
     static QList<TeacherInfo> displayClassTeacher(QSqlQuery &q, const qint64 & class_id);
+    static QList<StudentInfo> displayClassMember(QSqlQuery &q, const qint64 & class_id);
 
 public:
     explicit Student(Database& db) : Role(db) {}
@@ -165,7 +170,7 @@ public:
 
     QList<QPair<qint64, QString>> infoStudentClass();
     QList<TeacherInfo> infoClassDetails(const qint64 &class_id);
-    QList<ClassInfo> infoClassMembers(const qint64 &class_id);
+    QList<StudentInfo> infoClassMembers(const qint64 &class_id);
 };
 } // end db
 

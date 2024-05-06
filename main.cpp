@@ -57,6 +57,14 @@ int main(int argc, char *argv[])
   student.cancelRole();
   student2.displayInfo();
 
+  db::Student student3(database);
+  student3.SetId(90);
+  student3.SetName("Leon");
+  student3.SetPassword("eieiiedjjcncn");
+  student3.SetProfilePhotoUrl("llwlwl");
+  student3.registerRole();
+  student3.displayInfo();
+
   qDebug() << "-------- 测试老师创建班级 --------\n";
   teacher2.createClass(2023, "english1", "nnnnnnn");
   teacher2.createClass(2021, "english2", "mmmmmmm");
@@ -73,6 +81,7 @@ int main(int argc, char *argv[])
   student2.joinClass(2020);
   student2.joinClass(2028);
   student2.joinClass(2029);
+  student3.joinClass(2020);
   //student2.joinClass(2020);               // 会报错，并且导致崩溃
 
   qDebug() << "-------- 测试老师删除班级 --------\n";
@@ -115,8 +124,9 @@ int main(int argc, char *argv[])
   // param1: Class ID
   // 返回的是该class的老师信息。QList<TeacherInfo>
   student2.infoClassDetails(2020);
-  // 返回的是该class的学生信息。QList<ClassInfo>
-  //student2.infoClassMembers(2020);
+  // 返回的是该class的学生成员信息。QList<StudentInfo>
+  student2.infoClassMembers(2020);
+
   qDebug() << "-------- 数据库测试结束 -------\n";
 
 

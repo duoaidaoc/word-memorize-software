@@ -383,6 +383,31 @@ auto db::Student::displayClassTeacher(QSqlQuery &q, const qint64 &class_id) -> Q
   return teachersList;
 }
 
+auto db::Student::displayClassMember(QSqlQuery &q, const qint64 &class_id) -> QList<StudentInfo> {
+  QList<StudentInfo> studentList;
+
+  q.addBindValue(class_id);
+  if (!q.exec()) {
+    qDebug() << "Error executing displayClassMember query:" << q.lastError().text();
+    return studentList; // 返回空列表
+  }
+
+  if (!q.next()) {
+    qDebug() << "No student members for class with ID:" << class_id;
+    return studentList; // 返回空列表
+  }
+
+  do {
+    StudentInfo memberInfo;
+    memberInfo.studentId = q.value("id").toLongLong();
+    memberInfo.studentName = q.value("name").toString();
+    memberInfo.studentUrl = q.value("profile_photo_url").toString();
+    studentList.append(memberInfo);
+  } while (q.next());
+
+  return studentList;
+}
+
 
 auto db::Student::deleteStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id) -> bool {
   q.addBindValue(student_id);
@@ -484,4 +509,21 @@ auto db::Student::infoClassDetails(const qint64 &class_id) -> QList<TeacherInfo>
 
   return classDetails;
 }
+
+auto db::Student::infoClassMembers(const qint64 &class_id) -> QList<StudentInfo> {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(retrieveClassMember)) {
+    throw std::runtime_error("Failed to prepare student member class sql");
+  }
+  QList<StudentInfo> classMembers = displayClassMember(query, class_id);
+
+  qDebug() <<"**************\n";
+  for (const auto &student : classMembers) {
+    qDebug() << "Student ID:" << student.studentId << ", Student Name:" << student.studentName << ", student url:" << student.studentUrl;
+  }
+  qDebug() <<"**************\n";
+
+  return classMembers;
+}
+
 
