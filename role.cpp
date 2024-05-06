@@ -350,13 +350,39 @@ auto db::Student::displayStudentClass(QSqlQuery &q, const qint64 &student_id) ->
     return classesList; // 返回空列表
   }
   while (q.next()) {
-    long long classId = q.value("id").toLongLong();
+    qint64 classId = q.value("id").toLongLong();
     QString className = q.value("name").toString();
     classesList.append(qMakePair(classId, className));
   }
 
   return classesList;
 }
+
+auto db::Student::displayClassTeacher(QSqlQuery &q, const qint64 &class_id) -> QList<TeacherInfo> {
+  QList<TeacherInfo> teachersList;
+
+  q.addBindValue(class_id);
+  if (!q.exec()) {
+    qDebug() << "Error executing displayClassTeacher query:" << q.lastError().text();
+    return teachersList; // 返回空列表
+  }
+
+  if (!q.next()) {
+    qDebug() << "No teachers found for class with ID:" << class_id;
+    return teachersList; // 返回空列表
+  }
+
+  do {
+    TeacherInfo teacherInfo;
+    teacherInfo.teacherId = q.value("id").toLongLong();
+    teacherInfo.teacherName = q.value("name").toString();
+    teacherInfo.teacherUrl = q.value("profile_photo_url").toString();
+    teachersList.append(teacherInfo);
+  } while (q.next());
+
+  return teachersList;
+}
+
 
 auto db::Student::deleteStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id) -> bool {
   q.addBindValue(student_id);
@@ -442,3 +468,20 @@ auto db::Student::infoStudentClass() -> QList<QPair<qint64, QString>> {
 
   return classList;
 }
+
+auto db::Student::infoClassDetails(const qint64 &class_id) -> QList<TeacherInfo> {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(retrieveTeachersInClass)) {
+    throw std::runtime_error("Failed to prepare student info class sql");
+  }
+  QList<TeacherInfo> classDetails = displayClassTeacher(query, class_id);
+
+  qDebug() <<"**************\n";
+  for (const auto &teacher : classDetails) {
+    qDebug() << "Teacher ID:" << teacher.teacherId << ", Teacher Name:" << teacher.teacherName << ", Teacher url:" << teacher.teacherUrl;
+  }
+  qDebug() <<"**************\n";
+
+  return classDetails;
+}
+

@@ -62,6 +62,7 @@ set(PROJECT_SOURCES
         classcue_frame.h
         classcue_frame.cpp
         classcue_frame.ui
+        util.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

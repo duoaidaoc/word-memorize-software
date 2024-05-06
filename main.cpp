@@ -108,8 +108,15 @@ int main(int argc, char *argv[])
   system.importWordBank(1, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
 
   qDebug() << "-------- 测试学生显示所在的班级 --------\n";
+  // 返回的是QList<QPair<qint64, QString>>
   student2.infoStudentClass();
 
+  qDebug() << "-------- 测试学生显示所在的班级的详细信息 --------\n";
+  // param1: Class ID
+  // 返回的是该class的老师信息。QList<TeacherInfo>
+  student2.infoClassDetails(2020);
+  // 返回的是该class的学生信息。QList<ClassInfo>
+  //student2.infoClassMembers(2020);
   qDebug() << "-------- 数据库测试结束 -------\n";
 
 
