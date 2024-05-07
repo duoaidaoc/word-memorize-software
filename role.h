@@ -32,6 +32,7 @@ public:
     const QString GetName() const { return name_; }
     const QString GetPassword() const { return password_; }
     const QString GetProfilePhotoUrl() const { return profile_photo_url_; }
+    QList<TaskInfo> infoTaskInClass(const qint64 &class_id);
 };
 
 class Teacher : public Role {
@@ -70,6 +71,18 @@ private:
     const QLatin1String insertTaskWordTable = QLatin1String(R"(
         insert into TaskWordTable(task_id, word_id) values(?, ?)
     )");
+    const QLatin1String retrieveTaskInfo = QLatin1String(R"(
+        SELECT tasktable.id, tasktable.create_time, tasktable.deadline, tasktable.time_limit
+        FROM tasktable
+        INNER JOIN AssignmentDistributionTable ON tasktable.id = AssignmentDistributionTable.task_id
+        WHERE AssignmentDistributionTable.class_id = ?
+    )");
+    const QLatin1String retrieveWordFromTask = QLatin1String(R"(
+        SELECT words.id, words.english, words.chinese, words.phonetic, words.audio_url
+        FROM words
+        INNER JOIN TaskWordTable ON words.id = TaskWordTable.word_id
+        WHERE TaskWordTable.task_id = ?
+    )");
 
     // 教师语义操作
     static QVariant addTeacher(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
@@ -83,6 +96,8 @@ private:
     static int teacherDeleteAssignmentDistributionTable(QSqlQuery &q, const qint64 &teacher_id, const qint64 &task_id, const qint64 &class_id);
     static bool teacherDeleteTaskTable(QSqlQuery &q, const qint64 &task_id);
     static QVariant addTaskWord(QSqlQuery &q, const qint64 &task_id, const qint64 &word_id);
+    static QList<TaskInfo> displayTaskInClass(QSqlQuery &q, const qint64 &class_id);
+    static QList<WordInfo> displayWordFromTask(QSqlQuery &q, const qint64 &task_id);
 
 public:
     explicit Teacher(Database& db) : Role(db) {}
@@ -107,6 +122,8 @@ public:
                             const QString &chinese,
                             const QString &phonetic,
                             const QString &audio_url);
+    QList<TaskInfo> infoTaskInClass(const qint64 &class_id);
+    QList<WordInfo> infoWordsInTask(const qint64 &task_id);
 };
 
 class Student : public Role {
@@ -137,21 +154,18 @@ private:
         INNER JOIN teacherclass ON teachers.id = teacherclass.teacher_id
         WHERE teacherclass.class_id = ?
     )");
-
     const QLatin1String retrieveClassMember = QLatin1String(R"(
         SELECT students.id, students.name, students.profile_photo_url
         FROM students
         INNER JOIN studentclass ON students.id = studentclass.student_id
         WHERE studentclass.class_id = ?
     )");
-
     const QLatin1String retrieveTaskInfo = QLatin1String(R"(
         SELECT tasktable.id, tasktable.create_time, tasktable.deadline, tasktable.time_limit
         FROM tasktable
         INNER JOIN AssignmentDistributionTable ON tasktable.id = AssignmentDistributionTable.task_id
         WHERE AssignmentDistributionTable.class_id = ?
     )");
-
     const QLatin1String retrieveWordFromTask = QLatin1String(R"(
         SELECT words.id, words.english, words.chinese, words.phonetic, words.audio_url
         FROM words

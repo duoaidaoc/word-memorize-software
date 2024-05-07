@@ -152,8 +152,10 @@ int main(int argc, char *argv[])
 
   qDebug() << "-------- 测试老师查看学习情况 --------\n";
   // ToDo: （1）班级查任务
-
+  teacher2.infoTaskInClass(2020);
   // ToDo: （2）显示所有单词
+  teacher2.infoWordsInTask(6);
+  teacher2.infoWordsInTask(5);
   // ToDo: （3）显示总体完成情况
 
   qDebug() << "-------- 数据库测试结束 -------\n";

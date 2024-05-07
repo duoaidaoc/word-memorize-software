@@ -136,6 +136,61 @@ auto db::Teacher::addTaskWord(QSqlQuery &q,
   return q.lastInsertId();
 }
 
+auto db::Teacher::displayTaskInClass(QSqlQuery &q, const qint64 &class_id) -> QList<TaskInfo> {
+  QList<TaskInfo> taskList;
+
+  q.addBindValue(class_id);
+  if (!q.exec()) {
+    qDebug() << "Error executing displayTaskInClass query:" << q.lastError().text();
+    return taskList; // 返回空列表
+  }
+
+  if (!q.next()) {
+    qDebug() << "No student members for class with ID:" << class_id;
+    return taskList; // 返回空列表
+  }
+
+  do {
+    TaskInfo taskInfo;
+    taskInfo.taskId = q.value("id").toLongLong();
+    taskInfo.create_time = q.value("create_time").toDateTime();
+    taskInfo.deadline = q.value("deadline").toDateTime();
+    taskInfo.time = q.value("time_limit").toTime();
+    taskList.append(taskInfo);
+  } while (q.next());
+
+  return taskList;
+}
+
+auto db::Teacher::displayWordFromTask(QSqlQuery &q, const qint64 &task_id) -> QList<db::WordInfo>
+{
+  QList<WordInfo> wordList;
+
+  q.addBindValue(task_id);
+  if (!q.exec()) {
+    qDebug() << "Error executing displayWordFromTask query:" << q.lastError().text();
+    return wordList; // 返回空列表
+  }
+
+  if (!q.next()) {
+    qDebug() << "No words for task with ID:" << task_id;
+    return wordList; // 返回空列表
+  }
+
+  do {
+    WordInfo wordInfo;
+    wordInfo.word_id = q.value("id").toLongLong();
+    wordInfo.english = q.value("english").toString();
+    wordInfo.chinese = q.value("chinese").toString();
+    wordInfo.phonetic = q.value("phonetic").toString();
+    wordInfo.audio_url = q.value("audio_url").toString();
+    wordList.append(wordInfo);
+  } while (q.next());
+
+
+  return wordList;
+}
+
 //--------------------------- semantic functions --------------------------//
 // 增删改查
 auto db::Teacher::registerRole() -> QVariant {
@@ -287,6 +342,40 @@ auto db::Teacher::createTaskWord(const qint64 &task_id, const qint64 &word_id,
   addTaskWord(query, task_id, word_id);
 
   return word_.registerWord();
+}
+
+auto db::Teacher::infoTaskInClass(const qint64 &class_id) -> QList<TaskInfo> {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(retrieveTaskInfo)) {
+    throw std::runtime_error("Failed to infoTaskInClass sql");
+  }
+
+  QList<TaskInfo> taskInfo = displayTaskInClass(query, class_id);
+
+  qDebug() <<"**************\n";
+  for (const auto &task : taskInfo) {
+    qDebug() << "Task ID:" << task.taskId << ", task start time:" << task.create_time  << ", task end_time:" << task.deadline << ", lasting time:" << task.time;
+  }
+  qDebug() <<"**************\n";
+
+  return taskInfo;
+}
+
+auto db::Teacher::infoWordsInTask(const qint64 &task_id) -> QList<WordInfo> {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(retrieveWordFromTask)) {
+    throw std::runtime_error("Failed to prepare retrieveWordFromTask sql");
+  }
+
+  QList<WordInfo> WordList = displayWordFromTask(query, task_id);
+
+  qDebug() <<"**************\n";
+  for (const auto &wordInfo : WordList) {
+    qDebug() << "Wordid: " << wordInfo.word_id << "English:" << wordInfo.english << ", Chinese:" << wordInfo.chinese << ", Phonetic:" << wordInfo.phonetic << ", Audio URL:" << wordInfo.audio_url;
+  }
+  qDebug() <<"**************\n";
+
+  return WordList;
 }
 
 //====================================== Student part =====================================//
