@@ -26,6 +26,14 @@ struct TaskInfo {
   QDateTime deadline;
   QTime time;
 };
+
+struct WordInfo {
+  qint64 word_id;
+  QString english;
+  QString chinese;
+  QString phonetic;
+  QString audio_url;
+};
 } // end namespace db
 
 #endif  // UTIL_H

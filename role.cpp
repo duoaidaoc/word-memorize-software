@@ -286,7 +286,6 @@ auto db::Teacher::createTaskWord(const qint64 &task_id, const qint64 &word_id,
 
   addTaskWord(query, task_id, word_id);
 
-  // 将创建的班级在班级表中插入。
   return word_.registerWord();
 }
 
@@ -434,6 +433,34 @@ auto db::Student::displayTaskInClass(QSqlQuery &q, const qint64 &class_id) -> QL
   return taskList;
 }
 
+auto db::Student::displayWordFromTask(QSqlQuery &q, const qint64 &task_id) -> QList<db::WordInfo>
+{
+  QList<WordInfo> wordList;
+
+  q.addBindValue(task_id);
+  if (!q.exec()) {
+    qDebug() << "Error executing displayWordFromTask query:" << q.lastError().text();
+    return wordList; // 返回空列表
+  }
+
+  if (!q.next()) {
+    qDebug() << "No words for task with ID:" << task_id;
+    return wordList; // 返回空列表
+  }
+
+  while (q.next()) {
+    WordInfo wordInfo;
+    wordInfo.word_id = q.value("id").toLongLong();
+    wordInfo.english = q.value("english").toString();
+    wordInfo.chinese = q.value("chinese").toString();
+    wordInfo.phonetic = q.value("phonetic").toString();
+    wordInfo.audio_url = q.value("audio_url").toString();
+    wordList.append(wordInfo);
+  }
+
+  return wordList;
+}
+
 auto db::Student::deleteStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id) -> bool {
   q.addBindValue(student_id);
   q.addBindValue(class_id);
@@ -554,7 +581,7 @@ auto db::Student::infoClassMembers(const qint64 &class_id) -> QList<StudentInfo>
 auto db::Student::infoTaskInClass(const qint64 &class_id) -> QList<TaskInfo> {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(retrieveTaskInfo)) {
-    throw std::runtime_error("Failed to prepare student member class sql");
+    throw std::runtime_error("Failed to infoTaskInClass sql");
   }
 
   QList<TaskInfo> taskInfo = displayTaskInClass(query, class_id);
@@ -567,5 +594,23 @@ auto db::Student::infoTaskInClass(const qint64 &class_id) -> QList<TaskInfo> {
 
   return taskInfo;
 }
+
+auto db::Student::infoWordsInTask(const qint64 &task_id) -> QList<WordInfo> {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(retrieveWordFromTask)) {
+    throw std::runtime_error("Failed to prepare retrieveWordFromTask sql");
+  }
+
+  QList<WordInfo> WordList = displayWordFromTask(query, task_id);
+
+  qDebug() <<"**************\n";
+  for (const auto &wordInfo : WordList) {
+    qDebug() << "Wordid: " << wordInfo.word_id << "English:" << wordInfo.english << ", Chinese:" << wordInfo.chinese << ", Phonetic:" << wordInfo.phonetic << ", Audio URL:" << wordInfo.audio_url;
+  }
+  qDebug() <<"**************\n";
+
+  return WordList;
+}
+
 
 

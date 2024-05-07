@@ -102,9 +102,9 @@ private:
     // 任务单词关系
     const QLatin1String createTaskWordTable = QLatin1String(R"(
         CREATE TABLE IF NOT EXISTS TaskWordTable (
-            word_id BIGINT,
             task_id BIGINT,
-            PRIMARY KEY (word_id, task_id)
+            word_id BIGINT,
+            PRIMARY KEY (task_id, word_id)
         )
     )");
 

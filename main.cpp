@@ -115,6 +115,11 @@ int main(int argc, char *argv[])
   teacher2.createTaskWord(3, 13, "accccc", "抛弃", "aaaaa", "bbbbb");
   teacher2.createTaskWord(3, 14, "accccc", "抛弃", "aaaaa", "bbbbb");
   teacher2.createTaskWord(3, 15, "accccc", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(5, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(6, 12, "accccc", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(5, 13, "accccc", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(6, 14, "accccc", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(5, 15, "accccc", "抛弃", "aaaaa", "bbbbb");
 
   qDebug() <<"-------- 测试系统生成自带的题库 --------\n";
   system.createWordBank(1, "牛津", "djdjdjjdjdjdjdj");
@@ -133,10 +138,15 @@ int main(int argc, char *argv[])
   student2.infoClassMembers(2020);
 
   qDebug() << "-------- 测试学生背任务里面的单词 --------\n";
+  qDebug() << "***** 班级查任务 *****\n";
   // ToDo: （1）班级查任务
+  // 返回QList<TaskInfo>
   student2.infoTaskInClass(2020);
-
-  // ToDo: （2）显示所有单词
+  // ToDo: （2）显示所有指定任务里面的单词
+  // 返回QList<WordInfo>
+  qDebug() << "***** 任务查单词 *****\n";
+  student2.infoWordsInTask(6);
+  student2.infoWordsInTask(5);
   // ToDo: （3）学生学习单词（单词id）
   // ToDo: （4）显示总体完成情况
 

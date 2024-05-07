@@ -68,7 +68,7 @@ private:
         DELETE FROM tasktable WHERE id = ?
     )");
     const QLatin1String insertTaskWordTable = QLatin1String(R"(
-        insert into TaskWordTable(word_id, task_id) values(?, ?)
+        insert into TaskWordTable(task_id, word_id) values(?, ?)
     )");
 
     // 教师语义操作
@@ -152,6 +152,13 @@ private:
         WHERE AssignmentDistributionTable.class_id = ?
     )");
 
+    const QLatin1String retrieveWordFromTask = QLatin1String(R"(
+        SELECT words.id, words.english, words.chinese, words.phonetic, words.audio_url
+        FROM words
+        INNER JOIN TaskWordTable ON words.id = TaskWordTable.word_id
+        WHERE TaskWordTable.task_id = ?
+    )");
+
     // 学生语义操作
     static QVariant addStudent(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
     static bool deleteStudent(QSqlQuery &q, const qint64 &id);
@@ -162,6 +169,7 @@ private:
     static QList<TeacherInfo> displayClassTeacher(QSqlQuery &q, const qint64 &class_id);
     static QList<StudentInfo> displayClassMember(QSqlQuery &q, const qint64 &class_id);
     static QList<TaskInfo> displayTaskInClass(QSqlQuery &q, const qint64 &class_id);
+    static QList<WordInfo> displayWordFromTask(QSqlQuery &q, const qint64 &task_id);
 
 public:
     explicit Student(Database& db) : Role(db) {}
@@ -179,6 +187,7 @@ public:
     QList<TeacherInfo> infoClassDetails(const qint64 &class_id);
     QList<StudentInfo> infoClassMembers(const qint64 &class_id);
     QList<TaskInfo> infoTaskInClass(const qint64 &class_id);
+    QList<WordInfo> infoWordsInTask(const qint64 &task_id);
 };
 } // end db
 
