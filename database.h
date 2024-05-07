@@ -136,7 +136,6 @@ private:
         CREATE TABLE IF NOT EXISTS StudentWordLearning (
             student_id BIGINT,
             word_id BIGINT,
-            learned_tag BOOLEAN,
             PRIMARY KEY (student_id, word_id)
         )
     )");

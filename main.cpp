@@ -148,6 +148,7 @@ int main(int argc, char *argv[])
   student2.infoWordsInTask(6);
   student2.infoWordsInTask(5);
   // ToDo: （3）学生学习单词（单词id）
+  student2.learnWordRecord(11);
   // ToDo: （4）显示总体完成情况
 
   qDebug() << "-------- 测试老师查看学习情况 --------\n";

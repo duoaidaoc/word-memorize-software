@@ -161,6 +161,9 @@ private:
         INNER JOIN studentclass ON students.id = studentclass.student_id
         WHERE studentclass.class_id = ?
     )");
+    const QLatin1String learnWord = QLatin1String(R"(
+        insert into StudentWordLearning(student_id ,word_id) values(?, ?)
+    )");
 
     // 学生语义操作
     static QVariant addStudent(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
@@ -171,7 +174,7 @@ private:
     static QList<QPair<qint64, QString>> displayStudentClass(QSqlQuery &q, const qint64 &student_id);
     static QList<TeacherInfo> displayClassTeacher(QSqlQuery &q, const qint64 &class_id);
     static QList<StudentInfo> displayClassMember(QSqlQuery &q, const qint64 &class_id);
-
+    static QVariant insertStudentWordLearningTable(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id);
 public:
     explicit Student(Database& db) : Role(db) {}
 
@@ -187,6 +190,7 @@ public:
     QList<QPair<qint64, QString>> infoStudentClass();
     QList<TeacherInfo> infoClassDetails(const qint64 &class_id);
     QList<StudentInfo> infoClassMembers(const qint64 &class_id);
+    QVariant learnWordRecord(const qint64 &word_id);
 };
 } // end db
 

@@ -510,6 +510,15 @@ auto db::Student::deleteStudentClass(QSqlQuery &q, const qint64 &student_id, con
   }
 }
 
+auto db::Student::insertStudentWordLearningTable(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id) -> QVariant {
+  q.addBindValue(student_id);
+  q.addBindValue(word_id);
+  if (!q.exec()) {
+    qDebug() << "insertStudentWordLearningTable:" << q.lastError().text();
+  }
+  return q.lastInsertId();
+}
+
 //--------------------------- semantic functions --------------------------//
 // 增删改查
 auto db::Student::registerRole() -> QVariant {
@@ -613,6 +622,15 @@ auto db::Student::infoClassMembers(const qint64 &class_id) -> QList<StudentInfo>
   qDebug() <<"**************\n";
 
   return classMembers;
+}
+
+auto db::Student::learnWordRecord(const qint64 &word_id) -> QVariant {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(learnWord)) {
+    throw std::runtime_error("Failed to prepare retrieveWordFromTask sql");
+  }
+
+  return insertStudentWordLearningTable(query, GetId(), word_id);
 }
 
 
