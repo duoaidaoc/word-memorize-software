@@ -7,6 +7,7 @@
 #include "resource_manager.h"
 #include "role.h"
 #include "system.h"
+#include "teacher_main.h"
 
 int main(int argc, char *argv[])
 {
@@ -179,11 +180,12 @@ int main(int argc, char *argv[])
       file.close();
   }
 
-//  login* loginpage = new login();
-//  loginpage->show();
-  student_main* stm = new student_main();
-  stm->show();
-
+  login* loginpage = new login();
+  loginpage->show();
+  //student_main* stm = new student_main();
+  //stm->show();
+  //teacher_main* tem = new teacher_main();
+  //tem->show();
   AppInit::Instance()->start();
   return a.exec();
 }

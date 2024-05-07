@@ -122,7 +122,7 @@ resource_manager::resource_manager()
 {
     QTime current_time = QTime::currentTime();
     sel = current_time.hour();
-    sel = 20;
+    sel = 16;
     if (sel < 6 || sel >= 19) {
         //晚上
         glob_stylecss_path = "../word-memorize-software/night.css";

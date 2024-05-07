@@ -1,3 +1,9 @@
+QTableWidget{
+    border:none;
+    border-radius: 20px;
+    background-color: rgba(255,255,255,0.5);
+}
+
 QLineEdit {
     border: none;
     background-color: transparent;
@@ -66,7 +72,7 @@ word_frame QPushButton{
     background-color: rgba(255, 255, 255, 0.5);
 }
 
-QScrollArea{
+QScrollArea {
     background-color: rgba(255, 255, 255, 0.5);
     border: 5px;
     border-radius: 20px;
@@ -85,7 +91,7 @@ QScrollArea{
     border-radius: 20px;
 }
 
-#word_contents, #class_contents, #task_contents, #class_detail_contents{
+#word_contents, #class_contents, #task_contents,#task_view_contents, #class_detail_contents{
     background-color: rgba(127, 127, 200, 0.5);
     border:none;
     border-radius: 20px;
@@ -156,7 +162,7 @@ QScrollArea{
     color: white;
 }
 
-#btn_frame,#ud_frame,#btn_frame_2{
+#btn_frame,#btn_frame_2,#btn_frame_3,#btn_frame_4,#btn_frame_5,#ud_frame,teacher_main #info_frame{
     background-color: rgba(255, 255, 255, 0.6);
     border:none;
     border-radius: 20px;
@@ -236,32 +242,32 @@ QScrollArea{
     border-image: url(../word-memorize-software/pics/icon/grey/test.png) 0 0 0 0;
     border : none;
 }
-#up_btn {
+#up_btn,#btn_greater {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/black/arrowup.png) 0 0 0 0;
     border : none;
 }
-#up_btn:hover {
+#up_btn:hover,#btn_greater:hover {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/white/arrowup.png) 0 0 0 0;
     border : none;
 }
-#up_btn:pressed {
+#up_btn:pressed,#btn_greater:pressed {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/grey/arrowup.png) 0 0 0 0;
     border : none;
 }
-#down_btn {
+#down_btn,#btn_lower {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/black/arrowdown.png) 0 0 0 0;
     border : none;
 }
-#down_btn:hover {
+#down_btn:hover,#btn_lower:hover {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/white/arrowdown.png) 0 0 0 0;
     border : none;
 }
-#down_btn:pressed {
+#down_btn:pressed,#btn_lower:pressed {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/grey/arrowdown.png) 0 0 0 0;
     border : none;
@@ -345,7 +351,7 @@ QScrollArea{
     border-image: url(../word-memorize-software/pics/icon/grey/arrowright.png) 0 0 0 0;
     border : none;
 }
-#close_btn,#close_btn_2 {
+#close_btn, #close_btn_2 {
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/white/close.png) 0 0 0 0;
     border : none;
@@ -365,14 +371,92 @@ QScrollArea{
     border-image: url(../word-memorize-software/pics/icon/white/add.png) 0 0 0 0;
     border : none;
 }
-#class_add_btn:hover {
+#class_add_btn:hover{
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/black/add.png) 0 0 0 0;
     border : none;
 }
-#class_add_btn:pressed {
+#class_add_btn:pressed{
     background-color: none;
     border-image: url(../word-memorize-software/pics/icon/grey/add.png) 0 0 0 0;
+    border : none;
+}
+
+#btn_add_task,#btn_add_word{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/black/add.png) 0 0 0 0;
+    border : none;
+}
+#btn_add_task:hover,#btn_add_word:hover{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/white/add.png) 0 0 0 0;
+    border : none;
+}
+#btn_add_task:pressed,#btn_add_word:pressed{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/grey/add.png) 0 0 0 0;
+    border : none;
+}
+#btn_return_to_detail,#btn_create_to_task,#btn_condition_to_task,#btn_content_to_task{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/black/return.png) 0 0 0 0;
+    border : none;
+}
+
+#btn_return_to_detail:hover,#btn_create_to_task:hover,#btn_condition_to_task:hover,#btn_content_to_task:hover{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/white/return.png) 0 0 0 0;
+    border : none;
+}
+
+#btn_return_to_detail:pressed,#btn_create_to_task:pressed,#btn_condition_to_task:pressed,#btn_content_to_task:pressed{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/grey/return.png) 0 0 0 0;
+    border : none;
+}
+#btn_del_word,#btn_del_task,#btn_del_task_2{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/black/delete.png) 0 0 0 0;
+    border : none;
+}
+#btn_del_word:hover,#btn_del_task:hover,#btn_del_task_2:hover{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/white/delete.png) 0 0 0 0;
+    border : none;
+}
+#btn_del_word:pressed,#btn_del_task:pressed,#btn_del_task_2:pressed{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/grey/delete.png) 0 0 0 0;
+    border : none;
+}
+#btn_condition_to_content{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/black/word.png) 0 0 0 0;
+    border : none;
+}
+#btn_condition_to_content:hover{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/white/word.png) 0 0 0 0;
+    border : none;
+}
+#btn_condition_to_content:pressed{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/grey/word.png) 0 0 0 0;
+    border : none;
+}
+#btn_content_to_condition{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/black/rank.png) 0 0 0 0;
+    border : none;
+}
+#btn_content_to_condition:hover{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/white/rank.png) 0 0 0 0;
+    border : none;
+}
+#btn_content_to_condition:pressed{
+    background-color: none;
+    border-image: url(../word-memorize-software/pics/icon/grey/rank.png) 0 0 0 0;
     border : none;
 }
 
@@ -400,4 +484,10 @@ QScrollArea{
     background-color: rgba(255,255,255,0.3);
     border-radius: 20px;
     border: none;
+}
+
+#label_teacher_main_pic{
+    border-image: url(../word-memorize-software/pics/man.png) 0 0 0 0;
+    background-color: rgba(255,255,255,0.6);
+    border-radius: 50px;
 }
