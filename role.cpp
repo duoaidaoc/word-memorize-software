@@ -448,7 +448,7 @@ auto db::Student::displayWordFromTask(QSqlQuery &q, const qint64 &task_id) -> QL
     return wordList; // 返回空列表
   }
 
-  while (q.next()) {
+  do {
     WordInfo wordInfo;
     wordInfo.word_id = q.value("id").toLongLong();
     wordInfo.english = q.value("english").toString();
@@ -456,7 +456,8 @@ auto db::Student::displayWordFromTask(QSqlQuery &q, const qint64 &task_id) -> QL
     wordInfo.phonetic = q.value("phonetic").toString();
     wordInfo.audio_url = q.value("audio_url").toString();
     wordList.append(wordInfo);
-  }
+  } while (q.next());
+
 
   return wordList;
 }

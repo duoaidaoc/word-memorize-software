@@ -110,14 +110,14 @@ int main(int argc, char *argv[])
   teacher2.createTask(5, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
 
   qDebug() << "-------- 测试老师给计划添加单词 --------\n";
-  teacher2.createTaskWord(3, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
-  teacher2.createTaskWord(3, 12, "accccc", "抛弃", "aaaaa", "bbbbb");
-  teacher2.createTaskWord(3, 13, "accccc", "抛弃", "aaaaa", "bbbbb");
-  teacher2.createTaskWord(3, 14, "accccc", "抛弃", "aaaaa", "bbbbb");
-  teacher2.createTaskWord(3, 15, "accccc", "抛弃", "aaaaa", "bbbbb");
   teacher2.createTaskWord(5, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
   teacher2.createTaskWord(6, 12, "accccc", "抛弃", "aaaaa", "bbbbb");
   teacher2.createTaskWord(5, 13, "accccc", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(6, 14, "accccc", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(5, 15, "accccc", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(6, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(5, 12, "accccc", "抛弃", "aaaaa", "bbbbb");
+  teacher2.createTaskWord(6, 13, "accccc", "抛弃", "aaaaa", "bbbbb");
   teacher2.createTaskWord(6, 14, "accccc", "抛弃", "aaaaa", "bbbbb");
   teacher2.createTaskWord(5, 15, "accccc", "抛弃", "aaaaa", "bbbbb");
 
@@ -150,11 +150,9 @@ int main(int argc, char *argv[])
   // ToDo: （3）学生学习单词（单词id）
   // ToDo: （4）显示总体完成情况
 
-  qDebug() << "-------- 测试学生背诵系统单词 --------\n";
-  // 流程是系统推送单词（1）选取特定单词本（2）特定单词本选取单词
-
   qDebug() << "-------- 测试老师查看学习情况 --------\n";
   // ToDo: （1）班级查任务
+
   // ToDo: （2）显示所有单词
   // ToDo: （3）显示总体完成情况
 
