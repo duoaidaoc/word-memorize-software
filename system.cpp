@@ -23,6 +23,19 @@ auto db::System::addWordBankRelation(QSqlQuery &q,
   return q.lastInsertId();
 }
 
+auto db::System::returnPassword(QSqlQuery &q, const qint64 &id) -> QVariant {
+  q.addBindValue(id);
+  q.exec();
+  QString password;
+  if (q.next()) { // 如果有查询结果
+    // 获取密码字段的值
+    password = q.value("password").toString();
+  }
+  // 否则，password是空，判断空即可。
+
+  return password;
+}
+
 //=============== semantics movements =================//
 auto db::System::createWordBank(const qint64 &id, const QString &name, const QString &picture_url) -> QVariant {
   QSqlQuery query(returnDatabase());
@@ -53,4 +66,22 @@ auto db::System::importWordBank(const qint64 &word_bank_id,
   }
 
   return addWordBankRelation(query, word_bank_id, word_id);
+}
+
+auto db::System::returnTeacherPassword(const qint64 &teacher_id) -> QVariant {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(teachersLoginPassword)) {
+    throw std::runtime_error("Failed to prepare returnTeacherPasswor sql");
+  }
+
+  return returnPassword(query, teacher_id);
+}
+
+auto db::System::returnStudentPassword(const qint64 &student_id) -> QVariant {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(studentsLoginPassword)) {
+    throw std::runtime_error("Failed to prepare returnStudentPassword sql");
+  }
+
+  return returnPassword(query, student_id);
 }

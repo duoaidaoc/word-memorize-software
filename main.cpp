@@ -126,6 +126,12 @@ int main(int argc, char *argv[])
   system.importWordBank(1, 16, "oxford", "牛津", "ddddd", "dddddddd");
   system.importWordBank(1, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
 
+  qDebug() << "-------- 教师学生登录 --------\n";
+  qDebug() << system.returnTeacherPassword(9) << "\n";
+  qDebug() << system.returnTeacherPassword(3) << "\n";
+  qDebug() << system.returnStudentPassword(89) << "\n";
+  qDebug() << system.returnStudentPassword(90) << "\n";
+
   qDebug() << "-------- 测试学生显示所在的班级 --------\n";
   // 返回的是QList<QPair<qint64, QString>>
   student2.infoStudentClass();

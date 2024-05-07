@@ -174,8 +174,9 @@ private:
     static QList<QPair<qint64, QString>> displayStudentClass(QSqlQuery &q, const qint64 &student_id);
     static QList<TeacherInfo> displayClassTeacher(QSqlQuery &q, const qint64 &class_id);
     static QList<StudentInfo> displayClassMember(QSqlQuery &q, const qint64 &class_id);
-    static QVariant insertStudentWordLearningTable(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id);
-public:
+    static QVariant insertStudentWordLearningTable(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id);  
+
+  public:
     explicit Student(Database& db) : Role(db) {}
 
     // 增删改查
