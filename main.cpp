@@ -144,6 +144,11 @@ int main(int argc, char *argv[])
   // 返回的是该class的学生成员信息。QList<StudentInfo>
   student2.infoClassMembers(2020);
 
+  teacher2.infoTeacherClass();
+  teacher2.infoClassDetails(2020);
+  // 返回的是该class的学生成员信息。QList<StudentInfo>
+  teacher2.infoClassMembers(2020);
+
   qDebug() << "-------- 测试学生背任务里面的单词 --------\n";
   qDebug() << "***** 班级查任务 *****\n";
   // ToDo: （1）班级查任务
@@ -180,12 +185,12 @@ int main(int argc, char *argv[])
       file.close();
   }
 
-  login* loginpage = new login();
-  loginpage->show();
+//  login* loginpage = new login();
+//  loginpage->show();
   //student_main* stm = new student_main();
   //stm->show();
-  //teacher_main* tem = new teacher_main();
-  //tem->show();
+  teacher_main* tem = new teacher_main();
+  tem->show();
   AppInit::Instance()->start();
   return a.exec();
 }

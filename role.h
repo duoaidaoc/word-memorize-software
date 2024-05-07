@@ -29,9 +29,23 @@ private:
         INNER JOIN TaskWordTable ON words.id = TaskWordTable.word_id
         WHERE TaskWordTable.task_id = ?
     )");
+    const QLatin1String retrieveTeachersInClass = QLatin1String(R"(
+        SELECT teachers.id, teachers.name, teachers.profile_photo_url
+        FROM teachers
+        INNER JOIN teacherclass ON teachers.id = teacherclass.teacher_id
+        WHERE teacherclass.class_id = ?
+    )");
+    const QLatin1String retrieveClassMember = QLatin1String(R"(
+        SELECT students.id, students.name, students.profile_photo_url
+        FROM students
+        INNER JOIN studentclass ON students.id = studentclass.student_id
+        WHERE studentclass.class_id = ?
+    )");
 
     static QList<TaskInfo> displayTaskInClass(QSqlQuery &q, const qint64 &class_id);
     static QList<WordInfo> displayWordFromTask(QSqlQuery &q, const qint64 &task_id);
+    static QList<TeacherInfo> displayClassTeacher(QSqlQuery &q, const qint64 &class_id);
+    static QList<StudentInfo> displayClassMember(QSqlQuery &q, const qint64 &class_id);
 
 public:
     explicit Role(Database& db) : Table(db) {}
@@ -50,6 +64,8 @@ public:
     const QString GetProfilePhotoUrl() const { return profile_photo_url_; }
     QList<TaskInfo> infoTaskInClass(const qint64 &class_id);
     QList<WordInfo> infoWordsInTask(const qint64 &task_id);
+    QList<TeacherInfo> infoClassDetails(const qint64 &class_id);
+    QList<StudentInfo> infoClassMembers(const qint64 &class_id);
 };
 
 class Teacher : public Role {
@@ -88,6 +104,11 @@ private:
     const QLatin1String insertTaskWordTable = QLatin1String(R"(
         insert into TaskWordTable(task_id, word_id) values(?, ?)
     )");
+    const QLatin1String retrieveTeacherClasses = QLatin1String(R"(
+        SELECT class.id AS id, class.name AS name
+        FROM teacherclass JOIN class ON teacherclass.class_id = class.id
+        WHERE teacherclass.teacher_id = ?
+    )");
 
     // 教师语义操作
     static QVariant addTeacher(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
@@ -101,6 +122,7 @@ private:
     static int teacherDeleteAssignmentDistributionTable(QSqlQuery &q, const qint64 &teacher_id, const qint64 &task_id, const qint64 &class_id);
     static bool teacherDeleteTaskTable(QSqlQuery &q, const qint64 &task_id);
     static QVariant addTaskWord(QSqlQuery &q, const qint64 &task_id, const qint64 &word_id);
+    static QList<QPair<qint64, QString>> displayTeacherClass(QSqlQuery &q, const qint64 &student_id);
 
 public:
     explicit Teacher(Database& db) : Role(db) {}
@@ -125,6 +147,7 @@ public:
                             const QString &chinese,
                             const QString &phonetic,
                             const QString &audio_url);
+    QList<QPair<qint64, QString> > infoTeacherClass();
 };
 
 class Student : public Role {
@@ -149,18 +172,6 @@ private:
         FROM studentclass JOIN class ON studentclass.class_id = class.id
         WHERE studentclass.student_id = ?
     )");
-    const QLatin1String retrieveTeachersInClass = QLatin1String(R"(
-        SELECT teachers.id, teachers.name, teachers.profile_photo_url
-        FROM teachers
-        INNER JOIN teacherclass ON teachers.id = teacherclass.teacher_id
-        WHERE teacherclass.class_id = ?
-    )");
-    const QLatin1String retrieveClassMember = QLatin1String(R"(
-        SELECT students.id, students.name, students.profile_photo_url
-        FROM students
-        INNER JOIN studentclass ON students.id = studentclass.student_id
-        WHERE studentclass.class_id = ?
-    )");
     const QLatin1String learnWord = QLatin1String(R"(
         insert into StudentWordLearning(student_id ,word_id) values(?, ?)
     )");
@@ -172,8 +183,6 @@ private:
     static QVariant addStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id);
     static bool deleteStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id);
     static QList<QPair<qint64, QString>> displayStudentClass(QSqlQuery &q, const qint64 &student_id);
-    static QList<TeacherInfo> displayClassTeacher(QSqlQuery &q, const qint64 &class_id);
-    static QList<StudentInfo> displayClassMember(QSqlQuery &q, const qint64 &class_id);
     static QVariant insertStudentWordLearningTable(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id);  
 
   public:
@@ -189,8 +198,6 @@ private:
     bool leaveClass(const qint64 &class_id);
 
     QList<QPair<qint64, QString>> infoStudentClass();
-    QList<TeacherInfo> infoClassDetails(const qint64 &class_id);
-    QList<StudentInfo> infoClassMembers(const qint64 &class_id);
     QVariant learnWordRecord(const qint64 &word_id);
 };
 } // end db
