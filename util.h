@@ -1,6 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include "qdatetime.h"
 #include <QString>
 #include <QVariant>
 
@@ -17,6 +18,13 @@ struct StudentInfo {
   qint64 studentId;
   QString studentName;
   QString studentUrl;
+};
+
+struct TaskInfo {
+  qint64 taskId;
+  QDateTime create_time;
+  QDateTime deadline;
+  QTime time;
 };
 } // end namespace db
 

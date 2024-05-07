@@ -145,6 +145,12 @@ private:
         WHERE studentclass.class_id = ?
     )");
 
+    const QLatin1String retrieveTaskInfo = QLatin1String(R"(
+        SELECT tasktable.id, tasktable.create_time, tasktable.deadline, tasktable.time_limit
+        FROM tasktable
+        INNER JOIN AssignmentDistributionTable ON tasktable.id = AssignmentDistributionTable.task_id
+        WHERE AssignmentDistributionTable.class_id = ?
+    )");
 
     // 学生语义操作
     static QVariant addStudent(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
@@ -153,8 +159,9 @@ private:
     static QVariant addStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id);
     static bool deleteStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id);
     static QList<QPair<qint64, QString>> displayStudentClass(QSqlQuery &q, const qint64 &student_id);
-    static QList<TeacherInfo> displayClassTeacher(QSqlQuery &q, const qint64 & class_id);
-    static QList<StudentInfo> displayClassMember(QSqlQuery &q, const qint64 & class_id);
+    static QList<TeacherInfo> displayClassTeacher(QSqlQuery &q, const qint64 &class_id);
+    static QList<StudentInfo> displayClassMember(QSqlQuery &q, const qint64 &class_id);
+    static QList<TaskInfo> displayTaskInClass(QSqlQuery &q, const qint64 &class_id);
 
 public:
     explicit Student(Database& db) : Role(db) {}
@@ -171,6 +178,7 @@ public:
     QList<QPair<qint64, QString>> infoStudentClass();
     QList<TeacherInfo> infoClassDetails(const qint64 &class_id);
     QList<StudentInfo> infoClassMembers(const qint64 &class_id);
+    QList<TaskInfo> infoTaskInClass(const qint64 &class_id);
 };
 } // end db
 

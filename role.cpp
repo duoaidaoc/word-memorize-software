@@ -408,6 +408,31 @@ auto db::Student::displayClassMember(QSqlQuery &q, const qint64 &class_id) -> QL
   return studentList;
 }
 
+auto db::Student::displayTaskInClass(QSqlQuery &q, const qint64 &class_id) -> QList<TaskInfo> {
+  QList<TaskInfo> taskList;
+
+  q.addBindValue(class_id);
+  if (!q.exec()) {
+    qDebug() << "Error executing displayTaskInClass query:" << q.lastError().text();
+    return taskList; // 返回空列表
+  }
+
+  if (!q.next()) {
+    qDebug() << "No student members for class with ID:" << class_id;
+    return taskList; // 返回空列表
+  }
+
+  do {
+    TaskInfo taskInfo;
+    taskInfo.taskId = q.value("id").toLongLong();
+    taskInfo.create_time = q.value("create_time").toDateTime();
+    taskInfo.deadline = q.value("deadline").toDateTime();
+    taskInfo.time = q.value("time_limit").toTime();
+    taskList.append(taskInfo);
+  } while (q.next());
+
+  return taskList;
+}
 
 auto db::Student::deleteStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id) -> bool {
   q.addBindValue(student_id);
@@ -524,6 +549,23 @@ auto db::Student::infoClassMembers(const qint64 &class_id) -> QList<StudentInfo>
   qDebug() <<"**************\n";
 
   return classMembers;
+}
+
+auto db::Student::infoTaskInClass(const qint64 &class_id) -> QList<TaskInfo> {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(retrieveTaskInfo)) {
+    throw std::runtime_error("Failed to prepare student member class sql");
+  }
+
+  QList<TaskInfo> taskInfo = displayTaskInClass(query, class_id);
+
+  qDebug() <<"**************\n";
+  for (const auto &task : taskInfo) {
+    qDebug() << "Task ID:" << task.taskId << ", task start time:" << task.create_time  << ", task end_time:" << task.deadline << ", lasting time:" << task.time;
+  }
+  qDebug() <<"**************\n";
+
+  return taskInfo;
 }
 
 
