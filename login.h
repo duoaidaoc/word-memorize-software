@@ -24,6 +24,8 @@ private:
 private slots:
     void label_change(int rate);
     void set_curr_time();
+signals:
+    void turn_to(bool);
 };
 
 #endif // LOGIN_H

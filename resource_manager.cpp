@@ -76,26 +76,54 @@ db::Database& resource_manager::get_database()
     return *database;
 }
 
-void resource_manager::init_student()
+QVariant resource_manager::init_student(const qint64 id, const QString name, const QString password)
 {
     // @测试版本 正确的应该是在数据库中查询 student id 的所有信息
-    student = new db::Student(*database);
-    student->SetId(2021211230);
-    student->SetName("Mamba");
-    student->SetPassword("djdjdjjdjddddddd");
+    student->SetId(id);
+    student->SetName(name);
+    student->SetPassword(password);
     student->SetProfilePhotoUrl("eeueueuL");
-    student->registerRole();
-    student->joinClass(2023);// todo: 不能重复添加，是在db出解决还是逻辑中解决。
-    student->joinClass(2021);
-    student->joinClass(2020);
-    student->joinClass(2028);
-    student->joinClass(2029);
-    student->joinClass(2020);
+    return student->registerRole();
 }
 
 db::Student &resource_manager::get_student()
 {
     return *student;
+}
+
+QVariant resource_manager::init_teacher(const qint64 id, const QString name, const QString password)
+{
+    // @删掉曼巴、梅西、詹皇
+    teacher->SetId(id);
+    teacher->SetName(name);
+    teacher->SetPassword(password);
+    teacher->SetProfilePhotoUrl("eeueueuL");
+    return teacher->registerRole();
+}
+
+void resource_manager::init_init_student()
+{
+    student = new db::Student(*database);
+}
+
+void resource_manager::init_init_teacher()
+{
+    teacher = new db::Teacher(*database);
+}
+
+void resource_manager::destroy_student()
+{
+    delete student;
+}
+
+void resource_manager::destroy_teacher()
+{
+    delete teacher;
+}
+
+db::Teacher &resource_manager::get_teacher()
+{
+    return *teacher;
 }
 
 resource_manager* resource_manager::getInstance() {
@@ -122,7 +150,7 @@ resource_manager::resource_manager()
 {
     QTime current_time = QTime::currentTime();
     sel = current_time.hour();
-    sel = 16;
+    sel = 20;
     if (sel < 6 || sel >= 19) {
         //晚上
         glob_stylecss_path = "../word-memorize-software/night.css";

@@ -34,9 +34,16 @@ public:
 
     void init_database();
     db::Database &get_database();
-    void init_student();
-    db::Student &get_student();
 
+    db::Student &get_student();
+    db::Teacher &get_teacher();
+
+    QVariant init_student(const qint64 id, const QString name, const QString password);
+    QVariant init_teacher(const qint64 id, const QString name, const QString password);
+    void init_init_student();
+    void init_init_teacher();
+    void destroy_student();
+    void destroy_teacher();
   private:
     resource_manager();
     static resource_manager* instance;
@@ -48,8 +55,10 @@ public:
     QString glob_profile_picture_path;
     QString glob_audio_path;
     QString glob_stylecss_path;
+
     db::Database *database;
     db::Student *student;
+    db::Teacher *teacher;
     int sel;
 };
 

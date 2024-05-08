@@ -8,7 +8,7 @@
 #include "word_frame.h"
 #include "word_display.h"
 #include "question.h"
-
+#include "word.h"
 
 namespace Ui {
 class student_main;
@@ -22,6 +22,7 @@ public:
     explicit student_main(QWidget *parent = nullptr);
     ~student_main();
     void move_display();
+    void data_setup();
 private:
     Ui::student_main *ui;
 
@@ -41,10 +42,11 @@ private:
     question* que_widget;
 
 
+
     void setup();
     void setaction();
     void addword(const Word &word);
-    void init_student();
+
 private slots:
     void show_display(const Word &wd, int seq);
     void update_display(int seq_ = 0);

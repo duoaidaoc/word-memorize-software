@@ -22,7 +22,6 @@ classcue_frame::classcue_frame(QWidget *parent) :
     throw std::runtime_error("background of class_display is not availble.");
   }
   ImageProcesser::GaussiamBlur(20, 20, bg);
-  bg.save("bg.png");
   QObject::connect(ui->close_btn,&QPushButton::clicked,[&](){
     ui->lineEdit->clear();
     this->hide();

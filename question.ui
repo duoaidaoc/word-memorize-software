@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="AcrylicFrame" name="frame_2">
@@ -104,14 +104,20 @@
       <widget class="QLineEdit" name="eng_edit">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>20</y>
-         <width>260</width>
-         <height>40</height>
+         <x>9</x>
+         <y>9</y>
+         <width>281</width>
+         <height>61</height>
         </rect>
        </property>
        <property name="text">
         <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="placeholderText">
+        <string>input</string>
        </property>
       </widget>
      </widget>
@@ -191,7 +197,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="C_Btn">
+     <widget class="QPushButton" name="C_btn">
       <property name="geometry">
        <rect>
         <x>50</x>

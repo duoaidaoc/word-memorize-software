@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 {
   QApplication a(argc, argv);
   auto man = resource_manager::getInstance();
+
 //  ========================================== 数据库测试 ==========================================//
 //   创建数据库对象
   man->init_database();
@@ -144,6 +145,7 @@ int main(int argc, char *argv[])
   // 返回的是该class的学生成员信息。QList<StudentInfo>
   student2.infoClassMembers(2020);
 
+  qDebug() << "-------- ================================ --------\n";
   teacher2.infoTeacherClass();
   teacher2.infoClassDetails(2020);
   // 返回的是该class的学生成员信息。QList<StudentInfo>
@@ -185,12 +187,27 @@ int main(int argc, char *argv[])
       file.close();
   }
 
-//  login* loginpage = new login();
-//  loginpage->show();
-  //student_main* stm = new student_main();
-  //stm->show();
+  man->init_init_student();
+  man->init_student(1,"1","1");
+  man->init_init_teacher();
+  man->init_teacher(1,"1","1");
+  login* loginpage = new login();
+  student_main* stm = new student_main();
   teacher_main* tem = new teacher_main();
+  loginpage->show();
   tem->show();
+  stm->show();
+  QObject::connect(loginpage,&login::turn_to,[&](bool interface){
+    if(interface){
+      tem->data_setup();
+      tem->show();
+    }
+    else{
+      stm->data_setup();
+      stm->show();
+    }
+  });
+
   AppInit::Instance()->start();
   return a.exec();
 }

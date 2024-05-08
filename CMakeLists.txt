@@ -68,6 +68,9 @@ set(PROJECT_SOURCES
         teacher_main.h
         teacher_main.cpp
         teacher_main.ui
+        newclass_frame.h
+        newclass_frame.cpp
+        newclass_frame.ui
         util.h
 )
 

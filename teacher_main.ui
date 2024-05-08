@@ -186,7 +186,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>7</number>
     </property>
     <widget class="QWidget" name="teacher_info_page">
      <widget class="QFrame" name="detail_frame">
@@ -335,7 +335,7 @@
        <widget class="QLabel" name="class_label">
         <property name="geometry">
          <rect>
-          <x>170</x>
+          <x>150</x>
           <y>150</y>
           <width>141</width>
           <height>51</height>
@@ -396,7 +396,7 @@
         <string>teacher name</string>
        </property>
       </widget>
-      <widget class="QScrollArea" name="teacher_scroll">
+      <widget class="QScrollArea" name="student_scroll">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -921,6 +921,74 @@
      <zorder>btn_frame_3</zorder>
      <zorder>scrollArea_task_view</zorder>
      <zorder>label_task_content</zorder>
+    </widget>
+    <widget class="QWidget" name="page">
+     <widget class="QTableView" name="tableView">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>10</y>
+        <width>171</width>
+        <height>361</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_tips">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>20</y>
+        <width>141</width>
+        <height>351</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>提示:文本文件要求每个单词使用空格或换行符分开</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>161</width>
+        <height>361</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPushButton" name="btn_loadtxt">
+         <property name="text">
+          <string>加载文本文件</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_addtotask">
+         <property name="text">
+          <string>添加到任务</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_discard">
+         <property name="text">
+          <string>放弃添加</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_ret">
+         <property name="text">
+          <string>返回上级</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </widget>
    <widget class="QLabel" name="label_teacher_main_pic">

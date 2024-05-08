@@ -110,7 +110,6 @@ public:
           }
         }
       }
-      img.save("p.png");
     }
 };
 

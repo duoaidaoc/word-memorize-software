@@ -13,14 +13,13 @@ student_main::student_main(QWidget *parent) :
 
     auto man = resource_manager::getInstance();
     auto &database = man->get_database();
-    man->init_student();
     auto &student = man->get_student();
 
 
     Word wd = {"abandon","abandon.txt ","v. 抛弃、放弃"};
     setup();
     setaction();
-    init_student();
+    data_setup();
     addword(wd);
 }
 
@@ -110,6 +109,7 @@ void student_main::setaction()
     QObject::connect(ui->test_btn,&QPushButton::clicked,[&](){
       // TODO():
       // 得到单词列表
+
       // 生成题目列表
       // 将题目列表放置到que_widget中
       // que_widget将题目准备好
@@ -141,8 +141,19 @@ void student_main::addword(const Word &word)
     QObject::connect(tf, &task_frame::set_display_content, [&](Task tsk){
       // TODO():
       // 得到单词列表
+      std::vector<Word>words;
+      words.reserve(word_frames.size());
+      for(const auto &frm : word_frames){
+        words.push_back(frm->get_content());
+      }
+      /**** 得到的单词列表是 std::vector<Word>words; ****/
+      /**** Word 是一个结构体 见 word.h ****/
+
       // 生成题目列表
+      /**** 题目列表是一个student_main中的 private 变量****/
+
       // 将题目列表放置到que_widget中
+
       // que_widget将题目准备好
       // (和上文可以打包复用)
       que_widget->show();
@@ -160,7 +171,7 @@ void student_main::addword(const Word &word)
     }
 }
 
-void student_main::init_student()
+void student_main::data_setup()
 {
     auto &student = resource_manager::getInstance()->get_student();
     ui->label_user_id->setText(QString::number(student.GetId()));

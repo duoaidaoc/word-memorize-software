@@ -9,6 +9,7 @@
 #include <QTimer>
 #include <QFontDatabase>
 #include "resource_manager.h"
+#include "word.h"
 
 login::login(QWidget *parent) :
     QWidget(parent),
@@ -91,6 +92,52 @@ void login::actionSet()
     QObject::connect(ui->ret_button, &QPushButton::clicked, this , [&](){
         ui->stackedWidget->setCurrentIndex(0);
     });
+    QObject::connect(ui->checkBox, &QCheckBox::stateChanged,[&](int state){
+      if(state == Qt::Checked){
+        ui->checkBox_2->setCheckState(Qt::Unchecked);
+      }
+    });
+    QObject::connect(ui->checkBox_2, &QCheckBox::stateChanged,[&](int state){
+      if(state == Qt::Checked){
+        ui->checkBox->setCheckState(Qt::Unchecked);
+      }
+    });
+    QObject::connect(ui->sig_button, &QPushButton::clicked, this , [&](){
+
+    });
+    QObject::connect(ui->chk_button, &QPushButton::clicked, this , [&](){
+      bool ok = true;
+      qint64 id = ui->acc_edit->text().toLongLong(&ok);
+      if(!ok || ui->name_edit->text() == "" || ui->pwd_edit->text() == ""){
+        // 报告错误
+      }
+      else if(ui->checkBox->checkState() == Qt::Unchecked && ui->checkBox_2->checkState() == Qt::Unchecked){
+        // 报告错误
+      }
+      else{
+        auto man = resource_manager::getInstance();
+        QVariant variant;
+        if(ui->checkBox->checkState() == Qt::Checked)
+          variant = man->init_teacher(id, ui->name_edit->text(), ui->pwd_edit->text());
+        else
+          variant = man->init_student(id, ui->name_edit->text(), ui->pwd_edit->text());
+        if(variant.isNull()){
+          // 报告错误
+        }
+        else{
+          // 报告成功，并跳转到student_main / teacher_main
+          if((ui->checkBox->checkState() == Qt::Checked)){
+            emit turn_to(true);
+          }
+          else{
+            emit turn_to(false);
+          }
+          this->hide();
+        }
+      }
+    });
+
+
 
     int rate = 70;
     connect(ui->acc_edit, &QLineEdit::textChanged, this,[this, rate](){
