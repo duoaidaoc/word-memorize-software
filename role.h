@@ -109,6 +109,9 @@ private:
         FROM teacherclass JOIN class ON teacherclass.class_id = class.id
         WHERE teacherclass.teacher_id = ?
     )");
+    const QLatin1String wordIdInWords = QLatin1String(R"(
+        SELECT id from words where english = ?
+    )");
 
     // 教师语义操作
     static QVariant addTeacher(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
@@ -148,6 +151,12 @@ public:
                             const QString &phonetic,
                             const QString &audio_url);
     QList<QPair<qint64, QString> > infoTeacherClass();
+    // 返回系统分配的task_id
+    int importTaskWordBank(const QList<QString> &englishList);
+    int checkAlreadyInWords(const QString &word);
+
+    // 查看系统的task_id到哪个值了。
+    int getTaskId();
 };
 
 class Student : public Role {

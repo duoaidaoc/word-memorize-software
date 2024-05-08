@@ -112,6 +112,7 @@ int main(int argc, char *argv[])
   teacher2.createTask(5, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
 
   qDebug() << "-------- 测试老师给计划添加单词 --------\n";
+  /*
   teacher2.createTaskWord(5, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
   teacher2.createTaskWord(6, 12, "accccc", "抛弃", "aaaaa", "bbbbb");
   teacher2.createTaskWord(5, 13, "accccc", "抛弃", "aaaaa", "bbbbb");
@@ -122,11 +123,15 @@ int main(int argc, char *argv[])
   teacher2.createTaskWord(6, 13, "accccc", "抛弃", "aaaaa", "bbbbb");
   teacher2.createTaskWord(6, 14, "accccc", "抛弃", "aaaaa", "bbbbb");
   teacher2.createTaskWord(5, 15, "accccc", "抛弃", "aaaaa", "bbbbb");
+  */
 
   qDebug() <<"-------- 测试系统生成自带的题库 --------\n";
-  system.createWordBank(1, "牛津", "djdjdjjdjdjdjdj");
-  system.importWordBank(1, 16, "oxford", "牛津", "ddddd", "dddddddd");
-  system.importWordBank(1, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
+  //system.createWordBank(1, "牛津", "djdjdjjdjdjdjdj");
+  //system.importWordBank(1, 16, "oxford", "牛津", "ddddd", "dddddddd");
+  //system.importWordBank(1, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
+  system.importLocalWords("cet4");
+  qint64 id = system.checkAlreadyInWords("absolutely");
+  teacher2.createTaskWord(5, id, "absolutely", "绝对地", "aaaa", "bbbbb");
 
   qDebug() << "-------- 教师学生登录 --------\n";
   qDebug() << system.returnTeacherPassword(9) << "\n";
@@ -175,9 +180,7 @@ int main(int argc, char *argv[])
 
   qDebug() << "-------- 数据库测试结束 -------\n";
 
-
-//  //========================================== 前端测试 ==========================================//
-
+//========================================== 前端测试 ==========================================//
   a.setFont(man->get_glob_font());
 
   QFile file(man->get_glob_stylecss_path());
@@ -195,8 +198,8 @@ int main(int argc, char *argv[])
   student_main* stm = new student_main();
   teacher_main* tem = new teacher_main();
   loginpage->show();
-  tem->show();
-  stm->show();
+  //tem->show();
+  //stm->show();
   QObject::connect(loginpage,&login::turn_to,[&](bool interface){
     if(interface){
       tem->data_setup();

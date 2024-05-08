@@ -583,6 +583,10 @@ auto db::Student::insertStudentWordLearningTable(QSqlQuery &q, const qint64 &stu
   return q.lastInsertId();
 }
 
+/*auto db::Teacher::importTaskWordBank(const qint64 &task_id, const QList<QString> &english) -> bool {
+
+}*/
+
 //--------------------------- semantic functions --------------------------//
 // 增删改查
 auto db::Student::registerRole() -> QVariant {
@@ -663,6 +667,24 @@ auto db::Student::learnWordRecord(const qint64 &word_id) -> QVariant {
   }
 
   return insertStudentWordLearningTable(query, GetId(), word_id);
+}
+
+auto db::Teacher::checkAlreadyInWords(const QString &word) -> int {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(wordIdInWords)) {
+    throw std::runtime_error("Failed to prepare teacher wordInWords sql");
+  }
+
+  query.addBindValue(word);
+  if(!query.exec()) {
+    throw std::runtime_error("Failed to execute query");
+  }
+
+  if (query.next()) {
+    return query.value(0).toInt();
+  } else {
+    return -1;
+  }
 }
 
 

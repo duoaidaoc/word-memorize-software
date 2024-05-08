@@ -72,6 +72,7 @@ set(PROJECT_SOURCES
         newclass_frame.cpp
         newclass_frame.ui
         util.h
+        cet4.json
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

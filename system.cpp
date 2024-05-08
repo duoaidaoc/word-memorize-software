@@ -85,3 +85,76 @@ auto db::System::returnStudentPassword(const qint64 &student_id) -> QVariant {
 
   return returnPassword(query, student_id);
 }
+
+bool db::System::importLocalWords(const QString &filename) {
+  QString jsonFileName = QCoreApplication::applicationDirPath() + "/../word-memorize-software/" + filename + ".json";
+  QFile file(jsonFileName);
+  qDebug() << "====================" << jsonFileName;
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    qDebug() << "Could not open file for reading";
+    return false;
+  }
+
+  QByteArray rawData = file.readAll();
+  file.close();
+
+  // 解析JSON数据
+  QJsonParseError error;
+  QJsonDocument doc = QJsonDocument::fromJson(rawData, &error);
+  if (error.error != QJsonParseError::NoError) {
+    qDebug() << "Error parsing JSON:" << error.errorString();
+    return false;
+  }
+
+  if (!doc.isArray()) {
+    qDebug() << "JSON document is not an array";
+    return false;
+  }
+
+  // 获取JSON数组
+  QJsonArray jsonArray = doc.array();
+  word_bank_number_ ++;
+  createWordBank(word_bank_number_, filename, "djdjdjjdjdjdjdj");
+
+  // 循环处理每个单词对象
+  foreach(const QJsonValue & value, jsonArray) {
+    if (value.isObject()) {
+      QJsonObject jsonObj = value.toObject();
+
+      // 提取所需字段
+      QString mean = jsonObj["mean"].toString();
+      QString phonetic_symbol = jsonObj["phonetic_symbol"].toString();
+      QString word = jsonObj["word"].toString();
+
+      qDebug() << "-----------------------";
+      qDebug() << "Word:" << word;
+      qDebug() << "Meaning:" << mean;
+      qDebug() << "Phonetic Symbol:" << phonetic_symbol;
+      qDebug() << "-----------------------";
+      if(checkAlreadyInWords(word) == -1) {
+        importWordBank(word_bank_number_, word_number_++, word, mean, phonetic_symbol, "bbbbb");
+      }
+    }
+  }
+
+  return true;
+}
+
+auto db::System::checkAlreadyInWords(const QString &word) -> int {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(wordIdInWords)) {
+    throw std::runtime_error("Failed to prepare wordInWords sql");
+  }
+
+  query.addBindValue(word);
+  if(!query.exec()) {
+    throw std::runtime_error("Failed to execute query");
+  }
+
+  if (query.next()) {
+    return query.value(0).toInt();
+  } else {
+    return -1;
+  }
+}
+
