@@ -16,7 +16,7 @@ student_main::student_main(QWidget *parent) :
     auto &student = man->get_student();
 
 
-    Word wd = {"abandon","abandon.txt ","v. 抛弃、放弃"};
+    Word wd = {7,"abandon","abandon.txt ","v. 抛弃、放弃"};
     setup();
     setaction();
     data_setup();
