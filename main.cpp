@@ -138,6 +138,7 @@ int main(int argc, char *argv[])
   englishList.append("axe");
   englishList.append("arouse");
   englishList.append("bb");
+  englishList.append("ax");
 
   QList<QString> englishList2;
   englishList2.append("bbbbbbbbb");
@@ -145,7 +146,7 @@ int main(int argc, char *argv[])
   englishList2.append("bbb");
   englishList2.append("bb");
 
-  qint64 task_id = teacher2.importTaskWordBank(englishList2);
+  qint64 task_id = teacher2.importTaskWordBank(englishList);
   qDebug() << ">>>>>>>>>>>>>>>>>>>> " <<task_id;
 
   if(task_id > 0)
@@ -185,8 +186,11 @@ int main(int argc, char *argv[])
   student2.infoWordsInTask(6);
   student2.infoWordsInTask(5);
   // ToDo: （3）学生学习单词（单词id）
-  student2.learnWordRecord(11);
+  student2.learnWordRecord(0);
+  student2.learnWordRecord(92);
   // ToDo: （4）显示总体完成情况
+  double result = student2.infoTaskCondition(student2.GetId(), task_id);
+  qDebug() << "******************** " << result << " ***************************";
 
   qDebug() << "-------- 测试老师查看学习情况 --------\n";
   // ToDo: （1）班级查任务

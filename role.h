@@ -44,13 +44,25 @@ private:
         INNER JOIN studentclass ON students.id = studentclass.student_id
         WHERE studentclass.class_id = ?
     )");
+    const QLatin1String getTaskWords = QLatin1String(R"(
+        SELECT words.id, words.english, words.chinese, words.phonetic, words.audio_url
+        FROM TaskWordTable
+        JOIN words ON TaskWordTable.word_id = words.id
+        WHERE TaskWordTable.task_id = ?
+    )");
+    const QLatin1String isWordLearnedYet = QLatin1String(R"(
+        SELECT DISTINCT student_id
+        FROM StudentWordLearning
+        WHERE word_id = ?
+    )");
 
     static QList<TaskInfo> displayTaskInClass(QSqlQuery &q, const qint64 &class_id);
     static QList<WordInfo> displayWordFromTask(QSqlQuery &q, const qint64 &task_id);
     static QList<TeacherInfo> displayClassTeacher(QSqlQuery &q, const qint64 &class_id);
     static QList<StudentInfo> displayClassMember(QSqlQuery &q, const qint64 &class_id);
-
-public:
+    static QList<WordInfo> calculateTotal(QSqlQuery &q, const qint64& task_id);
+    static bool isWordLearned(QSqlQuery &q, const WordInfo &wordInfo);
+  public:
     explicit Role(Database& db) : Table(db) {}
     virtual QVariant registerRole() = 0;
     virtual void cancelRole() = 0;
@@ -69,6 +81,8 @@ public:
     QList<WordInfo> infoWordsInTask(const qint64 &task_id);
     QList<TeacherInfo> infoClassDetails(const qint64 &class_id);
     QList<StudentInfo> infoClassMembers(const qint64 &class_id);
+
+    double infoTaskCondition(const qint64 &studnet_id, const qint64 &task_id);
 };
 
 class Teacher : public Role {
@@ -183,6 +197,7 @@ private:
     const QLatin1String learnWord = QLatin1String(R"(
         insert into StudentWordLearning(student_id ,word_id) values(?, ?)
     )");
+
 
     // 学生语义操作
     static QVariant addStudent(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);

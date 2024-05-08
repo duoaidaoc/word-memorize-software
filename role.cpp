@@ -98,6 +98,100 @@ auto db::Teacher::displayTeacherClass(QSqlQuery &q, const qint64 &teacher_id) ->
   return classesList;
 }
 
+auto db::Role::displayClassTeacher(QSqlQuery &q, const qint64 &class_id) -> QList<TeacherInfo> {
+  QList<TeacherInfo> teachersList;
+
+  q.addBindValue(class_id);
+  if (!q.exec()) {
+    qDebug() << "Error executing displayClassTeacher query:" << q.lastError().text();
+    return teachersList; // 返回空列表
+  }
+
+  if (!q.next()) {
+    qDebug() << "No teachers found for class with ID:" << class_id;
+    return teachersList; // 返回空列表
+  }
+
+  do {
+    TeacherInfo teacherInfo;
+    teacherInfo.teacherId = q.value("id").toLongLong();
+    teacherInfo.teacherName = q.value("name").toString();
+    teacherInfo.teacherUrl = q.value("profile_photo_url").toString();
+    teachersList.append(teacherInfo);
+  } while (q.next());
+
+  return teachersList;
+}
+
+auto db::Role::displayClassMember(QSqlQuery &q, const qint64 &class_id) -> QList<StudentInfo> {
+  QList<StudentInfo> studentList;
+
+  q.addBindValue(class_id);
+  if (!q.exec()) {
+    qDebug() << "Error executing displayClassMember query:" << q.lastError().text();
+    return studentList; // 返回空列表
+  }
+
+  if (!q.next()) {
+    qDebug() << "No student members for class with ID:" << class_id;
+    return studentList; // 返回空列表
+  }
+
+  do {
+    StudentInfo memberInfo;
+    memberInfo.studentId = q.value("id").toLongLong();
+    memberInfo.studentName = q.value("name").toString();
+    memberInfo.studentUrl = q.value("profile_photo_url").toString();
+    studentList.append(memberInfo);
+  } while (q.next());
+
+  return studentList;
+}
+
+auto db::Role::calculateTotal(QSqlQuery &q, const qint64 &task_id) -> QList<WordInfo>
+{
+  QList<WordInfo> wordList;
+
+  q.addBindValue(task_id);
+  if (!q.exec()) {
+    qDebug() << "Error executing calculateTotal query:" << q.lastError().text();
+    return wordList; // 返回空列表
+  }
+
+  if (!q.next()) {
+    qDebug() << "No word for taso with " << task_id;
+    return wordList; // 返回空列表
+  }
+
+  do {
+    WordInfo wordInfo;
+    wordInfo.word_id = q.value("id").toLongLong();
+    wordInfo.english = q.value("english").toString();
+    wordInfo.chinese = q.value("chinese").toString();
+    wordInfo.phonetic = q.value("phonetic").toString();
+    wordInfo.audio_url = q.value("audio_url").toString();
+    wordList.append(wordInfo);
+  } while (q.next());
+
+  return wordList;
+}
+
+auto db::Role::isWordLearned(QSqlQuery &q, const WordInfo &wordInfo) -> bool
+{
+  q.addBindValue(wordInfo.word_id);
+  if (!q.exec()) {
+    qDebug() << "Error executing isWordLearned query:" << q.lastError().text();
+    return false;
+  }
+
+  if (!q.next()) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
 //========================== semantic
 auto db::Role::infoTaskInClass(const qint64 &class_id) -> QList<TaskInfo> {
   QSqlQuery query(returnDatabase());
@@ -165,73 +259,32 @@ auto db::Role::infoClassMembers(const qint64 &class_id) -> QList<StudentInfo> {
   return classMembers;
 }
 
-auto db::Role::displayClassTeacher(QSqlQuery &q, const qint64 &class_id) -> QList<TeacherInfo> {
-  QList<TeacherInfo> teachersList;
-
-  q.addBindValue(class_id);
-  if (!q.exec()) {
-    qDebug() << "Error executing displayClassTeacher query:" << q.lastError().text();
-    return teachersList; // 返回空列表
-  }
-
-  if (!q.next()) {
-    qDebug() << "No teachers found for class with ID:" << class_id;
-    return teachersList; // 返回空列表
-  }
-
-  do {
-    TeacherInfo teacherInfo;
-    teacherInfo.teacherId = q.value("id").toLongLong();
-    teacherInfo.teacherName = q.value("name").toString();
-    teacherInfo.teacherUrl = q.value("profile_photo_url").toString();
-    teachersList.append(teacherInfo);
-  } while (q.next());
-
-  return teachersList;
-}
-
-auto db::Role::displayClassMember(QSqlQuery &q, const qint64 &class_id) -> QList<StudentInfo> {
-  QList<StudentInfo> studentList;
-
-  q.addBindValue(class_id);
-  if (!q.exec()) {
-    qDebug() << "Error executing displayClassMember query:" << q.lastError().text();
-    return studentList; // 返回空列表
-  }
-
-  if (!q.next()) {
-    qDebug() << "No student members for class with ID:" << class_id;
-    return studentList; // 返回空列表
-  }
-
-  do {
-    StudentInfo memberInfo;
-    memberInfo.studentId = q.value("id").toLongLong();
-    memberInfo.studentName = q.value("name").toString();
-    memberInfo.studentUrl = q.value("profile_photo_url").toString();
-    studentList.append(memberInfo);
-  } while (q.next());
-
-  return studentList;
-}
-
-auto db::Teacher::infoTeacherClass() -> QList<QPair<qint64, QString>> {
+auto db::Role::infoTaskCondition(const qint64 &student_id, const qint64 &task_id) -> double
+{
   QSqlQuery query(returnDatabase());
-  if(!query.prepare(retrieveTeacherClasses)) {
-    throw std::runtime_error("Failed to prepare student info class sql");
+  if(!query.prepare(getTaskWords)) {
+    throw std::runtime_error("Failed to prepare getTaskWords sql");
   }
-  QList<QPair<qint64, QString>> classList = displayTeacherClass(query, GetId());
-
-  qDebug() <<"**************\n";
-  for (const auto &pair : classList) {
-    qDebug() << "Class ID:" << pair.first << ", Class Name:" << pair.second;
+  QList<WordInfo> totalWordList = calculateTotal(query, task_id);
+  if(totalWordList.size() == 0) {
+    qDebug() << "<<<<<<<<<<<<<<<<<< No words in task: " << task_id;
+    return 0;
   }
-  qDebug() <<"**************\n";
 
-  return classList;
+  int wordLearned = 0;
+  for(auto &word : totalWordList) {
+    if(!query.prepare(isWordLearnedYet)) {
+      throw std::runtime_error("Failed to prepare isWordLearnedYet sql");
+    }
+    if(isWordLearned(query, word)) {
+      wordLearned ++;
+    }
+  }
+
+  return (double)wordLearned / totalWordList.size();
 }
 
-//====================================== Student part =====================================//
+//====================================== Teacher part =====================================//
 //--------------------------- bind parameters --------------------------//
 auto db::Teacher::addTeacher(QSqlQuery &q,
                              const qint64 &id,
@@ -480,6 +533,22 @@ auto db::Teacher::createTaskWord(const qint64 &task_id, const qint64 &word_id) -
   }
 
   return addTaskWord(query, task_id, word_id);
+}
+
+auto db::Teacher::infoTeacherClass() -> QList<QPair<qint64, QString>> {
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(retrieveTeacherClasses)) {
+    throw std::runtime_error("Failed to prepare student info class sql");
+  }
+  QList<QPair<qint64, QString>> classList = displayTeacherClass(query, GetId());
+
+  qDebug() <<"**************\n";
+  for (const auto &pair : classList) {
+    qDebug() << "Class ID:" << pair.first << ", Class Name:" << pair.second;
+  }
+  qDebug() <<"**************\n";
+
+  return classList;
 }
 
 auto db::Teacher::importTaskWordBank(const QList<QString> &englishList) -> int {
