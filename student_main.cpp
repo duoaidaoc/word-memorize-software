@@ -108,7 +108,7 @@ void student_main::setaction()
     });
     QObject::connect(ui->test_btn,&QPushButton::clicked,[&](){
       // TODO():
-      // 得到单词列表
+      // 得到单词列表   若为空则不打开页面并报错！！！
 
       // 生成题目列表
       // 将题目列表放置到que_widget中
@@ -139,23 +139,22 @@ void student_main::addword(const Word &word)
     task_layout->addWidget(tf);
 
     QObject::connect(tf, &task_frame::set_display_content, [&](Task tsk){
-      // TODO():
-      // 得到单词列表
-      std::vector<Word>words;
-      words.reserve(word_frames.size());
-      for(const auto &frm : word_frames){
-        words.push_back(frm->get_content());
+      if(que_widget->get_status() == question::free){
+        std::vector<Word>words;
+        //得到单词列表
+        words.reserve(word_frames.size());
+        for(const auto &frm : word_frames){
+          words.push_back(frm->get_content());
+        }
+        if(words.empty()){
+          //TODO():报错
+          return;
+        }
+        // TODO(): 当外围单词计划改变的时候，que_widget进度丢失并重新设置状态为free
+        // TODO(): 其它情况不变
+        que_widget->set_ques(words);
+        que_widget->start();
       }
-      /**** 得到的单词列表是 std::vector<Word>words; ****/
-      /**** Word 是一个结构体 见 word.h ****/
-
-      // 生成题目列表
-      /**** 题目列表是一个student_main中的 private 变量****/
-
-      // 将题目列表放置到que_widget中
-
-      // que_widget将题目准备好
-      // (和上文可以打包复用)
       que_widget->show();
     });
 

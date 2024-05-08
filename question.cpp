@@ -37,7 +37,7 @@ question::question(QWidget *parent) :
     }
   });
 
-
+  st = state::free;
 }
 
 question::~question()
@@ -62,6 +62,12 @@ void question::set_fillword_question(const QString &english, const QString &chin
   ui->stackedWidget->setCurrentIndex(0);
 }
 
+question::state question::get_status()
+{
+  return st;
+}
+
+
 void question::paintEvent(QPaintEvent *evt)
 {
   QPainter painter(this);
@@ -76,18 +82,59 @@ void question::paintEvent(QPaintEvent *evt)
 void question::set_connection()
 {
   QObject::connect(ui->A_btn,&QPushButton::clicked,[&](){
-    emit done(correctitem == 1);
+    done(correctitem == 1);
   });
   QObject::connect(ui->B_btn,&QPushButton::clicked,[&](){
-    emit done(correctitem == 2);
+    done(correctitem == 2);
   });
   QObject::connect(ui->B_btn,&QPushButton::clicked,[&](){
-    emit done(correctitem == 3);
+    done(correctitem == 3);
   });
   QObject::connect(ui->eng_edit,&QLineEdit::editingFinished,[&](){
     if(ui->eng_edit->text() != ""){
-      emit done(ui->eng_edit->text() == correct_english);
+      done(ui->eng_edit->text() == correct_english);
     }
   });
+  QObject::connect(ui->close_btn,&QPushButton::clicked,[&](){
+    done(correctitem == 3);
+  });
+  QObject::connect(ui->close_btn_2,&QPushButton::clicked,[&](){
+    done(correctitem == 3);
+  });
+}
+
+void question::set_ques(const std::vector<Word> &_words)
+{
+
+  // TODO(): 使用 words 生成 questions
+}
+
+void question::start()
+{
+  if(st == state::free)
+    st = state::busy;
+  // TODO(): 从题目列表中拿出一题开始写。
+  // 本类中的private接口: set_selection_question() 注释见头文件
+  // 本类中的private接口: set_fillword_question() 注释见头文件
 
 }
+//  答题函数在回答完毕时自动调用done
+void question::done(bool ok)
+{
+  // TODO():
+  // ok == 1 答对 从问题序列中删除。
+  // ok == 0 答错 之后的某个时刻重新做。
+
+  // 做没做完？
+  // 没做完则下一题。
+  // 做完了 发出finish信号 qt语句: emit finish();
+  // 且 state = state::free
+}
+
+
+
+
+
+
+
+

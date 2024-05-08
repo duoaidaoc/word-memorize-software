@@ -3,8 +3,10 @@
 #define WORD_H
 
 typedef struct Word{
+  qint64 word_id;
   QString eng;
   QString sound_url;
+  QString chn;
   QString info;
 }Word;
 

@@ -216,8 +216,8 @@ int main(int argc, char *argv[])
   student_main* stm = new student_main();
   teacher_main* tem = new teacher_main();
   loginpage->show();
-  //tem->show();
-  //stm->show();
+  tem->show();
+  stm->show();
   QObject::connect(loginpage,&login::turn_to,[&](bool interface){
     if(interface){
       tem->data_setup();

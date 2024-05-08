@@ -41,7 +41,7 @@ private:
     classcue_frame *Ccue_frame;
     question* que_widget;
 
-
+    std::vector<ques>questions;
 
     void setup();
     void setaction();
