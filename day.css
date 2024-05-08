@@ -491,6 +491,25 @@ QScrollArea{
     border : none;
 }
 
+/****************2024.5.8******************************/
+QTableView {
+    background-color: rgba(187, 187, 255, 0.8);
+    border-radius: 20px;
+    border:none;
+}
+QHeaderView {
+    background-color: transparent;
+    border:none;
+    min-height: 29px;
+}
+QTableView QTableCornerButton::section {
+    background-color: transparent;
+    border: none;
+}
+QHeaderView::section {
+    background-color: transparent;
+    border: 1px solid rgba(0,0,0,0.4);
+}
 #teacher_frame {
     background-color: transparent;
 }

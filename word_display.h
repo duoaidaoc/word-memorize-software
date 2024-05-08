@@ -2,6 +2,7 @@
 #define WORD_DISPLAY_H
 
 #include <QWidget>
+#include "util.h"
 #include "word.h"
 #include <QPropertyAnimation>
 #include <QMediaPlayer>
@@ -18,7 +19,7 @@ class word_display : public QWidget
 public:
     explicit word_display(QWidget *parent = nullptr);
     ~word_display();
-    void set_content(const Word &wd, int seq_ = 0);
+    void set_content(const db::WordInfo &wd, int seq_ = 0);
     void enter();
     void set_nexpos(QPoint p);
 protected:
@@ -32,7 +33,7 @@ private:
     QMediaPlayer *player;
     QAudioOutput *audioOutput;
 
-    Word wd;
+    db::WordInfo wd;
     int seq;
 
 signals:

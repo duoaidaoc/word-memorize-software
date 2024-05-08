@@ -38,6 +38,7 @@ question::question(QWidget *parent) :
   });
 
   st = state::free;
+  task_id = -2; // -1 表示被每日任务占用，-2表示未被占用
 }
 
 question::~question()
@@ -103,7 +104,17 @@ void question::set_connection()
   });
 }
 
-void question::set_ques(const std::vector<Word> &_words)
+void question::set_task_id(qint64 _task_id)
+{
+  task_id = _task_id;
+}
+
+qint64 question::get_task_id()
+{
+  return task_id;
+}
+
+void question::set_ques(const std::vector<db::WordInfo> &_words)
 {
 
   // TODO(): 使用 words 生成 questions

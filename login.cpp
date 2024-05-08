@@ -65,6 +65,8 @@ void login::SetUp()
     timer = new QTimer(this);
     ui->time_label->setFocusPolicy(Qt::NoFocus);
     ui->hello_label->setText(man->get_glob_hello());
+
+    Tip = new tip();
 }
 void login::label_change(int x){
     if(rand()%100 >= x){
@@ -109,10 +111,13 @@ void login::actionSet()
       bool ok = true;
       qint64 id = ui->acc_edit->text().toLongLong(&ok);
       if(!ok || ui->name_edit->text() == "" || ui->pwd_edit->text() == ""){
-        // 报告错误
+        Tip->set_content("warning","输入格式不正确!\n账号必须是数字\n密码和姓名不能为空!");
+        Tip->show();
       }
       else if(ui->checkBox->checkState() == Qt::Unchecked && ui->checkBox_2->checkState() == Qt::Unchecked){
         // 报告错误
+        Tip->set_content("warning","老师和学生必须勾选一项");
+        Tip->show();
       }
       else{
         auto man = resource_manager::getInstance();
@@ -122,10 +127,13 @@ void login::actionSet()
         else
           variant = man->init_student(id, ui->name_edit->text(), ui->pwd_edit->text());
         if(variant.isNull()){
-          // 报告错误
+          // 老师创建失败
+          Tip->set_content("","账号创建失败");
+          Tip->show();
         }
         else{
-          // 报告成功，并跳转到student_main / teacher_main
+          Tip->set_content("","账号创建成功");
+          Tip->show();
           if((ui->checkBox->checkState() == Qt::Checked)){
             emit turn_to(true);
           }
@@ -136,8 +144,6 @@ void login::actionSet()
         }
       }
     });
-
-
 
     int rate = 70;
     connect(ui->acc_edit, &QLineEdit::textChanged, this,[this, rate](){

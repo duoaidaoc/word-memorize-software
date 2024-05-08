@@ -54,17 +54,17 @@ word_display::~word_display()
     delete ui;
 }
 
-void word_display::set_content(const Word &word, int seq_)
+void word_display::set_content(const db::WordInfo &word, int seq_)
 {
-    // TODO(): word的结构不完善，此处仅为示例。
     wd = word;
     seq = seq_;
-    ui->word_label->setText(word.eng);
-    ui->mean_label->setText(word.info);
+    ui->word_label->setText(word.english);
+    ui->mean_label->setText(word.chinese);
     ui->page_label->setText(QString::number(seq_ + 1));
 
     auto man = resource_manager::getInstance();
-    auto path = man->audio_select(word.eng);
+    auto path = man->audio_select(word.english);
+    // TODO(): player未打开文件必须检查
     player->setSource(path);
     player->setAudioOutput(audioOutput);
 }

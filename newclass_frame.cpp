@@ -13,13 +13,16 @@ newclass_frame::newclass_frame(QWidget *parent) :
   this->setProperty("canMove",true);
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
   this->setAttribute(Qt::WA_TranslucentBackground, true);
-
   auto man = resource_manager::getInstance();
   bg.load(man->bg_pic_randomselect());
   if(bg.isNull()){
     throw std::runtime_error("background of class_display is not availble.");
   }
   ImageProcesser::GaussiamBlur(20, 20, bg);
+
+  Tip = new tip();
+
+
   QObject::connect(ui->close_btn,&QPushButton::clicked,[&](){
     ui->id_edit->clear();
     this->hide();
@@ -28,7 +31,8 @@ newclass_frame::newclass_frame(QWidget *parent) :
     bool ok = true;
     qint64 id = ui->id_edit->text().toLongLong(&ok);
     if(!ok || ui->cue_edit->text() == "" || ui->name_edit->text() == ""){
-      //TODO(): 提醒错误。
+      Tip->set_content("warning","班级创建失败\nid必须为数字\n或暗号和班级名不能为空");
+      Tip->show();
       ui->id_edit->clear();
       return;
     }
@@ -38,10 +42,12 @@ newclass_frame::newclass_frame(QWidget *parent) :
     auto a = teacher.createClass(id,name,cue);
 
     if(a.isNull()){
-      //TODO(): 提醒错误
+      Tip->set_content("warning","id或暗号已存在");
+      Tip->show();
     }
     else{
-      //TODO(): 提醒创建成功
+      Tip->set_content("","创建成功");
+      Tip->show();
       emit UpdateClass();
     }
     ui->id_edit->clear();

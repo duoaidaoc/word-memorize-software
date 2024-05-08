@@ -8,6 +8,7 @@
 #include "role.h"
 #include "system.h"
 #include "teacher_main.h"
+#include "tip.h"
 
 int main(int argc, char *argv[])
 {

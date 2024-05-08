@@ -2,7 +2,7 @@
 #define LOGIN_H
 
 #include <QWidget>
-
+#include "tip.h"
 namespace Ui {
 class login;
 }
@@ -21,6 +21,7 @@ private:
     void actionSet();
     QTimer *timer;
     QString label_path;
+    tip *Tip;
 private slots:
     void label_change(int rate);
     void set_curr_time();

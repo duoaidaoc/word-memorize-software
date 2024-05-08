@@ -18,6 +18,7 @@ typedef struct CClass{
 
 typedef struct Task{
   QString name;
+  qint64 tid;
 }Task;
 
 typedef struct Student{

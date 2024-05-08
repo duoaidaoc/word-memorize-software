@@ -20,7 +20,7 @@ student_main::student_main(QWidget *parent) :
     setup();
     setaction();
     data_setup();
-    addword(wd);
+    test();
 }
 
 student_main::~student_main()
@@ -72,12 +72,45 @@ void student_main::setup()
     ui->wordlib_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->wordlib_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    Tip = new tip();
+
 }
 
 void student_main::setaction()
 {
     QObject::connect(ui->learn_btn,&QPushButton::clicked,[&](){
+      if(que_widget->get_status() == question::free){
+        clearlayout(word_layout);
+        word_frames.clear();
+        que_widget->set_task_id(-1);
+        std::vector<db::WordInfo>words;
+
+        auto man = resource_manager::getInstance();
+        auto student = man->get_student();
+        // TODO(): 每日任务拿单词
+
+        if(words.empty()){
+          Tip->set_content("warning","没有单词！");
+          Tip->show();
+          return;
+        }
+        for(const auto& word: words){
+          word_frame* wd = new word_frame(ui->word_contents);
+          word_frames.push_back(wd);
+          wd->set_content(word, word_frames.size() - 1);
+          word_layout->addWidget(wd);
+          QObject::connect(wd, &word_frame::set_display_content, this, &student_main::show_display);
+          QObject::connect(w_display, &word_display::upd_page, this, &student_main::update_display);
+        }
         ui->stackedWidget_2->setCurrentIndex(1);
+      }
+      else if(que_widget->get_task_id() != -1){
+        Tip->set_content("warning","当前进行其它任务中，完成后再开启新任务。");
+        Tip->show();
+      }
+      else{
+        ui->stackedWidget_2->setCurrentIndex(1);
+      }
     });
     QObject::connect(ui->close_button,&QPushButton::clicked,[&](){
         QApplication::quit();
@@ -107,12 +140,16 @@ void student_main::setaction()
       ui->stackedWidget_2->setCurrentIndex(6);
     });
     QObject::connect(ui->test_btn,&QPushButton::clicked,[&](){
-      // TODO():
-      // 得到单词列表   若为空则不打开页面并报错！！！
-
-      // 生成题目列表
-      // 将题目列表放置到que_widget中
-      // que_widget将题目准备好
+      //得到单词列表应该在tsk里面
+      if(que_widget->get_status() == question::free){
+        std::vector<db::WordInfo>words;
+        words.reserve(word_frames.size());
+        for(const auto &wd : word_frames){
+          words.push_back(wd->get_content());
+        }
+        que_widget->set_ques(words);
+        que_widget->start();
+      }
       que_widget->show();
     });
     QObject::connect(Ccue_frame,&classcue_frame::UpdateClass,[&](){
@@ -121,9 +158,10 @@ void student_main::setaction()
 
 }
 
-void student_main::addword(const Word &word)
+void student_main::test()
 {
     //初始化demo
+    db::WordInfo word = {};
     for(int i = 1;i<=10;i++){
         word_frame* wd = new word_frame(ui->word_contents);
         word_frames.push_back(wd);
@@ -133,30 +171,47 @@ void student_main::addword(const Word &word)
         QObject::connect(w_display, &word_display::upd_page, this, &student_main::update_display);
     }
 
-
+    /** task_frame adding **/
     task_frame* tf = new task_frame(ui->task_contents);
     task_frames.push_back(tf);
     task_layout->addWidget(tf);
 
     QObject::connect(tf, &task_frame::set_display_content, [&](Task tsk){
+      // 把Tsk的单词列表拿出来放在word_frames里面
       if(que_widget->get_status() == question::free){
-        std::vector<Word>words;
-        //得到单词列表
-        words.reserve(word_frames.size());
-        for(const auto &frm : word_frames){
-          words.push_back(frm->get_content());
-        }
+        clearlayout(word_layout);
+        word_frames.clear();
+        que_widget->set_task_id(tsk.tid);
+        //std::vector<Word>words;
+        QList<db::WordInfo>words;
+        auto man = resource_manager::getInstance();
+        auto student = man->get_student();
+        words = student.infoWordsInTask(tsk.tid);
+
         if(words.empty()){
-          //TODO():报错
+          Tip->set_content("warning","没有单词！");
+          Tip->show();
           return;
         }
-        // TODO(): 当外围单词计划改变的时候，que_widget进度丢失并重新设置状态为free
-        // TODO(): 其它情况不变
-        que_widget->set_ques(words);
-        que_widget->start();
+        for(const auto& word: words){
+          word_frame* wd = new word_frame(ui->word_contents);
+          word_frames.push_back(wd);
+          wd->set_content(word, word_frames.size() - 1);
+          word_layout->addWidget(wd);
+          QObject::connect(wd, &word_frame::set_display_content, this, &student_main::show_display);
+          QObject::connect(w_display, &word_display::upd_page, this, &student_main::update_display);
+        }
+        ui->stackedWidget_2->setCurrentIndex(1);
       }
-      que_widget->show();
+      else if(que_widget->get_task_id() != tsk.tid){
+        Tip->set_content("warning","当前进行其它任务中，完成后再开启新任务。");
+        Tip->show();
+      }
+      else{
+        ui->stackedWidget_2->setCurrentIndex(1);
+      }
     });
+    /** task_frame adding **/
 
     ui->class_label->hide();
     ui->task_label->hide();
@@ -167,6 +222,24 @@ void student_main::addword(const Word &word)
         itemFrame->setFixedSize(80, 100); // 固定大小为 80*100
         itemFrame->setStyleSheet("background-color: lightblue"); // 设置背景色
         hbox->addWidget(itemFrame);
+    }
+}
+
+void student_main::clearlayout(QBoxLayout *lo)
+{
+    // 删除所有原先存在的frame
+    while (QLayoutItem *item = lo->takeAt(0)) {
+        if (QWidget *widget = item->widget()) {
+          // 从布局中移除部件
+          class_layout->removeWidget(widget);
+          // 删除部件并释放内存
+          delete widget;
+        }
+        else{
+          throw std::runtime_error("布局中不是widget");
+        }
+        // 删除布局项并释放内存
+        delete item;
     }
 }
 
@@ -189,22 +262,7 @@ void student_main::update_display(int seq_)
 void student_main::update_class()
 {
     // 非常重要，不能删掉，yo!
-
-    // 删除所有原先存在的frame
-    while (QLayoutItem *item = class_layout->takeAt(0)) {
-      if (QWidget *widget = item->widget()) {
-        // 从布局中移除部件
-        class_layout->removeWidget(widget);
-        // 删除部件并释放内存
-        delete widget;
-      }
-      else{
-        throw std::runtime_error("布局中不是widget");
-      }
-      // 删除布局项并释放内存
-      delete item;
-    }
-
+    clearlayout(class_layout);
     auto &student = resource_manager::getInstance()->get_student();
     auto list = student.infoStudentClass();
     for(const auto& [id, name] : list){
@@ -271,11 +329,10 @@ void student_main::update_class()
           ui->stackedWidget_2->setCurrentIndex(5);
           // 根据cls设置新的ui->student_vlayout中的frame
         });
-        cf->add_connect(connect);
     }
 }
 
-void student_main::show_display(const Word &wd,int seq)
+void student_main::show_display(const db::WordInfo &wd,int seq)
 {
     if(seq < 0){
         throw std::runtime_error("seq isn't initialized.");

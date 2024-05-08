@@ -16,10 +16,10 @@ word_frame::word_frame(QWidget* parent): QFrame(parent)
 
 }
 
-void word_frame::set_content(const Word &wd, int seq_)
+void word_frame::set_content(const db::WordInfo &wd, int seq_)
 {
     content = wd;
-    word_label->setText(content.eng + " " + content.info);
+    word_label->setText(content.english + " " + content.chinese);
     player = new QMediaPlayer(this);
     audioOutput = new QAudioOutput(this);
     seq = seq_;
@@ -29,7 +29,7 @@ void word_frame::set_content(const Word &wd, int seq_)
     });
 
     auto man = resource_manager::getInstance();
-    auto path = man->audio_select(content.eng);
+    auto path = man->audio_select(content.english);
     player->setSource(path);
     player->setAudioOutput(audioOutput);
 
@@ -46,7 +46,7 @@ void word_frame::mousePressEvent(QMouseEvent *event)
     }
 }
 
-Word word_frame::get_content()
+db::WordInfo word_frame::get_content()
 {
     return content;
 }

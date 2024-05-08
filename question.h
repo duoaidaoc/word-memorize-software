@@ -2,6 +2,7 @@
   #define QUESTION_H
 
 #include <QWidget>
+#include "util.h"
 #include "word.h"
 
 namespace Ui {
@@ -26,6 +27,10 @@ public:
   void set_fillword_question(const QString &english, const QString &chinese);
   // 返回question 窗口的状态
   state get_status();
+
+  void set_task_id(qint64 task_id);
+
+  qint64 get_task_id();
 protected:
   // 窗口绘制事件重写,ui相关
   void paintEvent(QPaintEvent* evt)override;
@@ -37,9 +42,9 @@ private:
 
   std::vector<ques>questions; // 问题列表
   state st; // 窗口忙或空闲。
+  qint64 task_id;
 
   void set_connection(); // 初始化
-
 signals:
   // 题目做完时触发finish()信号
   void finish();
@@ -47,7 +52,7 @@ signals:
 
   // TODO(): 完成下面三个函数加一个要求 可以另写函数
 public:
-  void set_ques(const std::vector<Word> &_words); // 设置问题列表
+  void set_ques(const std::vector<db::WordInfo> &_words); // 设置问题列表
   void start(); // 从题目列表中拿出一题来设置窗口的题目。
 private:
   void done(bool ok);  //  答题函数在回答完毕时自动调用done

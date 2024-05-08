@@ -6,7 +6,6 @@
 #include "ui_classcue_frame.h"
 #include "resource_manager.h"
 #include "Image_processing.h"
-
 classcue_frame::classcue_frame(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::classcue_frame)
@@ -15,6 +14,7 @@ classcue_frame::classcue_frame(QWidget *parent) :
   this->setProperty("canMove",true);
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
   this->setAttribute(Qt::WA_TranslucentBackground, true);
+  Tip = new tip();
 
   auto man = resource_manager::getInstance();
   bg.load(man->bg_pic_randomselect());
@@ -26,7 +26,7 @@ classcue_frame::classcue_frame(QWidget *parent) :
     ui->lineEdit->clear();
     this->hide();
   });
-  QObject::connect(ui->lineEdit,&QLineEdit::editingFinished,[&](){
+  QObject::connect(ui->lineEdit,&QLineEdit::returnPressed,[&](){
     QString code = ui->lineEdit->text();
     if(code != ""){
       qDebug()<<"ok";
@@ -44,8 +44,9 @@ classcue_frame::classcue_frame(QWidget *parent) :
       auto &manba = man->get_student();
       QVariant a = manba.joinClass(int_code);
       if(a.isNull()){
-        // TODO():把这个类写成自己的报错窗口。
-        QMessageBox::about(nullptr,"warning","班级码不正确");
+        Tip->set_content("warning","班级码不正确");
+        Tip->show();
+        ui->lineEdit->setText("");
       }
       else{
         emit UpdateClass();

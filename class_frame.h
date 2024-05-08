@@ -12,16 +12,13 @@ class class_frame : public QFrame
   Q_OBJECT
 public:
   class_frame(QWidget* parent = nullptr);
-  ~class_frame();
   void setclass(CClass &_cls);
-  void add_connect(QMetaObject::Connection con);
 protected:
   void mousePressEvent(QMouseEvent* event)override;
 private:
   CClass cls;
   QLabel* classinfo;
   QHBoxLayout* hb;
-  std::vector<QMetaObject::Connection>connections;
 signals:
   void set_display_content(CClass _cls);
 };

@@ -1,8 +1,8 @@
 #ifndef CLASSCUE_FRAME_H
   #define CLASSCUE_FRAME_H
 
-  #include <QWidget>
-
+#include <QWidget>
+#include "tip.h"
 namespace Ui {
 class classcue_frame;
 }
@@ -19,6 +19,7 @@ protected:
 private:
   Ui::classcue_frame *ui;
   QImage bg;
+  tip* Tip;
 signals:
   void UpdateClass();
 };

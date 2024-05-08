@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <word.h>
-
+#include "tip.h"
 namespace Ui {
 class newclass_frame;
 }
@@ -21,6 +21,7 @@ private:
   Ui::newclass_frame *ui;
   QImage bg;
   CClass cls;
+  tip *Tip;
 signals:
   void UpdateClass();
 };

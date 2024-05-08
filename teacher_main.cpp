@@ -295,7 +295,6 @@ void teacher_main::update_class()
           ui->stackedWidget->setCurrentIndex(2);
           // 根据cls设置新的ui->student_vlayout中的frame
         });
-        cf->add_connect(connect);
     }
 }
 

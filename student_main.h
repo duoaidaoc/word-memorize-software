@@ -9,6 +9,7 @@
 #include "word_display.h"
 #include "question.h"
 #include "word.h"
+#include "tip.h"
 
 namespace Ui {
 class student_main;
@@ -42,13 +43,16 @@ private:
     question* que_widget;
 
     std::vector<ques>questions;
+    tip *Tip;
 
     void setup();
     void setaction();
-    void addword(const Word &word);
+    void test();
+    void clearlayout(QBoxLayout *lb);
+
 
 private slots:
-    void show_display(const Word &wd, int seq);
+    void show_display(const db::WordInfo &wd, int seq);
     void update_display(int seq_ = 0);
     void update_class();
 };
