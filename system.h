@@ -17,6 +17,7 @@ private:
   Database &db_;
   int word_number_;              // 给每个单词赋予独立的id。
   int word_bank_number_;
+  int task_number_;
 
   const QLatin1String insertWordBook = QLatin1String(R"(
         insert into wordbank(id, name, picture_url) values(?, ?, ?)
@@ -39,7 +40,7 @@ private:
   static QVariant returnPassword(QSqlQuery &q, const qint64 &id);
 
 public:
-  explicit System(Database &db) : db_(db) { word_number_ = 0; word_bank_number_ = 0; }
+  explicit System(Database &db) : db_(db) { word_number_ = 0; word_bank_number_ = 0; task_number_ = 0; }
   bool importLocalWords(const QString &filename);
   int checkAlreadyInWords(const QString &word);
   QVariant createWordBank(const qint64 &id, const QString &name, const QString &pircture_url);
@@ -61,6 +62,13 @@ public:
   }
   auto returnWordBankNumber() -> int {
     return word_bank_number_;
+  }
+  auto returnTaskNumber() -> int {
+    return task_number_;
+  }
+
+  void incTaskNumber() {
+    task_number_ ++;
   }
 
   auto returnTeacherPassword(const qint64 &teacher_id) -> QVariant;

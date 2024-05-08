@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
 //  qDebug() << "-------- 创建数据库 --------\n";
 
   // 初始化服务器系统，服务器端。
-  db::System system(database);
-
+  man->init_system();
+  auto &system = man->get_system();
   qDebug() << "-------- 创建教师信息 --------\n";
   db::Teacher teacher(database);
   teacher.SetId(3);
@@ -103,13 +103,13 @@ int main(int argc, char *argv[])
   teacher.deleteClass(2020);
 
   qDebug() << "-------- 测试老师给班级添加计划 --------\n";
-  teacher2.createTask(2, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+  //teacher2.createTask(2, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
 
   qDebug() << "-------- 测试老师给班级去除计划 --------\n";
-  teacher2.deleteTask(2, 2020);
-  teacher2.createTask(3, 2024, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
-  teacher2.createTask(6, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
-  teacher2.createTask(5, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+  //teacher2.deleteTask(2, 2020);
+  //teacher2.createTask(3, 2024, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+  //teacher2.createTask(6, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+  //teacher2.createTask(5, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
 
   qDebug() << "-------- 测试老师给计划添加单词 --------\n";
   /*
@@ -131,7 +131,25 @@ int main(int argc, char *argv[])
   //system.importWordBank(1, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
   system.importLocalWords("cet4");
   qint64 id = system.checkAlreadyInWords("absolutely");
-  teacher2.createTaskWord(5, id, "absolutely", "绝对地", "aaaa", "bbbbb");
+
+  qDebug() << "-------- 教师import进入task单词 --------\n";
+  QList<QString> englishList;
+  englishList.append("abandon");
+  englishList.append("axe");
+  englishList.append("arouse");
+  englishList.append("bb");
+
+  QList<QString> englishList2;
+  englishList2.append("bbbbbbbbb");
+  englishList2.append("bbbbb");
+  englishList2.append("bbb");
+  englishList2.append("bb");
+
+  qint64 task_id = teacher2.importTaskWordBank(englishList2);
+  qDebug() << ">>>>>>>>>>>>>>>>>>>> " <<task_id;
+
+  if(task_id > 0)
+    teacher2.createTask(task_id, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
 
   qDebug() << "-------- 教师学生登录 --------\n";
   qDebug() << system.returnTeacherPassword(9) << "\n";

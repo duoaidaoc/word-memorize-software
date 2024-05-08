@@ -11,6 +11,7 @@
 
 #include "database.h"
 #include "role.h"
+#include "system.h"
 
 class resource_manager
 {
@@ -33,7 +34,9 @@ public:
     QColor get_reversed_color();
 
     void init_database();
+    void init_system();
     db::Database &get_database();
+    db::System &get_system();
 
     db::Student &get_student();
     db::Teacher &get_teacher();
@@ -59,6 +62,7 @@ public:
     db::Database *database;
     db::Student *student;
     db::Teacher *teacher;
+    db::System *system;
     int sel;
 };
 

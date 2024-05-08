@@ -71,9 +71,19 @@ void resource_manager::init_database()
     database = new db::Database("wordmemorize.db");
 }
 
+void resource_manager::init_system()
+{
+  system = new db::System(*database);
+}
+
 db::Database& resource_manager::get_database()
 {
-    return *database;
+  return *database;
+}
+
+db::System &resource_manager::get_system()
+{
+  return *system;
 }
 
 QVariant resource_manager::init_student(const qint64 id, const QString name, const QString password)

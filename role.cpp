@@ -1,4 +1,5 @@
 #include "role.h"
+#include "resource_manager.h"
 
 /*
     qint64 id_;
@@ -471,27 +472,48 @@ auto db::Teacher::deleteTask(const qint64 &task_id, const qint64 &class_id) -> b
   return false;
 }
 
-auto db::Teacher::createTaskWord(const qint64 &task_id, const qint64 &word_id,
-                        const QString &english,
-                        const QString &chinese,
-                        const QString &phonetic,
-                        const QString &audio_url) -> QVariant {
-  Word word_(returnDB());
-  word_.SetId(word_id);
-  word_.SetEnglish(english);
-  word_.SetChinese(chinese);
-  word_.SetPhonetic(phonetic);
-  word_.SetAudioUrl(audio_url);
-
+auto db::Teacher::createTaskWord(const qint64 &task_id, const qint64 &word_id) -> QVariant {
   // @todo 在班级task中插入。
   QSqlQuery query(returnDatabase());
   if(!query.prepare(insertTaskWordTable)) {
     throw std::runtime_error("Failed to prepare TaskWord insert sql");
   }
 
-  addTaskWord(query, task_id, word_id);
+  return addTaskWord(query, task_id, word_id);
+}
 
-  return word_.registerWord();
+auto db::Teacher::importTaskWordBank(const QList<QString> &englishList) -> int {
+  // 向系统索要独一的task_id。
+  auto man = resource_manager::getInstance();
+  auto system = man->get_system();
+  qint64 task_id = system.returnTaskNumber();
+
+  QList<qint64> legalWords;
+  for(auto &english : englishList) {
+    // 在单词表里面找到单词，则添加成功。
+    auto word_id = checkAlreadyInWords(english);
+    if(word_id != -1) {
+      legalWords.append(word_id);
+    }
+  }
+
+  // 如果添加task成功，则返回task_id，否则返回-1代表添加不成功。
+  if(legalWords.size() > 0) {
+    for(auto word_id :legalWords) {
+      auto tmp = createTaskWord(task_id, word_id);
+      if(tmp.isNull()) {
+        qDebug() << "**************** failed to insert into taskwordtable: " << task_id <<" " <<word_id;
+      }
+    }
+
+    system.incTaskNumber();
+    qDebug() << "*********************** 添加成功 ****************************\n";
+    return task_id;
+  }
+  else {
+    qDebug() << "*********************** 添加task失败 ****************************\n";
+    return -1;
+  }
 }
 
 //====================================== Student part =====================================//
@@ -582,10 +604,6 @@ auto db::Student::insertStudentWordLearningTable(QSqlQuery &q, const qint64 &stu
   }
   return q.lastInsertId();
 }
-
-/*auto db::Teacher::importTaskWordBank(const qint64 &task_id, const QList<QString> &english) -> bool {
-
-}*/
 
 //--------------------------- semantic functions --------------------------//
 // 增删改查

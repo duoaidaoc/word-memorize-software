@@ -8,9 +8,12 @@
 #include "task.h"
 #include "words.h"
 #include "util.h"
+//#include "resource_manager.h""
 
 namespace db {
 class Role : public Table {
+  class ResourceManager;
+
 private:
     qint64 id_;
     QString name_;
@@ -145,11 +148,7 @@ public:
     // 老师删除班级里面的人物。
     bool deleteTask(const qint64 &task_id, const qint64 &class_id);
     // 老师给任务添加单词
-    QVariant createTaskWord(const qint64 &task_id, const qint64 &word_id,
-                            const QString &english,
-                            const QString &chinese,
-                            const QString &phonetic,
-                            const QString &audio_url);
+    QVariant createTaskWord(const qint64 &task_id, const qint64 &word_id);
     QList<QPair<qint64, QString> > infoTeacherClass();
     // 返回系统分配的task_id
     int importTaskWordBank(const QList<QString> &englishList);

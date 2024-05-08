@@ -511,4 +511,7 @@ QHeaderView::section {
     background-color: transparent;
     border: 1px solid rgba(0,0,0,0.4);
 }
+#teacher_frame {
+    background-color: transparent;
+}
 

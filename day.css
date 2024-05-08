@@ -490,3 +490,7 @@ QScrollArea{
     border-image: url(../word-memorize-software/pics/icon/grey/rank.png) 0 0 0 0;
     border : none;
 }
+
+#teacher_frame {
+    background-color: transparent;
+}
