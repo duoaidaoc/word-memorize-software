@@ -200,6 +200,36 @@ int main(int argc, char *argv[])
   teacher2.infoWordsInTask(5);
   // ToDo: （3）显示总体完成情况
 
+  qDebug() << "-------- 学生学习系统单词 -------\n";
+  student2.learnSysWordRecord(6);
+  student2.learnSysWordRecord(7);
+  student2.learnSysWordRecord(8);
+  student2.learnSysWordRecord(9);
+  student2.learnSysWordRecord(10);
+  student2.learnSysWordRecord(11);
+  student2.learnSysWordRecord(12);
+  student2.learnSysWordRecord(13);
+
+  QList<db::WordInfo> wordList = system.generateWords(student2.GetId());
+  for (const auto& wordInfo : wordList) {
+    qDebug() << "Word ID:" << wordInfo.word_id;
+    qDebug() << "English:" << wordInfo.english;
+    qDebug() << "Chinese:" << wordInfo.chinese;
+    qDebug() << "Phonetic:" << wordInfo.phonetic;
+    qDebug() << "Audio URL:" << wordInfo.audio_url;
+    qDebug() << "-------------------------";
+  }
+
+  wordList = system.generateWords(student2.GetId());
+  for (const auto& wordInfo : wordList) {
+    qDebug() << "Word ID:" << wordInfo.word_id;
+    qDebug() << "English:" << wordInfo.english;
+    qDebug() << "Chinese:" << wordInfo.chinese;
+    qDebug() << "Phonetic:" << wordInfo.phonetic;
+    qDebug() << "Audio URL:" << wordInfo.audio_url;
+    qDebug() << "-------------------------";
+  }
+
   qDebug() << "-------- 数据库测试结束 -------\n";
 
 //========================================== 前端测试 ==========================================//

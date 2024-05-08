@@ -149,6 +149,14 @@ private:
         )
     )");
 
+    const QLatin1String createStudentSysLearn = QLatin1String(R"(
+        CREATE TABLE IF NOT EXISTS StudentSysLearn (
+            student_id BIGINT,
+            word_id    BIGINT,
+            PRIMARY KEY (student_id, word_id)
+        )
+    )");
+
 public:
     Database(const QString &dbName)
     {

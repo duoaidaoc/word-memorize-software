@@ -3,6 +3,7 @@
 
 #include "table.h"
 #include "words.h"
+#include "util.h"
 #include <QString>
 #include <QVariant>
 #include <QFile>
@@ -34,11 +35,21 @@ private:
   const QLatin1String wordIdInWords = QLatin1String(R"(
         SELECT id from words where english = ?
     )");
+  const QLatin1String returnUnLearnedWords = QLatin1String(R"(
+        SELECT id, english, chinese, phonetic, audio_url
+        FROM words
+        WHERE id NOT IN (
+          SELECT word_id
+          FROM StudentSysLearn
+          WHERE student_id = ?
+        )
+        ORDER BY english;
+    )");
 
   static QVariant addWordBook(QSqlQuery &q, const qint64 &word_bank_id, const QString &name, const QString &picture_url);
   static QVariant addWordBankRelation(QSqlQuery &q, const qint64 &word_bank_id, const qint64 &word_id);
   static QVariant returnPassword(QSqlQuery &q, const qint64 &id);
-
+  static QList<WordInfo> returnUnlearnedWord(QSqlQuery &q, const qint64 &student_id);
 public:
   explicit System(Database &db) : db_(db) { word_number_ = 0; word_bank_number_ = 0; task_number_ = 0; }
   bool importLocalWords(const QString &filename);
@@ -50,6 +61,7 @@ public:
                           const QString &chinese,
                           const QString &phonetic,
                           const QString &audio_url);
+  QList<WordInfo> generateWords(const qint64 &stduent_id);
 
   auto returnDatabase() -> QSqlDatabase& {
     return db_.returnDatabase();

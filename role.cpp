@@ -674,6 +674,16 @@ auto db::Student::insertStudentWordLearningTable(QSqlQuery &q, const qint64 &stu
   return q.lastInsertId();
 }
 
+QVariant db::Student::addSysWord(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id)
+{
+  q.addBindValue(student_id);
+  q.addBindValue(word_id);
+  if (!q.exec()) {
+    qDebug() << "insertStudentSysLearning:" << q.lastError().text();
+  }
+  return q.lastInsertId();
+}
+
 //--------------------------- semantic functions --------------------------//
 // 增删改查
 auto db::Student::registerRole() -> QVariant {
@@ -754,6 +764,16 @@ auto db::Student::learnWordRecord(const qint64 &word_id) -> QVariant {
   }
 
   return insertStudentWordLearningTable(query, GetId(), word_id);
+}
+
+QVariant db::Student::learnSysWordRecord(const qint64 &word_id)
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(learnSysWords)) {
+    throw std::runtime_error("Failed to prepare learnSysWordRecord sql");
+  }
+
+  return addSysWord(query, GetId(), word_id);
 }
 
 auto db::Teacher::checkAlreadyInWords(const QString &word) -> int {

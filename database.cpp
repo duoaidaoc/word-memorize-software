@@ -112,6 +112,11 @@ bool db::Database::initDataBase() {
       return false;
     }
 
+    if (!tables.contains("createStudentSysLearn", Qt::CaseInsensitive) && !query.exec(createStudentSysLearn)) {
+      qWarning() << "Failed to create createStudentSysLearn Table:" << query.lastError().text();
+      return false;
+    }
+
     return true;
 }
 
