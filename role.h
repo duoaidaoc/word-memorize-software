@@ -128,7 +128,10 @@ private:
     )");
     const QLatin1String wordIdInWords = QLatin1String(R"(
         SELECT id from words where english = ?
-    )");  
+    )");
+    const QLatin1String returnTaskN = QLatin1String(R"(
+        SELECT COUNT(*) AS total_count FROM tasktable
+    )");
 
     // 教师语义操作
     static QVariant addTeacher(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
@@ -143,6 +146,7 @@ private:
     static bool teacherDeleteTaskTable(QSqlQuery &q, const qint64 &task_id);
     static QVariant addTaskWord(QSqlQuery &q, const qint64 &task_id, const qint64 &word_id);
     static QList<QPair<qint64, QString>> displayTeacherClass(QSqlQuery &q, const qint64 &student_id);
+    int returnTaskNumber();
 
 public:
     explicit Teacher(Database& db) : Role(db) {}

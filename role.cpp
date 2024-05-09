@@ -18,7 +18,7 @@ auto db::Role::displayTaskInClass(QSqlQuery &q, const qint64 &class_id) -> QList
   }
 
   if (!q.next()) {
-    qDebug() << "No student members for class with ID:" << class_id;
+    qDebug() << "No task members for class with ID:" << class_id;
     return taskList; // 返回空列表
   }
 
@@ -96,6 +96,27 @@ auto db::Teacher::displayTeacherClass(QSqlQuery &q, const qint64 &teacher_id) ->
   }
 
   return classesList;
+}
+
+auto db::Teacher::returnTaskNumber() -> int
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(returnTaskN)) {
+    throw std::runtime_error("Failed to returnTaskNumber sql");
+  }
+
+  if (!query.exec()) {
+    qDebug() << "Error executing returnTaskNumber:" << query.lastError().text();
+    return -1;
+  }
+  if (query.next()) {
+    int totalCount = query.value("total_count").toInt();
+    qDebug() << "Total task count:" << totalCount;
+    return totalCount;
+  } else {
+    qDebug() << "No records found in tasktable";
+    return 0;
+  }
 }
 
 auto db::Role::displayClassTeacher(QSqlQuery &q, const qint64 &class_id) -> QList<TeacherInfo> {
@@ -554,9 +575,9 @@ auto db::Teacher::infoTeacherClass() -> QList<QPair<qint64, QString>> {
 auto db::Teacher::importTaskWordBank(const QList<QString> &englishList) -> int {
   // 向系统索要独一的task_id。
   auto man = resource_manager::getInstance();
-  auto system = man->get_system();
-  qint64 task_id = system.returnTaskNumber();
-
+  //auto system = man->get_system();
+  //qint64 task_id = system.returnTaskNumber();
+  qint64 task_id = returnTaskNumber();
   QList<qint64> legalWords;
   for(auto &english : englishList) {
     // 在单词表里面找到单词，则添加成功。
@@ -575,7 +596,6 @@ auto db::Teacher::importTaskWordBank(const QList<QString> &englishList) -> int {
       }
     }
 
-    system.incTaskNumber();
     qDebug() << "*********************** 添加成功 ****************************\n";
     return task_id;
   }

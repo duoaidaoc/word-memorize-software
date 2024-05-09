@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
   teacher2.deleteClass(2028);
 
   qDebug() << "-------- 测试学生退出班级 --------\n";
-//  student2.leaveClass(2021);
+  // student2.leaveClass(2021);
   teacher2.deleteClass(2029);
   teacher.deleteClass(2020);
 
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
   englishList.append("ax");
 
   QList<QString> englishList2;
-  englishList2.append("bbbbbbbbb");
+  englishList2.append("abandon");
   englishList2.append("bbbbb");
   englishList2.append("bbb");
   englishList2.append("bb");
@@ -150,8 +150,14 @@ int main(int argc, char *argv[])
   qint64 task_id = teacher2.importTaskWordBank(englishList);
   qDebug() << ">>>>>>>>>>>>>>>>>>>> " <<task_id;
 
-  if(task_id > 0)
+  if(task_id >= 0)
     teacher2.createTask(task_id, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+
+  task_id = teacher2.importTaskWordBank(englishList2);
+  qDebug() << ">>>>>>>>>>>>>>>>>>>> " <<task_id;
+  if(task_id >= 0)
+    teacher2.createTask(task_id, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+
 
   qDebug() << "-------- 教师学生登录 --------\n";
   qDebug() << system.returnTeacherPassword(9) << "\n";
@@ -189,6 +195,15 @@ int main(int argc, char *argv[])
   // ToDo: （3）学生学习单词（单词id）
   student2.learnWordRecord(0);
   student2.learnWordRecord(92);
+
+  qDebug() << "******************** 测试学生退出班级又加入班级 ***************************";
+  student2.leaveClass(2020);
+  student2.joinClass(2020);
+
+  qDebug() << "******************** 输出2020班级的task ***************************";
+  student2.infoTaskInClass(2020);
+  qDebug() << "******************** 输出2020班级的task ***************************";
+
   // ToDo: （4）显示总体完成情况
   double result = student2.infoTaskCondition(student2.GetId(), task_id);
   qDebug() << "******************** " << result << " ***************************";
