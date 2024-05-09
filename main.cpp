@@ -262,19 +262,14 @@ int main(int argc, char *argv[])
   }
 
   man->init_init_student();
-  man->init_student(1,"1","1");
   man->init_init_teacher();
-  man->init_teacher(1,"1","1");
-  auto student4 = man->get_student();
-  qDebug() <<"======================*******************==============================";
-  //qDebug() << teacher2.infoTaskCondition(student4.GetId(), 2);
 
   login* loginpage = new login();
   student_main* stm = new student_main();
   teacher_main* tem = new teacher_main();
   loginpage->show();
-  tem->show();
-  stm->show();
+  //  tem->show();
+  //  stm->show();
   QObject::connect(loginpage,&login::turn_to,[&](bool interface){
     if(interface){
       tem->data_setup();

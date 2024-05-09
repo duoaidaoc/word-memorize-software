@@ -105,7 +105,56 @@ void login::actionSet()
       }
     });
     QObject::connect(ui->sig_button, &QPushButton::clicked, this , [&](){
+      bool ok = true;
+      qint64 id = ui->acc_edit->text().toLongLong(&ok);
+      if(!ok || ui->pwd_edit->text() == ""){
+        Tip->set_content("warning","输入格式不正确!\n账号必须是数字\n密码不能为空!");
+        Tip->show();
+      }
+      else if(ui->checkBox->checkState() == Qt::Unchecked && ui->checkBox_2->checkState() == Qt::Unchecked){
+        Tip->set_content("warning","老师和学生必须勾选一项");
+        Tip->show();
+      }
+      auto man = resource_manager::getInstance();
+      auto &sys = man->get_system();
+      QVariant variant;
+      QString correct_pwd;
+      if(ui->checkBox->checkState() == Qt::Checked){
+        //老师
+        correct_pwd = sys.returnTeacherPassword(id).toString();
+        if(correct_pwd != ui->pwd_edit->text()){
+          Tip->set_content("warning","密码错误");
+          Tip->show();
+        }
+        else{
+          auto &teacher = man->get_teacher();
+          teacher.SetId(id);
+          teacher.SetName("Mamba");
+          teacher.SetPassword(ui->pwd_edit->text());
+          teacher.SetProfilePhotoUrl("askjhfoie");
+          this->hide();
+          emit turn_to(true);
+        }
 
+      }
+      else{
+        //学生
+        correct_pwd = sys.returnStudentPassword(id).toString();
+        if(correct_pwd != ui->pwd_edit->text()){
+          Tip->set_content("warning","密码错误");
+          Tip->show();
+        }
+        else{
+          auto &student = man->get_student();
+          student.SetId(id);
+          student.SetName("Mamba");
+          student.SetPassword(ui->pwd_edit->text());
+          student.SetProfilePhotoUrl("askjhfoie");
+          this->show();
+          emit turn_to(false);
+        }
+      }
+      ui->pwd_edit->clear();
     });
     QObject::connect(ui->chk_button, &QPushButton::clicked, this , [&](){
       bool ok = true;
@@ -127,7 +176,7 @@ void login::actionSet()
         else
           variant = man->init_student(id, ui->name_edit->text(), ui->pwd_edit->text());
         if(variant.isNull()){
-          // 老师创建失败
+          // 创建失败
           Tip->set_content("","账号创建失败");
           Tip->show();
         }

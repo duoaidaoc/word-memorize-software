@@ -93,7 +93,6 @@ QVariant resource_manager::init_student(const qint64 id, const QString name, con
     student->SetName(name);
     student->SetPassword(password);
     student->SetProfilePhotoUrl("eeueueuL");
-    student->learnWordRecord(92);
     return student->registerRole();
 }
 
@@ -160,7 +159,7 @@ resource_manager::resource_manager()
 {
     QTime current_time = QTime::currentTime();
     sel = current_time.hour();
-    sel = 8;
+    sel = 20;
     if (sel < 6 || sel >= 19) {
         //晚上
         glob_stylecss_path = "../word-memorize-software/night.css";
