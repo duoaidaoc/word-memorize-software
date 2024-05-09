@@ -59,6 +59,146 @@ auto db::System::returnUnlearnedWord(QSqlQuery &q, const qint64 &student_id) -> 
 }
 
 //=============== semantics movements =================//
+auto db::System::returnTaskNumber() -> int
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(returnTaskN)) {
+    throw std::runtime_error("Failed to returnTaskNumber sql");
+  }
+
+  if (!query.exec()) {
+    qDebug() << "Error executing returnTaskNumber:" << query.lastError().text();
+    return -1;
+  }
+  if (query.next()) {
+    int totalCount = query.value("total_count").toInt();
+    qDebug() << "Total task count:" << totalCount;
+    return totalCount;
+  } else {
+    qDebug() << "No records found in tasktable";
+    return 0;
+  }
+}
+
+auto db::System::returnWordNumber() -> int
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(returnWordN)) {
+    throw std::runtime_error("Failed to returnWordNumber sql");
+  }
+
+  if (!query.exec()) {
+    qDebug() << "Error executing returnWordNumber:" << query.lastError().text();
+    return -1;
+  }
+  if (query.next()) {
+    int totalCount = query.value("total_count").toInt();
+    qDebug() << "Total task count:" << totalCount;
+    return totalCount;
+  } else {
+    qDebug() << "No records found in words";
+    return 0;
+  }
+}
+
+auto db::System::returnWordBankNumber() -> int
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(returnWordBankN)) {
+    throw std::runtime_error("Failed to returnWordBankNumber sql");
+  }
+
+  if (!query.exec()) {
+    qDebug() << "Error executing returnWordBankNumber:" << query.lastError().text();
+    return -1;
+  }
+  if (query.next()) {
+    int totalCount = query.value("total_count").toInt();
+    qDebug() << "Total task count:" << totalCount;
+    return totalCount;
+  } else {
+    qDebug() << "No records found in wordtable";
+    return 0;
+  }
+}
+
+auto db::System::returnStudentsLearnedNumber(const qint64 &student_id) -> int
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(returnStudentsLearnedN)) {
+    throw std::runtime_error("Failed to returnStudentsLearnedNumber sql");
+  }
+  query.addBindValue(student_id);
+
+  if (!query.exec()) {
+    qDebug() << "Error executing returnStudentsLearnedNumber:" << query.lastError().text();
+    return -1;
+  }
+  if (query.next()) {
+    int totalCount = query.value("total_count").toInt();
+    qDebug() << "Total task count:" << totalCount;
+    return totalCount;
+  } else {
+    qDebug() << "No records found in wordtable";
+    return 0;
+  }
+}
+
+auto db::System::returnWordBankWordNumber(const qint64 &word_bank_id) -> int
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(returnWordBankLearned)) {
+    throw std::runtime_error("Failed to returnWordBankWordNumber sql");
+  }
+  query.addBindValue(word_bank_id);
+
+  if (!query.exec()) {
+    qDebug() << "Error executing returnWordBankWordNumber:" << query.lastError().text();
+    return -1;
+  }
+  if (query.next()) {
+    int totalCount = query.value("word_count").toInt();
+    qDebug() << "Total word count:" << totalCount;
+    return totalCount;
+  } else {
+    qDebug() << "No records found in wordtable";
+    return 0;
+  }
+}
+
+auto db::System::returnStudentWordBankLearned(const qint64 &word_bank_id, const qint64 &student_id) -> int
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(studentLearnedWordBank)) {
+    throw std::runtime_error("Failed to returnStudentWordBankLearned sql");
+  }
+  query.addBindValue(student_id);
+  query.addBindValue(word_bank_id);
+
+  if (!query.exec()) {
+    qDebug() << "Error executing returnStudentWordBankLearned:" << query.lastError().text();
+    return -1;
+  }
+  if (query.next()) {
+    int totalCount = query.value("learned_word_count").toInt();
+    qDebug() << "Total word count:" << totalCount;
+    return totalCount;
+  } else {
+    qDebug() << "No records found in wordtable";
+    return 0;
+  }
+}
+
+double db::System::returnLearnedRate(const qint64 &student_id)
+{
+  return (double)(returnStudentsLearnedNumber(student_id))/(returnWordNumber());
+}
+
+double db::System::returnLearnedRateForWordBank(const qint64 &student_id, const qint64 &word_bank_id)
+{
+  return (double)(returnStudentWordBankLearned(word_bank_id, student_id)) / (returnWordBankWordNumber(word_bank_id));
+}
+
 auto db::System::createWordBank(const qint64 &id, const QString &name, const QString &picture_url) -> QVariant {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(insertWordBook)) {
@@ -155,7 +295,7 @@ bool db::System::importLocalWords(const QString &filename) {
 
   // 获取JSON数组
   QJsonArray jsonArray = doc.array();
-  word_bank_number_ ++;
+  qint64 word_bank_number_ = returnWordBankNumber();
   createWordBank(word_bank_number_, filename, "djdjdjjdjdjdjdj");
 
   // 循环处理每个单词对象
@@ -174,7 +314,8 @@ bool db::System::importLocalWords(const QString &filename) {
       qDebug() << "Phonetic Symbol:" << phonetic_symbol;
       qDebug() << "-----------------------";
       if(checkAlreadyInWords(word) == -1) {
-        importWordBank(word_bank_number_, word_number_++, word, mean, phonetic_symbol, "bbbbb");
+        qint64 word_number = returnWordNumber();
+        importWordBank(word_bank_number_, word_number, word, mean, phonetic_symbol, "bbbbb");
       }
     }
   }

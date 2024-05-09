@@ -16,9 +16,9 @@ namespace db {
 class System {
 private:
   Database &db_;
-  int word_number_;              // 给每个单词赋予独立的id。
-  int word_bank_number_;
-  int task_number_;
+  //int word_number_;              // 给每个单词赋予独立的id。
+  //int word_bank_number_;
+  //int task_number_;
 
   const QLatin1String insertWordBook = QLatin1String(R"(
         insert into wordbank(id, name, picture_url) values(?, ?, ?)
@@ -45,13 +45,38 @@ private:
         )
         ORDER BY english;
     )");
+  const QLatin1String returnTaskN = QLatin1String(R"(
+        SELECT COUNT(*) AS total_count FROM tasktable
+    )");
+  const QLatin1String returnWordN = QLatin1String(R"(
+        SELECT COUNT(*) AS total_count FROM words
+    )");
+  const QLatin1String returnWordBankN = QLatin1String(R"(
+        SELECT COUNT(*) AS total_count FROM wordbank
+    )");
+  const QLatin1String returnStudentsLearnedN = QLatin1String(R"(
+        SELECT COUNT(*) AS total_count FROM StudentSysLearn WHERE student_id = ?
+    )");
+  const QLatin1String returnWordBankLearned = QLatin1String(R"(
+        SELECT COUNT(*) AS word_count
+        FROM WordBankRelationTable
+        WHERE word_bank_id = ?
+    )");
+  const QLatin1String studentLearnedWordBank = QLatin1String(R"(
+        SELECT COUNT(*) AS learned_word_count
+        FROM StudentSysLearn
+        WHERE student_id = ? AND word_id IN (
+            SELECT word_id FROM WordBankRelationTable WHERE word_bank_id = ?
+        )
+    )");
 
   static QVariant addWordBook(QSqlQuery &q, const qint64 &word_bank_id, const QString &name, const QString &picture_url);
   static QVariant addWordBankRelation(QSqlQuery &q, const qint64 &word_bank_id, const qint64 &word_id);
   static QVariant returnPassword(QSqlQuery &q, const qint64 &id);
   static QList<WordInfo> returnUnlearnedWord(QSqlQuery &q, const qint64 &student_id);
+
 public:
-  explicit System(Database &db) : db_(db) { word_number_ = 0; word_bank_number_ = 0; task_number_ = 0; }
+  explicit System(Database &db) : db_(db) {  }
   bool importLocalWords(const QString &filename);
   int checkAlreadyInWords(const QString &word);
   QVariant createWordBank(const qint64 &id, const QString &name, const QString &pircture_url);
@@ -69,22 +94,18 @@ public:
   auto returnDB() -> Database& {
     return db_;
   }
-  auto returnWordNumber() -> int {
-    return word_number_;
-  }
-  auto returnWordBankNumber() -> int {
-    return word_bank_number_;
-  }
-  auto returnTaskNumber() -> int {
-    return task_number_;
-  }
-
-  void incTaskNumber() {
-    task_number_ ++;
-  }
 
   auto returnTeacherPassword(const qint64 &teacher_id) -> QVariant;
   auto returnStudentPassword(const qint64 &student_id) -> QVariant;
+  auto returnTaskNumber() -> int;
+  auto returnWordNumber() -> int;
+  auto returnWordBankNumber() -> int;
+  auto returnStudentsLearnedNumber(const qint64 &student_id) -> int;
+  auto returnWordBankWordNumber(const qint64 &word_bank_id) -> int;
+  auto returnStudentWordBankLearned(const qint64 &word_bank_id, const qint64 &student_id) -> int;
+
+  auto returnLearnedRate(const qint64 &student_id) -> double;
+  auto returnLearnedRateForWordBank(const qint64 &student_id, const qint64 &word_bank_id) -> double;
 };
 } // end namespace db
 

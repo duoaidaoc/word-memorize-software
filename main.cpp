@@ -246,6 +246,9 @@ int main(int argc, char *argv[])
     qDebug() << "-------------------------";
   }
 
+  qDebug() << system.returnLearnedRate(student2.GetId());
+  qDebug() << system.returnLearnedRateForWordBank(student2.GetId(), 1);
+
   qDebug() << "-------- 数据库测试结束 -------\n";
 
 //========================================== 前端测试 ==========================================//
