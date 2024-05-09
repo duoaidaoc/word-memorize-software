@@ -69,11 +69,21 @@ private:
             SELECT word_id FROM WordBankRelationTable WHERE word_bank_id = ?
         )
     )");
+  const QLatin1String returnTotalWordBank = QLatin1String(R"(
+        SELECT * FROM wordbank
+    )");
+  const QLatin1String returnWordBankListInfo = QLatin1String(R"(
+        SELECT *
+        FROM words JOIN WordBankRelationTable ON words.id = WordBankRelationTable.word_id
+        WHERE WordBankRelationTable.word_bank_id = ?
+  )");
 
   static QVariant addWordBook(QSqlQuery &q, const qint64 &word_bank_id, const QString &name, const QString &picture_url);
   static QVariant addWordBankRelation(QSqlQuery &q, const qint64 &word_bank_id, const qint64 &word_id);
   static QVariant returnPassword(QSqlQuery &q, const qint64 &id);
   static QList<WordInfo> returnUnlearnedWord(QSqlQuery &q, const qint64 &student_id);
+  static QList<WordBankInfo> returnWordBank(QSqlQuery &q);
+  static QList<WordInfo> returnBankList(QSqlQuery &q, const qint64 &bank_id);
 
 public:
   explicit System(Database &db) : db_(db) {  }
@@ -106,6 +116,9 @@ public:
 
   auto returnLearnedRate(const qint64 &student_id) -> double;
   auto returnLearnedRateForWordBank(const qint64 &student_id, const qint64 &word_bank_id) -> double;
+
+  auto returnWordBankInfo() -> QList<WordBankInfo>;
+  auto returnWordBankList(const qint64 &word_bank_id) -> QList<WordInfo>;
 };
 } // end namespace db
 

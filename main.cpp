@@ -249,6 +249,16 @@ int main(int argc, char *argv[])
   qDebug() << system.returnLearnedRate(student2.GetId());
   qDebug() << system.returnLearnedRateForWordBank(student2.GetId(), 1);
 
+  QList<db::WordBankInfo> banklist = system.returnWordBankInfo();
+  qDebug() << "-------- bankList测试 -------\n";
+  for(const auto &bank : banklist) {
+    qDebug() << bank.id << bank.name << bank.picture_url;
+  }
+
+  wordList = system.returnWordBankList(0);
+  for(const auto &word : wordList) {
+    qDebug() << word.word_id << word.chinese;
+  }
   qDebug() << "-------- 数据库测试结束 -------\n";
 
 //========================================== 前端测试 ==========================================//
@@ -263,6 +273,13 @@ int main(int argc, char *argv[])
 
   man->init_init_student();
   man->init_init_teacher();
+<<<<<<< Updated upstream
+=======
+  man->init_teacher(1,"1","1");
+  auto student4 = man->get_student();
+  qDebug() <<"======================*******************==============================";
+  qDebug() << teacher2.infoTaskCondition(student4.GetId(), 2);
+>>>>>>> Stashed changes
 
   login* loginpage = new login();
   student_main* stm = new student_main();

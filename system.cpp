@@ -58,6 +58,47 @@ auto db::System::returnUnlearnedWord(QSqlQuery &q, const qint64 &student_id) -> 
   return wordList;
 }
 
+QList<db::WordBankInfo> db::System::returnWordBank(QSqlQuery &q)
+{
+  QList<WordBankInfo> bankList;
+
+  if (!q.exec()) {
+    qDebug() << "Error executing returnWordBank:" << q.lastError().text();
+    return bankList; // 返回空列表
+  }
+  while (q.next()) {
+    WordBankInfo bankInfo;
+    bankInfo.id = q.value(0).toLongLong();
+    bankInfo.name = q.value(1).toString();
+    bankInfo.picture_url = q.value(2).toString();
+    bankList.append(bankInfo);
+  }
+
+  return bankList;
+}
+
+auto db::System::returnBankList(QSqlQuery &q, const qint64 &bank_id) -> QList<WordInfo>
+{
+  QList<WordInfo> wordList;
+  q.addBindValue(bank_id);
+  if (!q.exec()) {
+    qDebug() << "Error executing returnBankList:" << q.lastError().text();
+    return wordList; // 返回空列表
+  }
+
+  while (q.next()) {
+    WordInfo wordInfo;
+    wordInfo.word_id = q.value(0).toLongLong();
+    wordInfo.english = q.value(1).toString();
+    wordInfo.chinese = q.value(2).toString();
+    wordInfo.phonetic = q.value(3).toString();
+    wordInfo.audio_url = q.value(4).toString();
+    wordList.append(wordInfo);
+  }
+
+  return wordList;
+}
+
 //=============== semantics movements =================//
 auto db::System::returnTaskNumber() -> int
 {
@@ -197,6 +238,26 @@ double db::System::returnLearnedRate(const qint64 &student_id)
 double db::System::returnLearnedRateForWordBank(const qint64 &student_id, const qint64 &word_bank_id)
 {
   return (double)(returnStudentWordBankLearned(word_bank_id, student_id)) / (returnWordBankWordNumber(word_bank_id));
+}
+
+auto db::System::returnWordBankInfo() -> QList<db::WordBankInfo>
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(returnTotalWordBank)) {
+    throw std::runtime_error("Failed to prepare returnWordBankInfo insert sql");
+  }
+
+  return returnWordBank(query);
+}
+
+auto db::System::returnWordBankList(const qint64 &word_bank_id) -> QList<db::WordInfo>
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(returnWordBankListInfo)) {
+    throw std::runtime_error("Failed to prepare returnWordBankList insert sql");
+  }
+
+  return returnBankList(query, word_bank_id);
 }
 
 auto db::System::createWordBank(const qint64 &id, const QString &name, const QString &picture_url) -> QVariant {

@@ -35,6 +35,12 @@ struct WordInfo {
   QString phonetic;
   QString audio_url;
 };
+
+struct WordBankInfo {
+  qint64 id;
+  QString name;
+  QString picture_url;
+};
 } // end namespace db
 
 #endif  // UTIL_H

@@ -51,7 +51,7 @@ private:
         WHERE TaskWordTable.task_id = ?
     )");
     const QLatin1String isWordLearnedYet = QLatin1String(R"(
-        SELECT DISTINCT student_id
+        SELECT distinct student_id
         FROM StudentWordLearning
         WHERE word_id = ? AND student_id = ?
     )");
