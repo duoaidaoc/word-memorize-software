@@ -176,9 +176,10 @@ auto db::Role::calculateTotal(QSqlQuery &q, const qint64 &task_id) -> QList<Word
   return wordList;
 }
 
-auto db::Role::isWordLearned(QSqlQuery &q, const WordInfo &wordInfo) -> bool
+auto db::Role::isWordLearned(QSqlQuery &q, const WordInfo &wordInfo, const qint64 &student_id) -> bool
 {
   q.addBindValue(wordInfo.word_id);
+  q.addBindValue(student_id);
   if (!q.exec()) {
     qDebug() << "Error executing isWordLearned query:" << q.lastError().text();
     return false;
@@ -276,12 +277,12 @@ auto db::Role::infoTaskCondition(const qint64 &student_id, const qint64 &task_id
     if(!query.prepare(isWordLearnedYet)) {
       throw std::runtime_error("Failed to prepare isWordLearnedYet sql");
     }
-    if(isWordLearned(query, word)) {
+    if(isWordLearned(query, word, student_id)) {
       wordLearned ++;
     }
   }
 
-  return (double)wordLearned / totalWordList.size();
+  return ((double)wordLearned) / totalWordList.size();
 }
 
 //====================================== Teacher part =====================================//

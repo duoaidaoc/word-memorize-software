@@ -53,7 +53,7 @@ private:
     const QLatin1String isWordLearnedYet = QLatin1String(R"(
         SELECT DISTINCT student_id
         FROM StudentWordLearning
-        WHERE word_id = ?
+        WHERE word_id = ? AND student_id = ?
     )");
 
     static QList<TaskInfo> displayTaskInClass(QSqlQuery &q, const qint64 &class_id);
@@ -61,7 +61,7 @@ private:
     static QList<TeacherInfo> displayClassTeacher(QSqlQuery &q, const qint64 &class_id);
     static QList<StudentInfo> displayClassMember(QSqlQuery &q, const qint64 &class_id);
     static QList<WordInfo> calculateTotal(QSqlQuery &q, const qint64& task_id);
-    static bool isWordLearned(QSqlQuery &q, const WordInfo &wordInfo);
+    static bool isWordLearned(QSqlQuery &q, const WordInfo &wordInfo, const qint64 &student_id);
   public:
     explicit Role(Database& db) : Table(db) {}
     virtual QVariant registerRole() = 0;

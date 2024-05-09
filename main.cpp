@@ -265,6 +265,10 @@ int main(int argc, char *argv[])
   man->init_student(1,"1","1");
   man->init_init_teacher();
   man->init_teacher(1,"1","1");
+  auto student4 = man->get_student();
+  qDebug() <<"======================*******************==============================";
+  //qDebug() << teacher2.infoTaskCondition(student4.GetId(), 2);
+
   login* loginpage = new login();
   student_main* stm = new student_main();
   teacher_main* tem = new teacher_main();

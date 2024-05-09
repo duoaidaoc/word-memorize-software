@@ -93,6 +93,7 @@ QVariant resource_manager::init_student(const qint64 id, const QString name, con
     student->SetName(name);
     student->SetPassword(password);
     student->SetProfilePhotoUrl("eeueueuL");
+    student->learnWordRecord(92);
     return student->registerRole();
 }
 
