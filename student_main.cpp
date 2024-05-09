@@ -77,15 +77,18 @@ void student_main::setup()
     signaltip_1 = new tip();
     signaltip_1->set_content("warning","当前进行其它任务中,旧的任务会被丢弃,确定再开启新任务吗?");
     QObject::connect(signaltip_1, &tip::confirm,[&](){
-      clearnowtask();
-      setnowtask(signaltip_1->tid);
+      clearNowWord();
+      setNowWord(signaltip_1->tid);
     });
     signaltip_2 = new tip();
     signaltip_2->set_content("warning","确定退出课堂吗?!!!!");
-    QObject::connect(signaltip_1, &tip::confirm,[&](){
+    QObject::connect(signaltip_2, &tip::confirm,[&](){
       auto man = resource_manager::getInstance();
       auto student = man->get_student();
-      // TODO(): 力扬接口 学生退班。
+      student.leaveClass(cls_.id);
+      cls_.id = -1;
+      update_class();
+      ui->stackedWidget_2->setCurrentIndex(3);
     });
 }
 
@@ -93,8 +96,8 @@ void student_main::setaction()
 {
     QObject::connect(ui->learn_btn,&QPushButton::clicked,[&](){
       if(que_widget->get_status() == question::free){
-        clearnowtask();
-        setnowtask(-1);
+      clearNowWord();
+        setNowWord(-1);
       }
       else if(que_widget->get_task_id() != -1){
         signaltip_1->tid = -1;
@@ -158,46 +161,12 @@ void student_main::setaction()
     QObject::connect(ui->exi_class_btn,&QPushButton::clicked,[&](){
       // TODO(): 学生退出课堂
       signaltip_2->show();
-      update_class();
+
     });
 }
 
 void student_main::test()
 {
-    //初始化demo
-    db::WordInfo word = {};
-    for(int i = 1;i<=10;i++){
-        word_frame* wd = new word_frame(ui->word_contents);
-        word_frames.push_back(wd);
-        wd->set_content(word, word_frames.size() - 1);
-        word_layout->addWidget(wd);
-        QObject::connect(wd, &word_frame::set_display_content, this, &student_main::show_display);
-        QObject::connect(w_display, &word_display::upd_page, this, &student_main::update_display);
-    }
-
-    /** task_frame adding **/
-    task_frame* tf = new task_frame(ui->task_contents);
-    task_frames.push_back(tf);
-    task_layout->addWidget(tf);
-
-    QObject::connect(tf, &task_frame::set_display_content, [&](db::TaskInfo tsk){
-      // 把Tsk的单词列表拿出来放在word_frames里面
-      if(que_widget->get_status() == question::free){
-        clearnowtask();
-        setnowtask(tsk.taskId);
-      }
-      else if(que_widget->get_task_id() != tsk.taskId){
-        signaltip_1->tid = tsk.taskId;
-        signaltip_1->show(); // 选择确定则开启当前任务
-      }
-      else{
-        ui->stackedWidget_2->setCurrentIndex(1);
-      }
-    });
-    /** task_frame adding **/
-
-    ui->class_label->hide();
-    ui->task_label->hide();
     /** 词库de展示页 添加 词库 **/
     QHBoxLayout *hbox = new QHBoxLayout(ui->wordlib_display);
     for (int i = 0; i < 10; ++i) { // 添加九个 QFrame 作为示例
@@ -241,7 +210,7 @@ void student_main::clearlayout(QBoxLayout *lo)
     }
 }
 
-void student_main::clearnowtask()
+void student_main::clearNowWord()
 {
     clearlayout(word_layout);
     word_frames.clear();
@@ -250,7 +219,7 @@ void student_main::clearnowtask()
     }
 }
 
-void student_main::setnowtask(qint64 tid)
+void student_main::setNowWord(qint64 tid)
 {
     if(que_widget->get_status() == question::busy){
         qDebug() << "question frame Busying!";
@@ -264,7 +233,8 @@ void student_main::setnowtask(qint64 tid)
       words = student.infoWordsInTask(tid);
     }
     else{
-      // words = 每日单词
+      auto sys = man->get_system();
+      words = sys.generateWords(student.GetId());
     }
     if(words.empty()){
         Tip->set_content("warning","没有单词！");
@@ -280,6 +250,46 @@ void student_main::setnowtask(qint64 tid)
         QObject::connect(w_display, &word_display::upd_page, this, &student_main::update_display);
     }
     ui->stackedWidget_2->setCurrentIndex(1);
+}
+
+void student_main::clearNowTask()
+{
+    clearlayout(task_layout);
+    task_frames.clear();
+}
+
+void student_main::setNowTask()
+{
+    if(!task_frames.empty()){
+        qDebug() << "在set前需要clear task";
+        abort();
+    }
+    auto man = resource_manager::getInstance();
+    auto student = man->get_student();
+    for(const auto& class_frame: class_frames){
+        auto cls = class_frame->getclass();
+        auto tasks = student.infoTaskInClass(cls.id);
+        for(const auto& tsk: tasks){
+          task_frame* tf = new task_frame(ui->task_contents);
+          tf->settask(tsk);
+          task_frames.push_back(tf);
+          task_layout->addWidget(tf);
+          QObject::connect(tf, &task_frame::set_display_content, [&](db::TaskInfo tsk){
+            // 把Tsk的单词列表拿出来放在word_frames里面
+            if(que_widget->get_status() == question::free){
+              clearNowWord();
+              setNowWord(tsk.taskId);
+            }
+            else if(que_widget->get_task_id() != tsk.taskId){
+              signaltip_1->tid = tsk.taskId;
+              signaltip_1->show(); // 选择确定则开启当前任务
+            }
+            else{
+              ui->stackedWidget_2->setCurrentIndex(1);
+            }
+          });
+        }
+    }
 }
 
 void student_main::data_setup()
@@ -310,21 +320,22 @@ void student_main::update_class()
         class_frames.push_back(cf);
         class_layout->addWidget(cf);
         cf->setclass(cls);
-        auto connect = QObject::connect(cf, &class_frame::set_display_content, [&](CClass cls){
+        auto connect = QObject::connect(cf, &class_frame::set_display_content, [&](CClass _cls){
+          cls_ = _cls;
           // 重置ui->student_vlayout中的frame
           for(auto &layout : student_appending_layout){
             clearlayout(layout);
           }
           // 通过数据库获取 班级老师的信息(id, name)
-          ui->label_class_name->setText(QString("班级名: ") + cls.name);
-          const auto &class_detail = student.infoClassDetails(cls.id);
+          ui->label_class_name->setText(QString("班级名: ") + _cls.name);
+          const auto &class_detail = student.infoClassDetails(_cls.id);
           if(!class_detail.size()){
             throw std::runtime_error("class他没有老师，这合理吗？");
           }
           ui->label_teacher_name->setText(QString("教师: ") + class_detail[0].teacherName);
 
           // 通过数据库获取 班级学生的信息
-          const auto &class_members = student.infoClassMembers(cls.id);
+          const auto &class_members = student.infoClassMembers(_cls.id);
           int manba_size = class_members.size();
           ui->label_student_number->setText(QString("学生人数:\n %1 人").arg(manba_size));
 
@@ -354,6 +365,8 @@ void student_main::update_class()
           // 根据cls设置新的ui->student_vlayout中的frame
         });
     }
+    clearNowTask();
+    setNowTask();
 }
 
 void student_main::show_display(const db::WordInfo &wd,int seq)

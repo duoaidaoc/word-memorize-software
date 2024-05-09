@@ -185,7 +185,10 @@ private:
         SELECT * FROM students WHERE id = ?
     )");
     const QLatin1String insertStudentClassTable = QLatin1String(R"(
-        insert into studentclass(student_id, class_id) values(?, ?)
+        INSERT INTO studentclass (student_id, class_id)
+        SELECT ?, ?
+        FROM class
+        WHERE id = ?
     )");
     const QLatin1String deleteStudentFromClass = QLatin1String(R"(
         DELETE FROM studentclass WHERE student_id = ? AND class_id = ?

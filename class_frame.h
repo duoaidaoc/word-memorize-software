@@ -13,6 +13,7 @@ class class_frame : public QFrame
 public:
   class_frame(QWidget* parent = nullptr);
   void setclass(CClass &_cls);
+  CClass getclass();
 protected:
   void mousePressEvent(QMouseEvent* event)override;
 private:

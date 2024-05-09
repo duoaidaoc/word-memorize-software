@@ -38,19 +38,22 @@ private:
     QVBoxLayout* student_fixed_layout;
     QHBoxLayout* student_appending_layout[2];
 
-
     classcue_frame *Ccue_frame;
     question* que_widget;
 
     std::vector<ques>questions;
     tip *Tip, *signaltip_1,*signaltip_2;
 
+    CClass cls_;
+
     void setup();
     void setaction();
     void test();
     void clearlayout(QBoxLayout *lb);
-    void clearnowtask();
-    void setnowtask(qint64 tid);
+    void clearNowWord();
+    void setNowWord(qint64 tid);
+    void clearNowTask();
+    void setNowTask();
 
 
 private slots:

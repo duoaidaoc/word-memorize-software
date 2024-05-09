@@ -20,6 +20,11 @@ void class_frame::setclass(CClass &_cls)
     classinfo->setText(QString("%1 : %2").arg(cls.id).arg(cls.name));
 }
 
+CClass class_frame::getclass()
+{
+    return cls;
+}
+
 void class_frame::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {

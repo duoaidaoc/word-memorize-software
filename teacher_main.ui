@@ -186,7 +186,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>7</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="teacher_info_page">
      <widget class="QFrame" name="detail_frame">
@@ -608,7 +608,7 @@
      <zorder>label_class_of_task</zorder>
     </widget>
     <widget class="QWidget" name="class_create_task">
-     <widget class="QScrollArea" name="scrollArea">
+     <widget class="QScrollArea" name="word_scroll">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -699,9 +699,23 @@
        </property>
       </widget>
      </widget>
+     <widget class="QPushButton" name="btn_commit">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>10</y>
+        <width>101</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确认提交</string>
+      </property>
+     </widget>
      <zorder>btn_frame_5</zorder>
-     <zorder>scrollArea</zorder>
+     <zorder>word_scroll</zorder>
      <zorder>label_create_task</zorder>
+     <zorder>btn_commit</zorder>
     </widget>
     <widget class="QWidget" name="task_condition_page">
      <widget class="QLabel" name="label_finish_count">
@@ -949,7 +963,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>

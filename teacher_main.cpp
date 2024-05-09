@@ -53,6 +53,8 @@ void teacher_main::ui_setup()
   class_layout->setAlignment(Qt::AlignTop|Qt::AlignLeft);
   task_layout = new QVBoxLayout(ui->task_contents);
   task_layout->setAlignment(Qt::AlignTop|Qt::AlignLeft);
+  word_layout = new QVBoxLayout(ui->word_contents);
+  word_layout->setAlignment(Qt::AlignTop|Qt::AlignLeft);
 
   //分界线绘画
   QColor bgColor = man->get_reversed_color();
@@ -71,11 +73,13 @@ void teacher_main::ui_setup()
   student_fixed_layout->addLayout(student_appending_layout[1]);
   ui->student_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui->student_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  ui->word_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  ui->word_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui->tableView->setFocusPolicy(Qt::NoFocus);
   ui->tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui->tableView->setSelectionMode(QAbstractItemView::NoSelection);
 
-
+  Tip = new tip();
   nc_frame = new newclass_frame(this);
   model = new QStandardItemModel();
 }
@@ -137,6 +141,7 @@ void teacher_main::connection_setup()
   });
   // 为任务添加单词,跳转到单词添加页面
   QObject::connect(ui->btn_add_word,&QPushButton::clicked,[&](){
+    model->clear();
     ui->stackedWidget->setCurrentIndex(7);
   });
   // 加入班级马上刷新
@@ -183,15 +188,54 @@ void teacher_main::connection_setup()
   });
   // 清空导入内容
   QObject::connect(ui->btn_discard,&QPushButton::clicked,[&](){
-    model->removeRows(0, model->rowCount());
+    model->clear();
   });
   QObject::connect(ui->btn_ret,&QPushButton::clicked,[&](){
-    model->removeRows(0, model->rowCount());
+    model->clear();
     ui->stackedWidget->setCurrentIndex(4);
   });
   QObject::connect(ui->btn_addtotask,&QPushButton::clicked,[&](){
-    // TODO():添加到任务列表
+    int rowCount = model->rowCount();
+    for (int row = 0; row < rowCount; ++row) {
+      // 获取第一列数据
+      QModelIndex index = model->index(row, 0); // 第一个参数是行，第二个参数是列
+      QVariant data = model->data(index, Qt::DisplayRole); // 获取数据
+      QString value = data.toString(); // 转换为 QString
+
+      // 在这里对第一列的数据进行操作，比如输出到控制台
+      word_frame* wf = new word_frame(ui->word_contents);
+      wf->set_btn_disabled();
+      db::WordInfo wd;
+      wd.english = value;
+      wf->set_content(wd);
+      word_layout->addWidget(wf);
+      word_frames.push_back(wf);
+    }
+    ui->stackedWidget->setCurrentIndex(4);
   });
+  QObject::connect(ui->btn_commit,&QPushButton::clicked,[&](){
+    auto man = resource_manager::getInstance();
+    auto teacher = man->get_teacher();
+    QList<QString> words;
+    for(const auto &wf: word_frames){
+      words.push_back(wf->get_content().english);
+    }
+    int tid = teacher.importTaskWordBank(words) ;
+    if(tid >= 0){
+      Tip->set_content("","创建成功");
+      Tip->show();
+      teacher.createTask(tid, current_cls.id,QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+
+    }
+    else{
+      Tip->set_content("warning", "创建失败");
+      Tip->show();
+    }
+    clearlayout(word_layout);
+    word_frames.clear();
+    ui->stackedWidget->setCurrentIndex(3);
+  });
+
 }
 
 void teacher_main::data_setup()
@@ -209,20 +253,7 @@ void teacher_main::update_class()
     // 非常重要，不能删掉，yo!
 
     // 删除所有原先存在的frame
-    while (QLayoutItem *item = class_layout->takeAt(0)) {
-      if (QWidget *widget = item->widget()) {
-        // 从布局中移除部件
-        class_layout->removeWidget(widget);
-        // 删除部件并释放内存
-        delete widget;
-      }
-      else{
-        throw std::runtime_error("a content of layout is not a widget");
-      }
-      // 删除布局项并释放内存
-      delete item;
-    }
-
+  clearlayout(class_layout);
     auto &teacher = resource_manager::getInstance()->get_teacher();
     auto list = teacher.infoTeacherClass();
     if(list.size() > 0){
@@ -235,26 +266,13 @@ void teacher_main::update_class()
         class_layout->addWidget(cf);
         cf->setclass(cls);
         auto connect = QObject::connect(cf, &class_frame::set_display_content, [&](CClass cls){
+
           current_cls = cls;
 //          qDebug() << "1Q1111111111111111111111111111111111111111111111111\n";
 //          qDebug() << QString::number(cls.id) + ' ' + cls.name + ' ' + cls.cue + ' ';
           // 重置ui->student_vlayout中的frame
           for(auto &layout : student_appending_layout){
-            if (!layout)
-              return;
-            while (QLayoutItem *item = layout->takeAt(0)) {
-              if (QWidget *widget = item->widget()) {
-                // 从布局中移除部件
-                layout->removeWidget(widget);
-                // 删除部件并释放内存
-                delete widget;
-              }
-              else{
-                throw std::runtime_error("布局中不是widget");
-              }
-              // 删除布局项并释放内存
-              delete item;
-            }
+            clearlayout(layout);
           }
           // 通过数据库获取 班级老师的信息(id, name)
           ui->label_class_name->setText(QString("班级名: ") + cls.name);
@@ -291,10 +309,60 @@ void teacher_main::update_class()
 
             student_appending_layout[i % 2]->addWidget(itemFrame);
           }
-
           ui->stackedWidget->setCurrentIndex(2);
           // 根据cls设置新的ui->student_vlayout中的frame
         });
+    }
+}
+
+void teacher_main::clearlayout(QBoxLayout *layout)
+{
+    if(!layout)
+        return;
+    // 删除所有原先存在的frame
+    while (QLayoutItem *item = layout->takeAt(0)) {
+        if (QWidget *widget = item->widget()) {
+        // 从布局中移除部件
+        class_layout->removeWidget(widget);
+        // 删除部件并释放内存
+        delete widget;
+        }
+        else{
+        throw std::runtime_error("布局中不是widget");
+        }
+        // 删除布局项并释放内存
+        delete item;
+    }
+}
+
+void teacher_main::clearNowTask()
+{
+    clearlayout(task_layout);
+    task_frames.clear();
+}
+
+void teacher_main::setNowTask()
+{
+    if(!task_frames.empty()){
+        qDebug() << "在set前需要clear task";
+        abort();
+    }
+    auto man = resource_manager::getInstance();
+    auto student = man->get_student();
+    for(const auto& class_frame: class_frames){
+        auto cls = class_frame->getclass();
+        auto tasks = student.infoTaskInClass(cls.id);
+        for(const auto& tsk: tasks){
+        task_frame* tf = new task_frame(ui->task_contents);
+        tf->settask(tsk);
+        task_frames.push_back(tf);
+        task_layout->addWidget(tf);
+        QObject::connect(tf, &task_frame::set_display_content, [&](db::TaskInfo tsk){
+          // 将tsk的单词展示到展示页面
+
+          // 将tsk的学生按完成情况排序
+        });
+        }
     }
 }
 

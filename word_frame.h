@@ -21,6 +21,7 @@ public:
     explicit word_frame(QWidget* parent = 0);
     void set_content(const db::WordInfo& wd, int seq_ = 0);
     void mousePressEvent(QMouseEvent* event) override;
+    void set_btn_disabled();
     db::WordInfo get_content();
 signals:
     void set_display_content(const db::WordInfo &wd ,int _seq);

@@ -41,11 +41,16 @@ private:
   newclass_frame* nc_frame;
   CClass current_cls;
 
+  tip *Tip;
+
   QStandardItemModel *model;
   void ui_setup();
   void connection_setup();
   void test();
   void update_class();
+  void clearlayout(QBoxLayout *layout);
+  void clearNowTask();
+  void setNowTask();
 };
 
 #endif // TEACHER_MAIN_H

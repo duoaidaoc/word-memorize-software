@@ -46,6 +46,11 @@ void word_frame::mousePressEvent(QMouseEvent *event)
     }
 }
 
+void word_frame::set_btn_disabled()
+{
+    sound_btn->setEnabled(false);
+}
+
 db::WordInfo word_frame::get_content()
 {
     return content;

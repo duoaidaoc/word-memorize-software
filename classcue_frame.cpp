@@ -49,8 +49,11 @@ classcue_frame::classcue_frame(QWidget *parent) :
         ui->lineEdit->setText("");
       }
       else{
+        Tip->set_content("","班级加入成功");
+        Tip->show();
         emit UpdateClass();
       }
+      ui->lineEdit->clear();
       this->hide();
     }
   });

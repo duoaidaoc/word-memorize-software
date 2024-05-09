@@ -609,6 +609,7 @@ auto db::Student::addStudentClass(QSqlQuery &q,
                                   const qint64 &class_id) -> QVariant {
   q.addBindValue(student_id);
   q.addBindValue(class_id);
+  q.addBindValue(class_id);
   if (!q.exec()) {
     qDebug() << "Error inserting data:" << q.lastError().text();
     return QVariant(); // Return an empty QVariant or handle the error as needed
@@ -723,7 +724,8 @@ auto db::Student::joinClass(const qint64 &class_id) -> QVariant {
   if(!query.prepare(insertStudentClassTable)) {
     throw std::runtime_error("Failed to prepare TearcherClassTable insert sql");
   }
-  return addStudentClass(query, GetId(), class_id);
+  auto a = addStudentClass(query, GetId(), class_id);
+  return a;
 }
 
 auto db::Student::leaveClass(const qint64 &class_id) -> bool {
