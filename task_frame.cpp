@@ -18,9 +18,10 @@ void task_frame::mousePressEvent(QMouseEvent *event)
     }
 }
 
-void task_frame::settask(const db::TaskInfo& _tsk)
+void task_frame::settask(const CClass &cls, const db::TaskInfo& _tsk)
 {
-    taskinfo->setText(_tsk.taskName);
+    taskinfo->setText(cls.name + ": " +_tsk.taskName);
     tsk = _tsk;
 }
+
 

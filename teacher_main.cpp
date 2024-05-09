@@ -55,6 +55,9 @@ void teacher_main::ui_setup()
   task_layout->setAlignment(Qt::AlignTop|Qt::AlignLeft);
   word_layout = new QVBoxLayout(ui->word_contents);
   word_layout->setAlignment(Qt::AlignTop|Qt::AlignLeft);
+  task_view_layout = new QVBoxLayout(ui->task_view_contents);
+  task_view_layout->setAlignment(Qt::AlignTop|Qt::AlignLeft);
+
 
   //分界线绘画
   QColor bgColor = man->get_reversed_color();
@@ -75,6 +78,9 @@ void teacher_main::ui_setup()
   ui->student_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui->word_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui->word_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  ui->scrollArea_task_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  ui->scrollArea_task_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
   ui->tableView->setFocusPolicy(Qt::NoFocus);
   ui->tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui->tableView->setSelectionMode(QAbstractItemView::NoSelection);
@@ -82,6 +88,9 @@ void teacher_main::ui_setup()
   Tip = new tip();
   nc_frame = new newclass_frame(this);
   model = new QStandardItemModel();
+  ui->tableView->setModel(model);
+  stu_model = new QStandardItemModel();
+  ui->tableView_student->setModel(stu_model);
 }
 
 void teacher_main::connection_setup()
@@ -183,7 +192,6 @@ void teacher_main::connection_setup()
     }
 
     // 6. 创建 QTableView，并设置模型
-    ui->tableView->setModel(model);
 
   });
   // 清空导入内容
@@ -213,6 +221,7 @@ void teacher_main::connection_setup()
     }
     ui->stackedWidget->setCurrentIndex(4);
   });
+  // 任务完成创建
   QObject::connect(ui->btn_commit,&QPushButton::clicked,[&](){
     auto man = resource_manager::getInstance();
     auto teacher = man->get_teacher();
@@ -231,8 +240,8 @@ void teacher_main::connection_setup()
       Tip->set_content("warning", "创建失败");
       Tip->show();
     }
-    clearlayout(word_layout);
-    word_frames.clear();
+    clearNowTask();
+    setNowTask();
     ui->stackedWidget->setCurrentIndex(3);
   });
 
@@ -247,13 +256,12 @@ void teacher_main::data_setup()
   update_class();
 }
 
-
 void teacher_main::update_class()
 {
     // 非常重要，不能删掉，yo!
 
     // 删除所有原先存在的frame
-  clearlayout(class_layout);
+    clearlayout(class_layout);
     auto &teacher = resource_manager::getInstance()->get_teacher();
     auto list = teacher.infoTeacherClass();
     if(list.size() > 0){
@@ -288,7 +296,7 @@ void teacher_main::update_class()
           ui->label_student_number->setText(QString("学生人数:\n %1 人").arg(manba_size));
 
           // 创建并添加 QFrame 到布局
-          for (int i = 0; i < manba_size; ++i) { // 添加九个 QFrame 作为示例
+          for (int i = 0; i < manba_size; ++i) {
             QFrame *itemFrame = new QFrame(ui->student_display);
             itemFrame->setFixedSize(80, 100); // 固定大小为 80*100
             itemFrame->setAttribute(Qt::WA_TranslucentBackground, true);
@@ -313,6 +321,8 @@ void teacher_main::update_class()
           // 根据cls设置新的ui->student_vlayout中的frame
         });
     }
+    clearNowTask();
+    setNowTask();
 }
 
 void teacher_main::clearlayout(QBoxLayout *layout)
@@ -348,20 +358,51 @@ void teacher_main::setNowTask()
         abort();
     }
     auto man = resource_manager::getInstance();
-    auto student = man->get_student();
+    auto teacher = man->get_teacher();
     for(const auto& class_frame: class_frames){
         auto cls = class_frame->getclass();
-        auto tasks = student.infoTaskInClass(cls.id);
+        auto tasks = teacher.infoTaskInClass(cls.id);
         for(const auto& tsk: tasks){
-        task_frame* tf = new task_frame(ui->task_contents);
-        tf->settask(tsk);
-        task_frames.push_back(tf);
-        task_layout->addWidget(tf);
-        QObject::connect(tf, &task_frame::set_display_content, [&](db::TaskInfo tsk){
-          // 将tsk的单词展示到展示页面
+          task_frame* tf = new task_frame(ui->task_contents);
+          tf->settask(cls, tsk);
+          task_frames.push_back(tf);
+          task_layout->addWidget(tf);
+          QObject::connect(tf, &task_frame::set_display_content, [&](db::TaskInfo tsk){
+            auto man = resource_manager::getInstance();
+            auto teacher = man->get_teacher();
+            // 单词页清空
+            clearlayout(task_view_layout);
+            task_view_frames.clear();
+            // 学生页清空
+            stu_model->clear();
+            // 将tsk的单词添加到单词页面
+            const auto &words = teacher.infoWordsInTask(tsk.taskId);
+            for(const auto &word : words){
+              word_frame* wf = new word_frame();
+              wf->set_btn_disabled();
+              wf->set_content(word);
+              task_view_frames.push_back(wf);
+              task_view_layout->addWidget(wf);
+            }
+            // 将tsk的学生按完成情况排序
+            const auto &students = teacher.infoClassMembers(current_cls.id);
 
-          // 将tsk的学生按完成情况排序
-        });
+            stu_model->setRowCount(students.size());
+            stu_model->setColumnCount(3);
+            stu_model->setHorizontalHeaderItem(0, new QStandardItem("学生学号"));
+            stu_model->setHorizontalHeaderItem(1, new QStandardItem("姓名"));
+            stu_model->setHorizontalHeaderItem(2, new QStandardItem("完成率"));
+
+            for(int i = 0; i < students.size();i++){
+              QStandardItem *item = new QStandardItem(QString::number(students[i].studentId));
+              stu_model->setItem(i, 0, item);
+              QStandardItem *item_1 = new QStandardItem(students[i].studentName);
+              stu_model->setItem(i, 1, item_1);
+              QStandardItem *item_2 = new QStandardItem(QString::number(teacher.infoTaskCondition(students[i].studentId,tsk.taskId)));
+              stu_model->setItem(i, 2, item_2);
+            }
+            ui->stackedWidget->setCurrentIndex(6);
+          });
         }
     }
 }

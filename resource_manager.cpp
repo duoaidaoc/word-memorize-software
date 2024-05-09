@@ -103,7 +103,6 @@ db::Student &resource_manager::get_student()
 
 QVariant resource_manager::init_teacher(const qint64 id, const QString name, const QString password)
 {
-    // @删掉曼巴、梅西、詹皇
     teacher->SetId(id);
     teacher->SetName(name);
     teacher->SetPassword(password);

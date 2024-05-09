@@ -29,8 +29,8 @@ private:
   Ui::teacher_main *ui;
 
 
-  QVBoxLayout *word_layout,*class_layout,*task_layout;
-  std::vector<word_frame* >word_frames;
+  QVBoxLayout *word_layout,*class_layout,*task_layout,*task_view_layout;
+  std::vector<word_frame* >word_frames,task_view_frames;
   std::vector<class_frame* >class_frames;
   std::vector<task_frame* >task_frames;
 
@@ -43,7 +43,7 @@ private:
 
   tip *Tip;
 
-  QStandardItemModel *model;
+  QStandardItemModel *model,*stu_model;
   void ui_setup();
   void connection_setup();
   void test();

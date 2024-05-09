@@ -271,7 +271,7 @@ void student_main::setNowTask()
         auto tasks = student.infoTaskInClass(cls.id);
         for(const auto& tsk: tasks){
           task_frame* tf = new task_frame(ui->task_contents);
-          tf->settask(tsk);
+          tf->settask(cls, tsk);
           task_frames.push_back(tf);
           task_layout->addWidget(tf);
           QObject::connect(tf, &task_frame::set_display_content, [&](db::TaskInfo tsk){

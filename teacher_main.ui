@@ -744,16 +744,6 @@
        <string>task name:</string>
       </property>
      </widget>
-     <widget class="QTableWidget" name="tableWidget">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>70</y>
-        <width>471</width>
-        <height>301</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QFrame" name="btn_frame_2">
       <property name="geometry">
        <rect>
@@ -835,10 +825,20 @@
        </property>
       </widget>
      </widget>
+     <widget class="QTableView" name="tableView_student">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>470</width>
+        <height>300</height>
+       </rect>
+      </property>
+     </widget>
      <zorder>btn_frame_2</zorder>
      <zorder>label_finish_count</zorder>
      <zorder>label_task_name</zorder>
-     <zorder>tableWidget</zorder>
+     <zorder>tableView_student</zorder>
     </widget>
     <widget class="QWidget" name="task_content_page">
      <widget class="QScrollArea" name="scrollArea_task_view">
