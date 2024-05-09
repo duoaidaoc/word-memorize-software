@@ -60,6 +60,9 @@ void word_display::set_content(const db::WordInfo &word, int seq_)
     seq = seq_;
     ui->word_label->setText(word.english);
     ui->mean_label->setText(word.chinese);
+    ui->phon_label->setText(word.phonetic);
+    // ui->dia_label->setText(QString(""));
+
     ui->page_label->setText(QString::number(seq_ + 1));
 
     auto man = resource_manager::getInstance();

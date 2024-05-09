@@ -31,9 +31,10 @@ question::question(QWidget *parent) :
   QObject::connect(ui->close_btn_2,&QPushButton::clicked,[&](){
     this->hide();
   });
-  QObject::connect(ui->eng_edit,&QLineEdit::editingFinished,[&](){
+  QObject::connect(ui->eng_edit,&QLineEdit::returnPressed,[&](){
     if(ui->eng_edit->text() != ""){
-
+      done(ui->eng_edit->text() == correct_english);
+      ui->eng_edit->setText("");
     }
   });
 
@@ -66,6 +67,13 @@ void question::set_fillword_question(const QString &english, const QString &chin
 question::state question::get_status()
 {
   return st;
+}
+
+void question::shutdown()
+{
+  questions.clear();
+  st = state::free;
+  this->hide();
 }
 
 
@@ -116,7 +124,6 @@ qint64 question::get_task_id()
 
 void question::set_ques(const std::vector<db::WordInfo> &_words)
 {
-
   // TODO(): 使用 words 生成 questions
 }
 

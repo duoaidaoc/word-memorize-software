@@ -43,12 +43,14 @@ private:
     question* que_widget;
 
     std::vector<ques>questions;
-    tip *Tip;
+    tip *Tip, *signaltip_1,*signaltip_2;
 
     void setup();
     void setaction();
     void test();
     void clearlayout(QBoxLayout *lb);
+    void clearnowtask();
+    void setnowtask(qint64 tid);
 
 
 private slots:

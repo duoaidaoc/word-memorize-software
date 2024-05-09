@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QFrame>
 #include <QHBoxLayout>
-#include "word.h"
+#include "util.h"
 
 class task_frame: public QFrame
 {
@@ -17,9 +17,10 @@ protected:
 private:
   QLabel* taskinfo;
   QHBoxLayout* hb;
-  Task tsk;
+  db::TaskInfo tsk;
+  void settask(const db::TaskInfo& _tsk);
 signals:
-  void set_display_content(Task _tsk);
+  void set_display_content(db::TaskInfo _tsk);
 };
 
 #endif // TASK_FRAME_H

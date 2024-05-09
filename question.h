@@ -27,6 +27,8 @@ public:
   void set_fillword_question(const QString &english, const QString &chinese);
   // 返回question 窗口的状态
   state get_status();
+  // 外部设置question窗口状态用于强行终止
+  void shutdown();
 
   void set_task_id(qint64 task_id);
 

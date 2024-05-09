@@ -15,6 +15,7 @@ public:
   explicit tip(QWidget *parent = nullptr);
   ~tip();
   void set_content(const QString &title,const QString &content,const QString &Ri = "取消",const QString &Le = "确认");
+  qint64 tid;
 protected:
   void paintEvent(QPaintEvent *evt);
 private:

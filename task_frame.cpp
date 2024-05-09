@@ -19,3 +19,9 @@ void task_frame::mousePressEvent(QMouseEvent *event)
     }
 }
 
+void task_frame::settask(const db::TaskInfo& _tsk)
+{
+    taskinfo->setText(_tsk.taskName);
+    tsk = _tsk;
+}
+

@@ -22,6 +22,7 @@ struct StudentInfo {
 
 struct TaskInfo {
   qint64 taskId;
+  QString taskName;
   QDateTime create_time;
   QDateTime deadline;
   QTime time;
