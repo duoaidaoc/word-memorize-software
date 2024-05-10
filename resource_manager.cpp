@@ -73,7 +73,17 @@ void resource_manager::init_database()
 
 void resource_manager::init_system()
 {
-  system = new db::System(*database);
+    system = new db::System(*database);
+
+    const auto &list = system->returnWordBankInfo();
+    QList<QString> wordbanks = {"cet4"};
+    std::map<QString,int>wordbank_exist;
+    for(const auto &Info : list){
+      wordbank_exist[Info.name] = 1;
+    }
+    for(const auto& wordbank : wordbanks){
+      if(!wordbank_exist[wordbank])system->importLocalWords(wordbank);
+    }
 }
 
 db::Database& resource_manager::get_database()

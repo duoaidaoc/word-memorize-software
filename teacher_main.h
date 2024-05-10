@@ -46,7 +46,6 @@ private:
   QStandardItemModel *model,*stu_model;
   void ui_setup();
   void connection_setup();
-  void test();
   void update_class();
   void clearlayout(QBoxLayout *layout);
   void clearNowTask();

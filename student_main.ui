@@ -151,24 +151,54 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>6</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="start_page">
-     <widget class="QLabel" name="start_label">
+     <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>531</width>
-        <height>391</height>
+        <x>120</x>
+        <y>100</y>
+        <width>291</width>
+        <height>121</height>
        </rect>
       </property>
       <property name="text">
-       <string>尚未开始计划</string>
+       <string>设置你的背单词计划吧！
+一天背多少个呢？</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
+     </widget>
+     <widget class="AcrylicFrame" name="frame">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>250</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLineEdit" name="lineEdit_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>113</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>输入数字</string>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="word_page">
@@ -674,7 +704,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page_5">
      <widget class="QFrame" name="btn_frame_2">
@@ -860,6 +890,14 @@
    <zorder>stackedWidget_3</zorder>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AcrylicFrame</class>
+   <extends>QFrame</extends>
+   <header location="global">acrylicframe.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

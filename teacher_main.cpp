@@ -17,8 +17,6 @@ teacher_main::teacher_main(QWidget *parent) :
 
   ui_setup();
   connection_setup();
-  //data_setup();
-  test();
 }
 
 teacher_main::~teacher_main()
@@ -236,13 +234,15 @@ void teacher_main::connection_setup()
     if(tid >= 0){
       Tip->set_content("","创建成功");
       Tip->show();
-      teacher.createTask(tid, current_cls.id, "jdjdjdj", QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+      teacher.createTask(tid, current_cls.id, ui->lineEdit->text(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
       clearlayout(word_layout);
       word_frames.clear();
     }
     else{
       Tip->set_content("warning", "创建失败");
       Tip->show();
+      clearlayout(word_layout);
+      word_frames.clear();
     }
     clearNowTask();
     setNowTask();
@@ -266,6 +266,8 @@ void teacher_main::update_class()
 
     // 删除所有原先存在的frame
     clearlayout(class_layout);
+    class_frames.clear();
+
     auto &teacher = resource_manager::getInstance()->get_teacher();
     auto list = teacher.infoTeacherClass();
     if(list.size() > 0){
@@ -278,10 +280,7 @@ void teacher_main::update_class()
         class_layout->addWidget(cf);
         cf->setclass(cls);
         auto connect = QObject::connect(cf, &class_frame::set_display_content, [&](CClass cls){
-
           current_cls = cls;
-//          qDebug() << "1Q1111111111111111111111111111111111111111111111111\n";
-//          qDebug() << QString::number(cls.id) + ' ' + cls.name + ' ' + cls.cue + ' ';
           // 重置ui->student_vlayout中的frame
           for(auto &layout : student_appending_layout){
             clearlayout(layout);
@@ -293,32 +292,26 @@ void teacher_main::update_class()
             throw std::runtime_error("class他没有老师，这合理吗？");
           }
           ui->label_teacher_name->setText(QString("教师: ") + class_detail[0].teacherName);
-
           // 通过数据库获取 班级学生的信息
           const auto &class_members = teacher.infoClassMembers(cls.id);
           int manba_size = class_members.size();
           ui->label_student_number->setText(QString("学生人数:\n %1 人").arg(manba_size));
-
           // 创建并添加 QFrame 到布局
           for (int i = 0; i < manba_size; ++i) {
             QFrame *itemFrame = new QFrame(ui->student_display);
             itemFrame->setFixedSize(80, 100); // 固定大小为 80*100
             itemFrame->setAttribute(Qt::WA_TranslucentBackground, true);
-
             QLabel *icon = new QLabel(itemFrame);
             icon->move(0, 0);
             icon->setFixedSize(80,80);
             // TODO(): 改成正经的 头像。
             icon->setStyleSheet("border-image: url(../word-memorize-software/pics/man.png) 0 0 0 0;");
-
             QLabel *name = new QLabel(itemFrame);
             name->move(0,80);
             name->setFixedSize(80,20);
             name->setStyleSheet("color: black");
             name->setText(class_members[i].studentName);
             name->setAlignment(Qt::AlignCenter);
-
-
             student_appending_layout[i % 2]->addWidget(itemFrame);
           }
           ui->stackedWidget->setCurrentIndex(2);
@@ -409,19 +402,4 @@ void teacher_main::setNowTask()
           });
         }
     }
-}
-
-void teacher_main::test()
-{
-//  class_frame* cf = new class_frame();
-//  class_layout->addWidget(cf);
-//  QObject::connect(cf,&class_frame::set_display_content,[&](CClass cls){
-//    ui->stackedWidget->setCurrentIndex(2);
-//  });
-
-//  task_frame* tf = new task_frame();
-//  task_layout->addWidget(tf);
-//  QObject::connect(tf,&task_frame::set_display_content,[&](Task tsk){
-//    ui->stackedWidget->setCurrentIndex(6);
-//  });
 }

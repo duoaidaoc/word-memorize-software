@@ -636,7 +636,7 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>191</width>
+        <width>111</width>
         <height>31</height>
        </rect>
       </property>
@@ -702,7 +702,7 @@
      <widget class="QPushButton" name="btn_commit">
       <property name="geometry">
        <rect>
-        <x>280</x>
+        <x>390</x>
         <y>10</y>
         <width>101</width>
         <height>41</height>
@@ -712,6 +712,36 @@
        <string>确认提交</string>
       </property>
      </widget>
+     <widget class="AcrylicFrame" name="frame">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>0</y>
+        <width>211</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLineEdit" name="lineEdit">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>191</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>请输入任务名</string>
+       </property>
+      </widget>
+     </widget>
+     <zorder>frame</zorder>
      <zorder>btn_frame_5</zorder>
      <zorder>word_scroll</zorder>
      <zorder>label_create_task</zorder>
@@ -1023,6 +1053,14 @@
    </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AcrylicFrame</class>
+   <extends>QFrame</extends>
+   <header location="global">acrylicframe.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

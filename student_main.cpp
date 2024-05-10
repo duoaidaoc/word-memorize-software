@@ -94,8 +94,9 @@ void student_main::setup()
 void student_main::setaction()
 {
     QObject::connect(ui->learn_btn,&QPushButton::clicked,[&](){
+      // TODO() 切换系统单词
       if(que_widget->get_status() == question::free){
-      clearNowWord();
+        clearNowWord();
         setNowWord(-1);
       }
       else if(que_widget->get_task_id() != -1){
@@ -131,7 +132,6 @@ void student_main::setaction()
       Ccue_frame->show();
     });
     QObject::connect(ui->change_btn,&QPushButton::clicked,[&](){
-
       ui->stackedWidget_2->setCurrentIndex(6);
     });
     QObject::connect(ui->test_btn,&QPushButton::clicked,[&](){
@@ -160,6 +160,7 @@ void student_main::setaction()
       // TODO(): 学生退出课堂
       signaltip_2->show();
     });
+
 }
 
 
@@ -278,6 +279,7 @@ void student_main::data_setup()
     //词库只需要在开始的时候初始化
     auto man = resource_manager::getInstance();
     auto sys = man->get_system();
+
     const auto &idlist = sys.returnWordBankInfo();
     QHBoxLayout *hbox = new QHBoxLayout(ui->wordlib_display);
     for (int i = 0; i < idlist.size(); ++i) { // 添加九个 QFrame 作为示例
