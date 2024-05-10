@@ -205,6 +205,16 @@ private:
         insert into StudentSysLearn(student_id, word_id) values(?, ?)
     )");
 
+    // TODO马方舟: change this sqlite sql into mysql version.
+    const QLatin1String learnWordBank = QLatin1String(R"(
+        INSERT OR REPLACE INTO createStudentLearnWordBank (student_id, word_bank_id)
+        VALUES (?, ?);
+    )");
+
+    const QLatin1String returnStudentWordBank = QLatin1String(R"(
+        SELECT word_bank_id FROM createStudentLearnWordBank WHERE student_id = ?;
+    )");
+
     // 学生语义操作
     static QVariant addStudent(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
     static bool deleteStudent(QSqlQuery &q, const qint64 &id);
@@ -214,6 +224,7 @@ private:
     static QList<QPair<qint64, QString>> displayStudentClass(QSqlQuery &q, const qint64 &student_id);
     static QVariant insertStudentWordLearningTable(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id);  
     static QVariant addSysWord(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id);
+    static QVariant addWordBank(QSqlQuery &q, const qint64 &student_id, const qint64 &word_bank_id);
 
   public:
     explicit Student(Database& db) : Role(db) {}
@@ -230,6 +241,9 @@ private:
     QList<QPair<qint64, QString>> infoStudentClass();
     QVariant learnWordRecord(const qint64 &word_id);
     QVariant learnSysWordRecord(const qint64 &word_id);
+
+    QVariant learnWordBanks(const qint64 &word_bank_id);
+    QVariant returnStudentBank();
 };
 } // end db
 

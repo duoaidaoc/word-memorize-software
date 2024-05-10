@@ -684,6 +684,16 @@ QVariant db::Student::addSysWord(QSqlQuery &q, const qint64 &student_id, const q
   return q.lastInsertId();
 }
 
+auto db::Student::addWordBank(QSqlQuery &q, const qint64 &student_id, const qint64 &word_bank_id) -> QVariant
+{
+  q.addBindValue(student_id);
+  q.addBindValue(word_bank_id);
+  if (!q.exec()) {
+    qDebug() << "addWordBank:" << q.lastError().text();
+  }
+  return q.lastInsertId();
+}
+
 //--------------------------- semantic functions --------------------------//
 // 增删改查
 auto db::Student::registerRole() -> QVariant {
@@ -775,6 +785,37 @@ QVariant db::Student::learnSysWordRecord(const qint64 &word_id)
   }
 
   return addSysWord(query, GetId(), word_id);
+}
+
+auto db::Student::learnWordBanks(const qint64 &word_bank_id) ->QVariant
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(learnWordBank)) {
+    throw std::runtime_error("Failed to prepare learWordBanks sql");
+  }
+
+  return addWordBank(query, GetId(), word_bank_id);
+}
+
+auto db::Student::returnStudentBank() -> QVariant
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(returnStudentWordBank)) {
+    throw std::runtime_error("Failed to prepare returnStudentBank sql");
+  }
+
+  query.addBindValue(GetId());
+  QVariant tmp;
+  if (!query.exec()) {
+    qDebug() << "Error executing returnStudentWordBank:" << query.lastError().text();
+    return tmp;
+  }
+
+  if (query.next()) {
+    return query.value("word_bank_id");
+  } else {
+    return tmp;
+  }
 }
 
 auto db::Teacher::checkAlreadyInWords(const QString &word) -> int {

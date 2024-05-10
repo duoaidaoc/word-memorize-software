@@ -117,6 +117,11 @@ bool db::Database::initDataBase() {
       return false;
     }
 
+    if (!tables.contains("createStudentLearnWordBank", Qt::CaseInsensitive) && !query.exec(createStudentLearnWordBank)) {
+      qWarning() << "Failed to create createStudentSysLearn Table:" << query.lastError().text();
+      return false;
+    }
+
     return true;
 }
 

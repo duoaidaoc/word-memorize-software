@@ -253,6 +253,8 @@ int main(int argc, char *argv[])
   QList<db::WordBankInfo> banklist = system.returnWordBankInfo();
   qDebug() << "-------- bankList测试 -------\n";
   for(const auto &bank : banklist) {
+    student2.learnWordBanks(bank.id);
+    qDebug() << student2.returnStudentBank();
     qDebug() << bank.id << bank.name << bank.picture_url;
   }
 

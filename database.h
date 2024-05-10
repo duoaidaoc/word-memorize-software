@@ -108,6 +108,14 @@ private:
         )
     )");
 
+    const QLatin1String createStudentLearnWordBank = QLatin1String(R"(
+        CREATE TABLE IF NOT EXISTS createStudentLearnWordBank (
+            student_id    BIGINT,
+            word_bank_id  BIGINT,
+            PRIMARY KEY (student_id)
+        )
+    )");
+
     // 学生学习词库
     // todo
     const QLatin1String createStudentWordBank = QLatin1String(R"(
