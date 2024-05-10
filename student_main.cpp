@@ -20,7 +20,6 @@ student_main::student_main(QWidget *parent) :
     setup();
     setaction();
     data_setup();
-    test();
 }
 
 student_main::~student_main()
@@ -132,7 +131,6 @@ void student_main::setaction()
       Ccue_frame->show();
     });
     QObject::connect(ui->change_btn,&QPushButton::clicked,[&](){
-      // TODO(): 更换词库页面的完善。
 
       ui->stackedWidget_2->setCurrentIndex(6);
     });
@@ -161,34 +159,9 @@ void student_main::setaction()
     QObject::connect(ui->exi_class_btn,&QPushButton::clicked,[&](){
       // TODO(): 学生退出课堂
       signaltip_2->show();
-
     });
 }
 
-void student_main::test()
-{
-    /** 词库de展示页 添加 词库 **/
-    QHBoxLayout *hbox = new QHBoxLayout(ui->wordlib_display);
-    for (int i = 0; i < 10; ++i) { // 添加九个 QFrame 作为示例
-        QFrame *itemFrame = new QFrame;
-        itemFrame->setFixedSize(80, 100); // 固定大小为 80*100
-        itemFrame->setAttribute(Qt::WA_TranslucentBackground, true);
-
-        QLabel *icon = new QLabel(itemFrame);
-        icon->move(0, 0);
-        icon->setFixedSize(80,80);
-        // TODO(): 改成正经的 头像。
-        icon->setStyleSheet("border-image: url(../word-memorize-software/pics/man.png) 0 0 0 0;");
-
-        QPushButton *name = new QPushButton(itemFrame);
-        name->move(0,80);
-        name->setFixedSize(80,20);
-        name->setStyleSheet("color: black");
-        name->setText("词库1");
-        // 点击名字，当前id 变为词库id,当前名字变为本词库名字,当前图片变为本词库图片,学习进度改为本词库学习进度。
-        hbox->addWidget(itemFrame);
-    }
-}
 
 void student_main::clearlayout(QBoxLayout *lo)
 {
@@ -236,7 +209,7 @@ void student_main::setNowWord(qint64 tid)
       auto sys = man->get_system();
 
       // @test
-      words = sys.generateWords(student.GetId(), 0);
+      words = sys.generateWords(student.GetId(), nowWordBank);
     }
     if(words.empty()){
         Tip->set_content("warning","没有单词！");
@@ -301,6 +274,45 @@ void student_main::data_setup()
     ui->label_user_name->setText(student.GetName());
     update_class();
     // TODO():头像没完成
+    qDebug() << "1111111111111111111";
+    //词库只需要在开始的时候初始化
+    auto man = resource_manager::getInstance();
+    auto sys = man->get_system();
+    const auto &idlist = sys.returnWordBankInfo();
+    QHBoxLayout *hbox = new QHBoxLayout(ui->wordlib_display);
+    for (int i = 0; i < idlist.size(); ++i) { // 添加九个 QFrame 作为示例
+      QFrame *itemFrame = new QFrame;
+      itemFrame->setFixedSize(80, 100); // 固定大小为 80*100
+      itemFrame->setAttribute(Qt::WA_TranslucentBackground, true);
+
+      QLabel *icon = new QLabel(itemFrame);
+      icon->move(0, 0);
+      icon->setFixedSize(80,80);
+      // TODO(): 改成正经的 图标。
+      icon->setStyleSheet("border-image: url(../word-memorize-software/pics/man.png) 0 0 0 0;");
+
+      QPushButton *name = new QPushButton(itemFrame);
+      name->move(0,80);
+      name->setFixedSize(80,20);
+      name->setStyleSheet("color: black");
+      name->setText(idlist[i].name);
+      hbox->addWidget(itemFrame);
+
+      QVariant tmp = QVariant::fromValue(idlist[i]);
+      name->setProperty("wordBankInfo", tmp);
+
+      QObject::connect(name,&QPushButton::clicked,name,[this, name]{
+        QVariant tmp = name->property("wordBankInfo");
+        if(tmp.canConvert<db::WordBankInfo>()){
+          db::WordBankInfo info = tmp.value<db::WordBankInfo>();
+          ui->n_label->setText(QString("当前正在学习的词库") + name->text());
+          nowWordBank = info.id;
+        }
+        else{
+          qDebug()<< "frame 没有 wordBankInfo属性";
+        }
+      });
+    }
 }
 
 void student_main::update_display(int seq_)

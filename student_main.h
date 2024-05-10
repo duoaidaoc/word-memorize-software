@@ -45,6 +45,7 @@ private:
     tip *Tip, *signaltip_1,*signaltip_2;
 
     CClass cls_;
+    qint64 nowWordBank;
 
     void setup();
     void setaction();
