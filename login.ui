@@ -328,6 +328,18 @@
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>checkBox</tabstop>
+  <tabstop>checkBox_2</tabstop>
+  <tabstop>acc_edit</tabstop>
+  <tabstop>pwd_edit</tabstop>
+  <tabstop>name_edit</tabstop>
+  <tabstop>ret_button</tabstop>
+  <tabstop>chk_button</tabstop>
+  <tabstop>close_button</tabstop>
+  <tabstop>sig_button</tabstop>
+  <tabstop>reg_button</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -36,11 +36,12 @@ auto db::System::returnPassword(QSqlQuery &q, const qint64 &id) -> QVariant {
   return password;
 }
 
-auto db::System::returnUnlearnedWord(QSqlQuery &q, const qint64 &student_id) -> QList<db::WordInfo>
+auto db::System::returnUnlearnedWord(QSqlQuery &q, const qint64 &student_id, const qint64 &word_bank_id) -> QList<db::WordInfo>
 {
   QList<WordInfo> wordList;
 
   q.addBindValue(student_id);
+  q.addBindValue(word_bank_id);
   if (!q.exec()) {
     qDebug() << "Error executing returnUnlearnedWord:" << q.lastError().text();
     return wordList; // 返回空列表
@@ -291,13 +292,13 @@ auto db::System::importWordBank(const qint64 &word_bank_id,
   return addWordBankRelation(query, word_bank_id, word_id);
 }
 
-auto db::System::generateWords(const qint64 &student_id) -> QList<WordInfo> {
+auto db::System::generateWords(const qint64 &student_id, const qint64 &word_bank_id) -> QList<WordInfo> {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(returnUnLearnedWords)) {
     throw std::runtime_error("Failed to prepare returnUnLearnedWords sql");
   }
 
-  QList<WordInfo> unlearned_words = returnUnlearnedWord(query, student_id);
+  QList<WordInfo> unlearned_words = returnUnlearnedWord(query, student_id, word_bank_id);
   int count = 0;
   QList<WordInfo> generate_words;
   for(const auto &word : unlearned_words) {

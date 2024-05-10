@@ -234,7 +234,9 @@ void student_main::setNowWord(qint64 tid)
     }
     else{
       auto sys = man->get_system();
-      words = sys.generateWords(student.GetId());
+
+      // @test
+      words = sys.generateWords(student.GetId(), 0);
     }
     if(words.empty()){
         Tip->set_content("warning","没有单词！");

@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
   student2.learnSysWordRecord(12);
   student2.learnSysWordRecord(13);
 
-  QList<db::WordInfo> wordList = system.generateWords(student2.GetId());
+  QList<db::WordInfo> wordList = system.generateWords(student2.GetId(), 0);
   for (const auto& wordInfo : wordList) {
     qDebug() << "Word ID:" << wordInfo.word_id;
     qDebug() << "English:" << wordInfo.english;
@@ -236,7 +236,8 @@ int main(int argc, char *argv[])
     qDebug() << "-------------------------";
   }
 
-  wordList = system.generateWords(student2.GetId());
+  qDebug() << "11111111111111111111111111111111111111111111111111111111111111111111111111";
+  wordList = system.generateWords(student2.GetId(), 0);
   for (const auto& wordInfo : wordList) {
     qDebug() << "Word ID:" << wordInfo.word_id;
     qDebug() << "English:" << wordInfo.english;
@@ -273,13 +274,6 @@ int main(int argc, char *argv[])
 
   man->init_init_student();
   man->init_init_teacher();
-<<<<<<< Updated upstream
-=======
-  man->init_teacher(1,"1","1");
-  auto student4 = man->get_student();
-  qDebug() <<"======================*******************==============================";
-  qDebug() << teacher2.infoTaskCondition(student4.GetId(), 2);
->>>>>>> Stashed changes
 
   login* loginpage = new login();
   student_main* stm = new student_main();

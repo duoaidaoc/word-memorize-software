@@ -42,6 +42,10 @@ private:
           SELECT word_id
           FROM StudentSysLearn
           WHERE student_id = ?
+        ) AND id IN (
+          SELECT word_id
+          FROM WordBankRelationTable
+          WHERE word_bank_id = ?
         )
         ORDER BY english;
     )");
@@ -81,7 +85,7 @@ private:
   static QVariant addWordBook(QSqlQuery &q, const qint64 &word_bank_id, const QString &name, const QString &picture_url);
   static QVariant addWordBankRelation(QSqlQuery &q, const qint64 &word_bank_id, const qint64 &word_id);
   static QVariant returnPassword(QSqlQuery &q, const qint64 &id);
-  static QList<WordInfo> returnUnlearnedWord(QSqlQuery &q, const qint64 &student_id);
+  static QList<WordInfo> returnUnlearnedWord(QSqlQuery &q, const qint64 &student_id, const qint64 &word_bank_id);
   static QList<WordBankInfo> returnWordBank(QSqlQuery &q);
   static QList<WordInfo> returnBankList(QSqlQuery &q, const qint64 &bank_id);
 
@@ -96,7 +100,7 @@ public:
                           const QString &chinese,
                           const QString &phonetic,
                           const QString &audio_url);
-  QList<WordInfo> generateWords(const qint64 &stduent_id);
+  QList<WordInfo> generateWords(const qint64 &stduent_id, const qint64 &word_bank_id);
 
   auto returnDatabase() -> QSqlDatabase& {
     return db_.returnDatabase();
