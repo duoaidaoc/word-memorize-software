@@ -32,7 +32,7 @@
 *.app
 
 # Cmake
-CMakeLists.txt.user
+CMakeLists.txt.*
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
