@@ -5,6 +5,9 @@
 #include "util.h"
 #include "word.h"
 
+#include <queue>
+#include <map>
+
 namespace Ui {
 class question;
 }
@@ -42,24 +45,28 @@ private:
   int correctitem; // 正确选项
   QString correct_english; // 英文
 
-  std::vector<ques>questions; // 问题列表
-  state st; // 窗口忙或空闲。
-  qint64 task_id;
+  std::queue<ques> questions;         // 问题列表
+  std::map<qint64, int> finished_cnt; // 完成计数
+  state st;                           // 窗口忙或空闲。
+  qint64 task_id;                     // 任务id
 
   void set_connection(); // 初始化
+
 signals:
   // 题目做完时触发finish()信号
   void finish();
+  // 一个单词学会时发出word_learnt()信号
   void word_learnt(qint64 word_id);
 
-  // TODO(): 完成下面三个函数加一个要求 可以另写函数
 public:
-  void set_ques(const std::vector<db::WordInfo> &_words); // 设置问题列表
-  void start(); // 从题目列表中拿出一题来设置窗口的题目。
+  // 设置问题列表
+  void set_ques(const std::vector<db::WordInfo> &_words);
+  // 从题目列表中拿出一题来设置窗口的题目
+  void start();
+
 private:
-  void done(bool ok);  //  答题函数在回答完毕时自动调用done
-  // 要求: 实时地将某个单词是否学会的进度发送出去
-  // 接口: emit word_learnt(qint64 word_id);
+  // 答题函数在回答完毕时自动调用done
+  void done(bool ok);
 };
 
 #endif // QUESTION_H
