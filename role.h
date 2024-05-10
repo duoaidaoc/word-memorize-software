@@ -176,7 +176,7 @@ public:
 class Student : public Role {
 private:
     const QLatin1String insertStudentTable = QLatin1String(R"(
-        insert into students(id, name, password, profile_photo_url) values(?, ?, ?, ?)
+        insert into students(id, name, password, profile_photo_url, plan) values(?, ?, ?, ?, ?)
     )");
     const QLatin1String deleteStudentRole = QLatin1String(R"(
         DELETE FROM students WHERE id = ?
@@ -214,9 +214,17 @@ private:
     const QLatin1String returnStudentWordBank = QLatin1String(R"(
         SELECT word_bank_id FROM createStudentLearnWordBank WHERE student_id = ?;
     )");
+    const QLatin1String infoStudentPlan = QLatin1String(R"(
+        SELECT students.plan FROM students WHERE id = ?;
+    )");
+    const QLatin1String updateStudentPlan = QLatin1String(R"(
+        UPDATE students
+        SET plan = ?
+        WHERE id = ?;
+    )");
 
     // 学生语义操作
-    static QVariant addStudent(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url);
+    static QVariant addStudent(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url, const qint64 &plan);
     static bool deleteStudent(QSqlQuery &q, const qint64 &id);
     static void displayStudent(QSqlQuery &q, const qint64 &id);
     static QVariant addStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id);
@@ -225,6 +233,8 @@ private:
     static QVariant insertStudentWordLearningTable(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id);  
     static QVariant addSysWord(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id);
     static QVariant addWordBank(QSqlQuery &q, const qint64 &student_id, const qint64 &word_bank_id);
+    static QVariant sinfoStudentPlan(QSqlQuery &q, const qint64 &student_id);
+    static QVariant supdateStudentPlan(QSqlQuery &q, const qint64 &student_id, const qint64 &plan);
 
   public:
     explicit Student(Database& db) : Role(db) {}
@@ -244,6 +254,9 @@ private:
 
     QVariant learnWordBanks(const qint64 &word_bank_id);
     QVariant returnStudentBank();
+
+    QVariant infoPlan();
+    void updatePlan(const qint64 &plan);
 };
 } // end db
 

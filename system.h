@@ -81,6 +81,12 @@ private:
         FROM words JOIN WordBankRelationTable ON words.id = WordBankRelationTable.word_id
         WHERE WordBankRelationTable.word_bank_id = ?
   )");
+  //const QLatin1String return = QLatin1String(R"(
+  //      SELECT * FROM wordbank
+  //  )");
+  //const QLatin1String returnTotalWordBank = QLatin1String(R"(
+  //      SELECT * FROM wordbank
+  //  )");
 
   static QVariant addWordBook(QSqlQuery &q, const qint64 &word_bank_id, const QString &name, const QString &picture_url);
   static QVariant addWordBankRelation(QSqlQuery &q, const qint64 &word_bank_id, const qint64 &word_id);
@@ -123,6 +129,9 @@ public:
 
   auto returnWordBankInfo() -> QList<WordBankInfo>;
   auto returnWordBankList(const qint64 &word_bank_id) -> QList<WordInfo>;
+
+  //auto returnStudentName(const qint64 &student_id) -> QVariant();
+  //auto returnTeacherName(const qint64 &teacher_id) -> QVariant();
 };
 } // end namespace db
 

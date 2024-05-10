@@ -17,7 +17,7 @@ teacher_main::teacher_main(QWidget *parent) :
 
   ui_setup();
   connection_setup();
-  data_setup();
+  //data_setup();
   test();
 }
 
@@ -223,6 +223,9 @@ void teacher_main::connection_setup()
   });
   // 任务完成创建
   QObject::connect(ui->btn_commit,&QPushButton::clicked,[&](){
+    clearlayout(word_layout);
+    word_frames.clear();
+
     auto man = resource_manager::getInstance();
     auto teacher = man->get_teacher();
     QList<QString> words;

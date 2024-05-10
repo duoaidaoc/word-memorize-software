@@ -593,11 +593,13 @@ auto db::Student::addStudent(QSqlQuery &q,
                              const qint64 &id,
                              const QString &name,
                              const QString &password,
-                             const QString &profile_photo_url) -> QVariant {
+                             const QString &profile_photo_url,
+                             const qint64 &plan) -> QVariant {
   q.addBindValue(id);
   q.addBindValue(name);
   q.addBindValue(password);
   q.addBindValue(profile_photo_url);
+  q.addBindValue(plan);
   q.exec();
 
   return q.lastInsertId();
@@ -697,6 +699,23 @@ auto db::Student::addWordBank(QSqlQuery &q, const qint64 &student_id, const qint
   return q.lastInsertId();
 }
 
+QVariant db::Student::sinfoStudentPlan(QSqlQuery &q, const qint64 &student_id)
+{
+  q.addBindValue(student_id);
+  if (!q.exec()) {
+    qDebug() << "sinfoStudentPlan:" << q.lastError().text();
+    return QVariant(); // 返回一个空的 QVariant 表示出错
+  }
+
+  if (q.next()) {
+    return q.value(0); // 获取第一个字段的值
+  } else {
+    qDebug() << "No results found.";
+    return QVariant(); // 返回一个空的 QVariant 表示没有结果
+  }
+}
+
+
 //--------------------------- semantic functions --------------------------//
 // 增删改查
 auto db::Student::registerRole() -> QVariant {
@@ -707,7 +726,7 @@ auto db::Student::registerRole() -> QVariant {
     throw std::runtime_error("Failed to prepare student register sql");
   }
 
-  return addStudent(query, GetId(), GetName(), GetPassword(), GetProfilePhotoUrl());
+  return addStudent(query, GetId(), GetName(), GetPassword(), GetProfilePhotoUrl(), 20);
 }
 
 auto db::Student::cancelRole() ->void {
@@ -818,6 +837,42 @@ auto db::Student::returnStudentBank() -> QVariant
     return query.value("word_bank_id");
   } else {
     return tmp;
+  }
+}
+
+QVariant db::Student::infoPlan()
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(infoStudentPlan)) {
+    throw std::runtime_error("Failed to prepare infoPlan sql");
+  }
+
+  query.addBindValue(GetId());
+  QVariant tmp;
+  if (!query.exec()) {
+    qDebug() << "Error executing infoPlan:" << query.lastError().text();
+    return tmp;
+  }
+
+  if (query.next()) {
+    return query.value("plan");
+  } else {
+    return tmp;
+  }
+}
+
+void db::Student::updatePlan(const qint64 &plan)
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(updateStudentPlan)) {
+    throw std::runtime_error("Failed to prepare updatePlan sql");
+  }
+
+  query.addBindValue(plan);
+  query.addBindValue(GetId());
+  QVariant tmp;
+  if (!query.exec()) {
+    qDebug() << "Error executing updatePlan:" << query.lastError().text();
   }
 }
 

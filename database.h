@@ -25,7 +25,8 @@ private:
             id BIGINT PRIMARY KEY,
             name VARCHAR(255),
             password VARCHAR(255),
-            profile_photo_url VARCHAR(255)
+            profile_photo_url VARCHAR(255),
+            plan BIGINT
         )
     )");
 
