@@ -21,7 +21,7 @@ private:
     QString profile_photo_url_;
 
     const QLatin1String retrieveTaskInfo = QLatin1String(R"(
-        SELECT tasktable.id, tasktable.create_time, tasktable.deadline, tasktable.time_limit
+        SELECT tasktable.id, tasktable.task_name, tasktable.create_time, tasktable.deadline, tasktable.time_limit
         FROM tasktable
         INNER JOIN AssignmentDistributionTable ON tasktable.id = AssignmentDistributionTable.task_id
         WHERE AssignmentDistributionTable.class_id = ?
@@ -159,7 +159,7 @@ public:
     // 老师删除班级只需要：Class_id
     bool deleteClass(const qint64 &class_id);
     // 老师创建任务：需要和班级绑定。
-    QVariant createTask(const qint64 &task_id, const qint64 &class_id, const QDateTime &create_time, const QDateTime &deadline, const QTime &time_limit);
+    QVariant createTask(const qint64 &task_id, const qint64 &class_id, const QString& task_name, const QDateTime &create_time, const QDateTime &deadline, const QTime &time_limit);
     // 老师删除班级里面的人物。
     bool deleteTask(const qint64 &task_id, const qint64 &class_id);
     // 老师给任务添加单词

@@ -83,6 +83,7 @@ private:
     const QLatin1String createTaskTable = QLatin1String(R"(
         CREATE TABLE IF NOT EXISTS tasktable (
             id BIGINT PRIMARY KEY,
+            task_name VARCHAR(255),
             create_time DATETIME,
             deadline DATETIME,
             time_limit TIME

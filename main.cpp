@@ -151,12 +151,12 @@ int main(int argc, char *argv[])
   qDebug() << ">>>>>>>>>>>>>>>>>>>> " <<task_id;
 
   if(task_id >= 0)
-    teacher2.createTask(task_id, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+    teacher2.createTask(task_id, 2020, "aaaa", QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
 
   task_id = teacher2.importTaskWordBank(englishList2);
   qDebug() << ">>>>>>>>>>>>>>>>>>>> " <<task_id;
   if(task_id >= 0)
-    teacher2.createTask(task_id, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+    teacher2.createTask(task_id, 2020, "aaaa", QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
 
 
   qDebug() << "-------- 教师学生登录 --------\n";

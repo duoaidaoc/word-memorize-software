@@ -25,6 +25,7 @@ auto db::Role::displayTaskInClass(QSqlQuery &q, const qint64 &class_id) -> QList
   do {
     TaskInfo taskInfo;
     taskInfo.taskId = q.value("id").toLongLong();
+    taskInfo.taskName = q.value("task_name").toString();
     taskInfo.create_time = q.value("create_time").toDateTime();
     taskInfo.deadline = q.value("deadline").toDateTime();
     taskInfo.time = q.value("time_limit").toTime();
@@ -204,7 +205,7 @@ auto db::Role::infoTaskInClass(const qint64 &class_id) -> QList<TaskInfo> {
 
   qDebug() <<"**************\n";
   for (const auto &task : taskInfo) {
-    qDebug() << "Task ID:" << task.taskId << ", task start time:" << task.create_time  << ", task end_time:" << task.deadline << ", lasting time:" << task.time;
+    qDebug() << "Task ID:" << task.taskId << ", task name" << task.taskName << ", task start time:" << task.create_time  << ", task end_time:" << task.deadline << ", lasting time:" << task.time;
   }
   qDebug() <<"**************\n";
 
@@ -481,11 +482,13 @@ auto db::Teacher::deleteClass(const qint64 &class_id) -> bool {
 // 老师创建任务
 auto db::Teacher::createTask(const qint64 &task_id,
                              const qint64 &class_id,
+                             const QString& task_name,
                              const QDateTime &create_time,
                              const QDateTime &deadline,
                              const QTime &time_limit) -> QVariant {
   Task task_(returnDB());
   task_.SetId(task_id);
+  task_.SetTaskName(task_name);
   task_.SetCreateTime(create_time);
   task_.SetDeadline(deadline);
   task_.SetTime(time_limit);

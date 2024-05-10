@@ -233,8 +233,9 @@ void teacher_main::connection_setup()
     if(tid >= 0){
       Tip->set_content("","创建成功");
       Tip->show();
-      teacher.createTask(tid, current_cls.id,QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
-
+      teacher.createTask(tid, current_cls.id, "jdjdjdj", QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
+      clearlayout(word_layout);
+      word_frames.clear();
     }
     else{
       Tip->set_content("warning", "创建失败");
