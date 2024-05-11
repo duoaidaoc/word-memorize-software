@@ -42,14 +42,16 @@ classcue_frame::classcue_frame(QWidget *parent) :
       qint64 int_code = code.toLongLong();
       auto man = resource_manager::getInstance();
       auto &manba = man->get_student();
-      QVariant a = manba.joinClass(int_code);
-      if(a.isNull()){
+      qDebug() << int_code;
+      bool classExit = manba.isClassExit(int_code);
+      if(!classExit){
         Tip->set_content("warning","班级码不正确");
         Tip->show();
         ui->lineEdit->setText("");
       }
       else{
-        Tip->set_content("","班级加入成功");
+        manba.joinClass(int_code);
+        Tip->set_content("", "班级加入成功");
         Tip->show();
         emit UpdateClass();
       }

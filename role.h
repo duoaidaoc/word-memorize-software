@@ -185,9 +185,10 @@ private:
         SELECT * FROM students WHERE id = ?
     )");
     const QLatin1String insertStudentClassTable = QLatin1String(R"(
-        INSERT INTO studentclass (student_id, class_id)
-        SELECT ?, ?
-        FROM class
+        INSERT INTO studentclass(student_id, class_id) values(?, ?)
+    )");
+    const QLatin1String returnClassId = QLatin1String(R"(
+        SELECT id from class
         WHERE id = ?
     )");
     const QLatin1String deleteStudentFromClass = QLatin1String(R"(
@@ -257,6 +258,8 @@ private:
 
     QVariant infoPlan();
     void updatePlan(const qint64 &plan);
+
+    bool isClassExit(const qint64 &class_id);
 };
 } // end db
 

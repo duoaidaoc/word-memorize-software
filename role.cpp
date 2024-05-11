@@ -615,10 +615,8 @@ auto db::Student::addStudentClass(QSqlQuery &q,
                                   const qint64 &class_id) -> QVariant {
   q.addBindValue(student_id);
   q.addBindValue(class_id);
-  q.addBindValue(class_id);
   if (!q.exec()) {
     qDebug() << "Error inserting data:" << q.lastError().text();
-    return QVariant(); // Return an empty QVariant or handle the error as needed
   }
   return q.lastInsertId();
 }
@@ -874,6 +872,23 @@ void db::Student::updatePlan(const qint64 &plan)
   if (!query.exec()) {
     qDebug() << "Error executing updatePlan:" << query.lastError().text();
   }
+}
+
+bool db::Student::isClassExit(const qint64 &class_id)
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(returnClassId)) {
+    throw std::runtime_error("Failed to prepare isClassExit sql");
+  }
+
+  query.addBindValue(class_id);
+  if (!query.exec()) {
+    qDebug() << "Error executing isClassExit:" << query.lastError().text();
+  }
+  if(query.next())
+    return true;
+  else
+    return false;
 }
 
 auto db::Teacher::checkAlreadyInWords(const QString &word) -> int {
