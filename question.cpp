@@ -233,7 +233,6 @@ void question::done(bool ok)
     if (ok) {
       this->finished_cnt[curr_id]++;
       if (this->finished_cnt[curr_id] == 2) {
-        if(this->task_id == -1)
           emit word_learnt(curr_id);
       }
     // 如果问题答对即ok == false，将当前问题加到问题队列队尾

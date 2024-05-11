@@ -271,10 +271,10 @@ void student_main::setNowTask()
         auto cls = class_frame->getclass();
         auto tasks = student.infoTaskInClass(cls.id);
         for(const auto& tsk: tasks){
-          // 过滤已学习的任务
-//          if(student.infoTaskCondition(student.GetId(),tsk.taskId) > 0.99999){
-//            return;
-//          }
+          //过滤已学习的任务
+          if(student.infoTaskCondition(student.GetId(),tsk.taskId) > 0.99999){
+            return;
+          }
 
           task_frame* tf = new task_frame(ui->task_contents);
           tf->settask(cls, tsk);
