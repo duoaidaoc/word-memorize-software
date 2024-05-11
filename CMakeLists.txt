@@ -74,6 +74,8 @@ set(PROJECT_SOURCES
         util.h
         cet4.json
         cet6.json
+        toefl.json
+        ielts.json
         tip.h
         tip.cpp
         tip.ui
