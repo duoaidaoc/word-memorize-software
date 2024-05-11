@@ -40,6 +40,7 @@ private:
   QImage img;
   newclass_frame* nc_frame;
   CClass current_cls;
+  int task_id;
 
   tip *Tip;
 

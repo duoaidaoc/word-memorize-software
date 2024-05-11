@@ -178,6 +178,15 @@ void student_main::setaction()
       Tip->set_content("","做题完毕");
       Tip->show();
       // 刷新任务列表
+      auto man = resource_manager::getInstance();
+      auto student = man->get_student();
+      auto sys = man->get_system();
+      int ll =  student.returnStudentBank().toLongLong();
+      if(ll != -1){
+        double rate = sys.returnLearnedRateForWordBank(student.GetId(), ll);
+        ui->progressBar->setValue(int(rate * 100));
+      }
+
       clearNowTask();
       setNowTask();
 
@@ -186,7 +195,13 @@ void student_main::setaction()
     });
     QObject::connect(que_widget,&question::word_learnt,[&](qint64 word_id){
       auto &student = resource_manager::getInstance()->get_student();
+      qDebug()<< "学习了task";
       student.learnWordRecord(word_id);
+    });
+    QObject::connect(que_widget,&question::word_learnt_sys,[&](qint64 word_id){
+      auto &student = resource_manager::getInstance()->get_student();
+      qDebug()<< "学习了sys";
+      student.learnSysWordRecord(word_id);
     });
 }
 

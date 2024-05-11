@@ -2,22 +2,27 @@
 
 // 构建数据库
 bool db::Database::createDatabase(const QString &dbName) {
-    db_ = QSqlDatabase::addDatabase("QSQLITE");
-    db_.setDatabaseName(dbName); // 使用传入的数据库名称参数
-    if (!db_.open()) {
-      qDebug() << "Error: connection with database fail";
-      return false;
-    } else {
-      qDebug() << "Database: connection ok";
-      QSqlQuery query(db_);
-      if (!query.exec("PRAGMA foreign_keys = ON")) {
-        qDebug() << "Error: failed to enable foreign keys support";
-      } else {
-        qDebug() << "Foreign keys support enabled";
-      }
+  db_ = QSqlDatabase::addDatabase("QMYSQL");
+  db_.setHostName("rm-cn-o843qi5it0001jko.rwlb.rds.aliyuncs.com");
+  db_.setPort(3306);
+  db_.setUserName("word");
+  db_.setPassword("BUPT310@");
+  db_.setDatabaseName(dbName);
 
-      return true;
+  if (!db_.open()) {
+    qDebug() << "Error: connection with database fail";
+    return false;
+  } else {
+    qDebug() << "Database: connection ok";
+    QSqlQuery query(db_);
+    if (!query.exec("SET FOREIGN_KEY_CHECKS = 1")) {
+      qDebug() << "Error: failed to enable foreign keys support";
+    } else {
+      qDebug() << "Foreign keys support enabled";
     }
+
+    return true;
+  }
 }
 
 // 查询数据库中是否有tableName表。

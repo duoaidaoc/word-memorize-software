@@ -244,7 +244,29 @@ void teacher_main::connection_setup()
     setNowTask();
     ui->stackedWidget->setCurrentIndex(3);
   });
-
+  QObject::connect(ui->btn_del_class,&QPushButton::clicked,[&](){
+    auto man = resource_manager::getInstance();
+    auto teacher = man->get_teacher();
+    teacher.deleteClass(current_cls.id);
+    update_class();
+    ui->stackedWidget->setCurrentIndex(1);
+  });
+  QObject::connect(ui->btn_del_task,&QPushButton::clicked,[&](){
+    auto man = resource_manager::getInstance();
+    auto teacher = man->get_teacher();
+    teacher.deleteTask(task_id, current_cls.id);
+    clearNowTask();
+    setNowTask();
+    ui->stackedWidget->setCurrentIndex(3);
+  });
+  QObject::connect(ui->btn_del_task_2,&QPushButton::clicked,[&](){
+    auto man = resource_manager::getInstance();
+    auto teacher = man->get_teacher();
+    teacher.deleteTask(task_id, current_cls.id);
+    clearNowTask();
+    setNowTask();
+    ui->stackedWidget->setCurrentIndex(3);
+  });
 }
 
 void teacher_main::data_setup()
@@ -361,6 +383,7 @@ void teacher_main::setNowTask()
           task_frames.push_back(tf);
           task_layout->addWidget(tf);
           QObject::connect(tf, &task_frame::set_display_content, [&](db::TaskInfo tsk){
+            task_id = tsk.taskId;
             auto man = resource_manager::getInstance();
             auto teacher = man->get_teacher();
             // 单词页清空

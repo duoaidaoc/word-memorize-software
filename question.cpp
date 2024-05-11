@@ -227,13 +227,17 @@ void question::done(bool ok)
     }
     ques curr_question = this->questions.front();
     this->questions.pop();
-    qint64 curr_id = this->questions.front().word_id;
+    qint64 curr_id = curr_question.word_id;
 
     // 如果问题答对即ok == true，当前问题的当前单词的完成计数加1，如果达到2，向数据库发出完成信号
     if (ok) {
       this->finished_cnt[curr_id]++;
+      qDebug() << "*******************" << this->finished_cnt[curr_id] << "********" << curr_id;
       if (this->finished_cnt[curr_id] == 2) {
+        if(task_id >= 0)
           emit word_learnt(curr_id);
+        else
+          emit word_learnt_sys(curr_id);
       }
     // 如果问题答对即ok == false，将当前问题加到问题队列队尾
     } else {

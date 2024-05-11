@@ -22,69 +22,69 @@ int main(int argc, char *argv[])
 
 ////  qDebug() << "======== 开始数据库测试 ========\n";
 ////  qDebug() << "-------- 创建数据库 --------\n";
-  auto &system = man->get_system();
-  auto &database = man->get_database();
-  qDebug() << "-------- 创建教师信息 --------\n";
-  db::Teacher teacher(database);
-  teacher.SetId(3);
-  teacher.SetName("John");
-  teacher.SetPassword("abcdefg");
-  teacher.SetProfilePhotoUrl("djdjdjjdjd");
-  teacher.registerRole();
+  // auto &system = man->get_system();
+  // auto &database = man->get_database();
+  // qDebug() << "-------- 创建教师信息 --------\n";
+  // db::Teacher teacher(database);
+  // teacher.SetId(3);
+  // teacher.SetName("John");
+  // teacher.SetPassword("abcdefg");
+  // teacher.SetProfilePhotoUrl("djdjdjjdjd");
+  // teacher.registerRole();
 
-  db::Teacher teacher2(database);
-  teacher2.SetId(9);
-  teacher2.SetName("Alic");
-  teacher2.SetPassword("ieieie");
-  teacher2.SetProfilePhotoUrl("cncnncnc");
-  teacher2.registerRole();
+  // db::Teacher teacher2(database);
+  // teacher2.SetId(9);
+  // teacher2.SetName("Alic");
+  // teacher2.SetPassword("ieieie");
+  // teacher2.SetProfilePhotoUrl("cncnncnc");
+  // teacher2.registerRole();
 
-  teacher.cancelRole();
-  teacher2.displayInfo();
+  // teacher.cancelRole();
+  // teacher2.displayInfo();
 
-  qDebug() << "-------- 创建学生信息 --------\n";
-  // 创建学生对象并注册
+  // qDebug() << "-------- 创建学生信息 --------\n";
+  // // 创建学生对象并注册
 
-  db::Student student2(database);
-  student2.SetId(89);
-  student2.SetName("MIKE");
-  student2.SetPassword("eieiiedjjcncn");
-  student2.SetProfilePhotoUrl("llwlwl");
-  student2.registerRole();
+  // db::Student student2(database);
+  // student2.SetId(89);
+  // student2.SetName("MIKE");
+  // student2.SetPassword("eieiiedjjcncn");
+  // student2.SetProfilePhotoUrl("llwlwl");
+  // student2.registerRole();
 
-  student2.displayInfo();
+  // student2.displayInfo();
 
-  db::Student student3(database);
-  student3.SetId(90);
-  student3.SetName("Leon");
-  student3.SetPassword("eieiiedjjcncn");
-  student3.SetProfilePhotoUrl("llwlwl");
-  student3.registerRole();
-  student3.displayInfo();
+  // db::Student student3(database);
+  // student3.SetId(90);
+  // student3.SetName("Leon");
+  // student3.SetPassword("eieiiedjjcncn");
+  // student3.SetProfilePhotoUrl("llwlwl");
+  // student3.registerRole();
+  // student3.displayInfo();
 
-  qDebug() << "-------- 测试老师创建班级 --------\n";
-  teacher2.createClass(2023, "english1", "nnnnnnn");
-  teacher2.createClass(2021, "english2", "mmmmmmm");
-  teacher2.createClass(2024, "english3", "mmmmmmm");
-  teacher2.createClass(2026, "english4", "mmmmmmm");
-  teacher2.createClass(2027, "english5", "mmmmmmm");
-  teacher2.createClass(2028, "english6", "mmmmmmm");
-  teacher2.createClass(2029, "english7", "mmmmmmm");
-  teacher2.createClass(2020, "english8", "mmmmmmm");
-  teacher2.createClass(100000, "english10", "mmmmmmm");
+  // qDebug() << "-------- 测试老师创建班级 --------\n";
+  // teacher2.createClass(2023, "english1", "nnnnnnn");
+  // teacher2.createClass(2021, "english2", "mmmmmmm");
+  // teacher2.createClass(2024, "english3", "mmmmmmm");
+  // teacher2.createClass(2026, "english4", "mmmmmmm");
+  // teacher2.createClass(2027, "english5", "mmmmmmm");
+  // teacher2.createClass(2028, "english6", "mmmmmmm");
+  // teacher2.createClass(2029, "english7", "mmmmmmm");
+  // teacher2.createClass(2020, "english8", "mmmmmmm");
+  // teacher2.createClass(100000, "english10", "mmmmmmm");
 
-  qDebug() << "==================================================================\n";
-  qDebug() << student2.isClassExit(2020);
-  qDebug() << student2.isClassExit(1000);
+  // qDebug() << "==================================================================\n";
+  // qDebug() << student2.isClassExit(2020);
+  // qDebug() << student2.isClassExit(1000);
 
-  qDebug() << "-------- 测试学生加入班级 --------\n";
-  student2.joinClass(2023);                 // todo: 不能重复添加，是在db出解决还是逻辑中解决。
-  student2.joinClass(2021);
-  student2.joinClass(2020);
-  student2.joinClass(2028);
-  student2.joinClass(2029);
-  student3.joinClass(2020);
-  student2.joinClass(2020);               // 会报错，并且导致崩溃
+  // qDebug() << "-------- 测试学生加入班级 --------\n";
+  // student2.joinClass(2023);                 // todo: 不能重复添加，是在db出解决还是逻辑中解决。
+  // student2.joinClass(2021);
+  // student2.joinClass(2020);
+  // student2.joinClass(2028);
+  // student2.joinClass(2029);
+  // student3.joinClass(2020);
+  // student2.joinClass(2020);               // 会报错，并且导致崩溃
 
   qDebug() << "-------- 测试老师删除班级 --------\n";
   // 需要支持级联删除。
@@ -92,12 +92,12 @@ int main(int argc, char *argv[])
   // 1. class表格里面删除
   // 2. teacherclass表格里面删除
   // 3. studentclass表格里面删除
-  teacher2.deleteClass(2028);
+  // teacher2.deleteClass(2028);
 
-  qDebug() << "-------- 测试学生退出班级 --------\n";
-  // student2.leaveClass(2021);
-  teacher2.deleteClass(2029);
-  teacher.deleteClass(2020);
+  // qDebug() << "-------- 测试学生退出班级 --------\n";
+  // // student2.leaveClass(2021);
+  // teacher2.deleteClass(2029);
+  // teacher.deleteClass(2020);
 
   qDebug() << "-------- 测试老师给班级添加计划 --------\n";
   //teacher2.createTask(2, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
@@ -126,25 +126,25 @@ int main(int argc, char *argv[])
   //system.createWordBank(1, "牛津", "djdjdjjdjdjdjdj");
   //system.importWordBank(1, 16, "oxford", "牛津", "ddddd", "dddddddd");
   //system.importWordBank(1, 11, "abandon", "抛弃", "aaaaa", "bbbbb");
-  system.importLocalWords("cet4");
-  qint64 id = system.checkAlreadyInWords("absolutely");
+  // system.importLocalWords("cet4");
+  // qint64 id = system.checkAlreadyInWords("absolutely");
 
-  qDebug() << "-------- 教师import进入task单词 --------\n";
-  QList<QString> englishList;
-  englishList.append("abandon");
-  englishList.append("axe");
-  englishList.append("arouse");
-  englishList.append("bb");
-  englishList.append("ax");
+  // qDebug() << "-------- 教师import进入task单词 --------\n";
+  // QList<QString> englishList;
+  // englishList.append("abandon");
+  // englishList.append("axe");
+  // englishList.append("arouse");
+  // englishList.append("bb");
+  // englishList.append("ax");
 
-  QList<QString> englishList2;
-  englishList2.append("abandon");
-  englishList2.append("bbbbb");
-  englishList2.append("bbb");
-  englishList2.append("bb");
+  // QList<QString> englishList2;
+  // englishList2.append("abandon");
+  // englishList2.append("bbbbb");
+  // englishList2.append("bbb");
+  // englishList2.append("bb");
 
-  qint64 task_id = teacher2.importTaskWordBank(englishList);
-  qDebug() << ">>>>>>>>>>>>>>>>>>>> " <<task_id;
+  // qint64 task_id = teacher2.importTaskWordBank(englishList);
+  // qDebug() << ">>>>>>>>>>>>>>>>>>>> " <<task_id;
 
 //  if(task_id >= 0)
 //    teacher2.createTask(task_id, 2020, QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
