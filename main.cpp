@@ -264,6 +264,16 @@ int main(int argc, char *argv[])
 //  student.updatePlan(40);
 //  qDebug() << student.infoPlan();
 
+  // auto database = man->get_database();
+  // db::Student student2(database);
+  // student2.SetId(89);
+  // student2.SetName("MIKE");
+  // student2.SetPassword("eieiiedjjcncn");
+  // student2.SetProfilePhotoUrl("llwlwl");
+  // student2.registerRole();
+
+  // auto system = man->get_system();
+  // qDebug() << system.returnStudentInfo(student2.GetId());
 ////========================================== 前端测试 ==========================================//
 
 

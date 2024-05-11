@@ -81,12 +81,12 @@ private:
         FROM words JOIN WordBankRelationTable ON words.id = WordBankRelationTable.word_id
         WHERE WordBankRelationTable.word_bank_id = ?
   )");
-  //const QLatin1String return = QLatin1String(R"(
-  //      SELECT * FROM wordbank
-  //  )");
-  //const QLatin1String returnTotalWordBank = QLatin1String(R"(
-  //      SELECT * FROM wordbank
-  //  )");
+  const QLatin1String retrunTeacherName = QLatin1String(R"(
+        SELECT name from teachers where id = ?
+    )");
+  const QLatin1String returnStudentName = QLatin1String(R"(
+        SELECT name from students where id = ?
+    )");
 
   static QVariant addWordBook(QSqlQuery &q, const qint64 &word_bank_id, const QString &name, const QString &picture_url);
   static QVariant addWordBankRelation(QSqlQuery &q, const qint64 &word_bank_id, const qint64 &word_id);
@@ -94,6 +94,8 @@ private:
   static QList<WordInfo> returnUnlearnedWord(QSqlQuery &q, const qint64 &student_id, const qint64 &word_bank_id);
   static QList<WordBankInfo> returnWordBank(QSqlQuery &q);
   static QList<WordInfo> returnBankList(QSqlQuery &q, const qint64 &bank_id);
+  static QVariant returnStudentNameInfo(QSqlQuery &q, const qint64 &student_id);
+  static QVariant returnTeacherNameInfo(QSqlQuery &q, const qint64 &teacher_id);
 
 public:
   explicit System(Database &db) : db_(db) {  }
@@ -129,6 +131,9 @@ public:
 
   auto returnWordBankInfo() -> QList<WordBankInfo>;
   auto returnWordBankList(const qint64 &word_bank_id) -> QList<WordInfo>;
+
+  QVariant returnTeacherInfo(const qint64 &teacher_id);
+  QVariant returnStudentInfo(const qint64 &student_id);
 
   //auto returnStudentName(const qint64 &student_id) -> QVariant();
   //auto returnTeacherName(const qint64 &teacher_id) -> QVariant();

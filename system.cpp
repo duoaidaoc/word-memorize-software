@@ -100,6 +100,42 @@ auto db::System::returnBankList(QSqlQuery &q, const qint64 &bank_id) -> QList<Wo
   return wordList;
 }
 
+QVariant db::System::returnTeacherNameInfo(QSqlQuery &q, const qint64 &teacher_id)
+{
+  q.addBindValue(teacher_id);
+  QVariant name;
+  if (!q.exec()) {
+    qDebug() << "Error executing returnTeacherNameInfo:" << q.lastError().text();
+    return name; // 返回空列表
+  }
+  if (q.next()) {
+    name = q.value("name");
+    qDebug() << "Teacher name: " << name;
+    return name;
+  } else {
+    qDebug() << "No teacher_name found in tasktable";
+    return 0;
+  }
+}
+
+QVariant db::System::returnStudentNameInfo(QSqlQuery &q, const qint64 &student_id)
+{
+  q.addBindValue(student_id);
+  QVariant name;
+  if (!q.exec()) {
+    qDebug() << "Error executing returnStudentNameInfo:" << q.lastError().text();
+    return name; // 返回空列表
+  }
+  if (q.next()) {
+    name = q.value("name");
+    qDebug() << "Student name: " << name;
+    return name;
+  } else {
+    qDebug() << "No student_name found in tasktable";
+    return 0;
+  }
+}
+
 //=============== semantics movements =================//
 auto db::System::returnTaskNumber() -> int
 {
@@ -259,6 +295,26 @@ auto db::System::returnWordBankList(const qint64 &word_bank_id) -> QList<db::Wor
   }
 
   return returnBankList(query, word_bank_id);
+}
+
+QVariant db::System::returnTeacherInfo(const qint64 &teacher_id)
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(retrunTeacherName)) {
+    throw std::runtime_error("Failed to prepare returnTeacherInfo insert sql");
+  }
+
+  return returnTeacherNameInfo(query, teacher_id);
+}
+
+QVariant db::System::returnStudentInfo(const qint64 &student_id)
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(returnStudentName)) {
+    throw std::runtime_error("Failed to prepare returnStudentInfo insert sql");
+  }
+
+  return returnStudentNameInfo(query, student_id);
 }
 
 auto db::System::createWordBank(const qint64 &id, const QString &name, const QString &picture_url) -> QVariant {
