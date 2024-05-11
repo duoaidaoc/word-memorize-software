@@ -127,7 +127,7 @@ void login::actionSet()
           Tip->show();
         }
         else{
-          man->init_teacher(id,"Mamba",ui->pwd_edit->text(),false);
+          man->init_teacher(id,sys.returnTeacherInfo(id).toString(),ui->pwd_edit->text(),false);
           this->hide();
           emit turn_to(true);
         }
@@ -142,7 +142,7 @@ void login::actionSet()
           Tip->show();
         }
         else{
-          man->init_student(id,"Mamba",ui->pwd_edit->text(), false);
+          man->init_student(id,sys.returnStudentInfo(id).toString(),ui->pwd_edit->text(), false);
           this->show();
           emit turn_to(false);
         }

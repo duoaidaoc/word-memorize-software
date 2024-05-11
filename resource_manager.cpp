@@ -76,7 +76,7 @@ void resource_manager::init_system()
     system = new db::System(*database);
 
     const auto &list = system->returnWordBankInfo();
-    QList<QString> wordbanks = {"cet4"};
+    QList<QString> wordbanks = {"cet4", "cet6"};
     std::map<QString,int>wordbank_exist;
     for(const auto &Info : list){
       wordbank_exist[Info.name] = 1;

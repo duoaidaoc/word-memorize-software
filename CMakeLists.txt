@@ -73,6 +73,7 @@ set(PROJECT_SOURCES
         newclass_frame.ui
         util.h
         cet4.json
+        cet6.json
         tip.h
         tip.cpp
         tip.ui
