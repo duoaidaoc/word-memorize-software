@@ -43,12 +43,6 @@ int main(int argc, char *argv[])
 
 //  qDebug() << "-------- 创建学生信息 --------\n";
 //  // 创建学生对象并注册
-//  db::Student student(database);
-//  student.SetId(4);
-//  student.SetName("Alice");
-//  student.SetPassword("djdjdjjdjddddddd");
-//  student.SetProfilePhotoUrl("eeueueuL");
-//  student.registerRole();
 
 //  db::Student student2(database);
 //  student2.SetId(89);
@@ -259,6 +253,17 @@ int main(int argc, char *argv[])
 //    qDebug() << word.word_id << word.chinese;
 //  }
 //  qDebug() << "-------- 数据库测试结束 -------\n"
+//  auto db = man->get_database();
+//  db::Student student(db);
+//  student.SetId(4);
+//  student.SetName("Alice");
+//  student.SetPassword("djdjdjjdjddddddd");
+//  student.SetProfilePhotoUrl("eeueueuL");
+//  student.registerRole();
+//  qDebug() << student.infoPlan();
+//  student.updatePlan(40);
+//  qDebug() << student.infoPlan();
+
 ////========================================== 前端测试 ==========================================//
 
 
@@ -288,6 +293,7 @@ int main(int argc, char *argv[])
       stm->data_setup();
       stm->show();
     }
+    loginpage->hide();
   });
 
   AppInit::Instance()->start();

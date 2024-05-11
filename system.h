@@ -106,7 +106,7 @@ public:
                           const QString &chinese,
                           const QString &phonetic,
                           const QString &audio_url);
-  QList<WordInfo> generateWords(const qint64 &stduent_id, const qint64 &word_bank_id);
+  QList<WordInfo> generateWords(const qint64 &stduent_id, const qint64 &word_bank_id, const qint64 plan);
 
   auto returnDatabase() -> QSqlDatabase& {
     return db_.returnDatabase();

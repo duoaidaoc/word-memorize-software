@@ -20,6 +20,7 @@ question::question(QWidget *parent) :
   this->setAttribute(Qt::WA_TranslucentBackground,true);
   this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
   this->setProperty("canMove",true);
+
   QFont font;
   font.setPointSize(20);
   ui->eng_edit->setFont(font);
@@ -27,20 +28,7 @@ question::question(QWidget *parent) :
   bg = new QImage(man->bg_pic_randomselect());
   ImageProcesser::GaussiamBlur(20, 20, *bg);
 
-  QObject::connect(ui->close_btn,&QPushButton::clicked,[&](){
-    ui->eng_edit->clear();
-    this->hide();
-  });
-  QObject::connect(ui->close_btn_2,&QPushButton::clicked,[&](){
-    this->hide();
-  });
-  QObject::connect(ui->eng_edit,&QLineEdit::returnPressed,[&](){
-    if(ui->eng_edit->text() != ""){
-      done(ui->eng_edit->text() == correct_english);
-      ui->eng_edit->setText("");
-    }
-  });
-
+  set_connection();
   st = state::free;
   task_id = -2; // -1 表示被每日任务占用，-2表示未被占用
 }
@@ -104,19 +92,22 @@ void question::set_connection()
   QObject::connect(ui->B_btn,&QPushButton::clicked,[&](){
     done(correctitem == 2);
   });
-  QObject::connect(ui->B_btn,&QPushButton::clicked,[&](){
+  QObject::connect(ui->C_btn,&QPushButton::clicked,[&](){
     done(correctitem == 3);
-  });
-  QObject::connect(ui->eng_edit,&QLineEdit::editingFinished,[&](){
-    if(ui->eng_edit->text() != ""){
-      done(ui->eng_edit->text() == correct_english);
-    }
   });
   QObject::connect(ui->close_btn,&QPushButton::clicked,[&](){
-    done(correctitem == 3);
+    ui->eng_edit->clear();
+    this->hide();
   });
   QObject::connect(ui->close_btn_2,&QPushButton::clicked,[&](){
-    done(correctitem == 3);
+    ui->eng_edit->clear();
+    this->hide();
+  });
+  QObject::connect(ui->eng_edit,&QLineEdit::returnPressed,[&](){
+    if(ui->eng_edit->text() != ""){
+      done(ui->eng_edit->text() == correct_english);
+      ui->eng_edit->setText("");
+    }
   });
 }
 
@@ -149,33 +140,35 @@ void question::set_ques(const std::vector<db::WordInfo> &_words)
 {
   int n = _words.size();
   // 生成n个选择题
-  for (int i=0; i<n; i++) {
-    ques cur_ques;
-    cur_ques.word_id = _words[i].word_id;
-    cur_ques.is_sel = true;
-    cur_ques.is_fill = false;
-    cur_ques.chn = _words[i].chinese;
-    cur_ques.eng = _words[i].english;
+  if(n > 1){
+    for (int i=0; i<n; i++) {
+      ques cur_ques;
+      cur_ques.word_id = _words[i].word_id;
+      cur_ques.is_sel = true;
+      cur_ques.is_fill = false;
+      cur_ques.chn = _words[i].chinese;
+      cur_ques.eng = _words[i].english;
 
-    // 在ABC三个选项中随机选择一个作为正确选项，填写第i个单词的中文
-    // 另外两个干扰项从_words中随机选择其它的单词的中文，因此可能会有两个选项内容相同
-    int right = rand()%3+1;
-    cur_ques.right = right;
-    if (right == 1) {
-      cur_ques.A = _words[i].chinese;
-      cur_ques.B = _words[get_diff_rand(n,i)].chinese;
-      cur_ques.C = _words[get_diff_rand(n,i)].chinese;
-    } else if (right == 2) {
-      cur_ques.A = _words[get_diff_rand(n,i)].chinese;
-      cur_ques.B = _words[i].chinese;
-      cur_ques.C = _words[get_diff_rand(n,i)].chinese;
-    } else {
-      cur_ques.A = _words[get_diff_rand(n,i)].chinese;
-      cur_ques.B = _words[get_diff_rand(n,i)].chinese;
-      cur_ques.C = _words[i].chinese;
+      // 在ABC三个选项中随机选择一个作为正确选项，填写第i个单词的中文
+      // 另外两个干扰项从_words中随机选择其它的单词的中文，因此可能会有两个选项内容相同
+      int right = rand()%3+1;
+      cur_ques.right = right;
+      if (right == 1) {
+        cur_ques.A = _words[i].chinese;
+        cur_ques.B = _words[get_diff_rand(n,i)].chinese;
+        cur_ques.C = _words[get_diff_rand(n,i)].chinese;
+      } else if (right == 2) {
+        cur_ques.A = _words[get_diff_rand(n,i)].chinese;
+        cur_ques.B = _words[i].chinese;
+        cur_ques.C = _words[get_diff_rand(n,i)].chinese;
+      } else {
+        cur_ques.A = _words[get_diff_rand(n,i)].chinese;
+        cur_ques.B = _words[get_diff_rand(n,i)].chinese;
+        cur_ques.C = _words[i].chinese;
+      }
+
+      this->questions.push(cur_ques);
     }
-
-    this->questions.push(cur_ques);
   }
 
   // 生成n个填空题
@@ -227,30 +220,39 @@ void question::start()
 //      如果问题队列非空，调用start()取出下一题
 void question::done(bool ok)
 {
-  // 取出当前问题队列队首的问题
-  ques curr_question = this->questions.front();
-  this->questions.pop();
-  qint64 curr_id = this->questions.front().word_id;
-
-  // 如果问题答对即ok == true，当前问题的当前单词的完成计数加1，如果达到2，向数据库发出完成信号
-  if (ok) {
-    this->finished_cnt[curr_id]++;
-    if (this->finished_cnt[curr_id] == 2) {
-      emit word_learnt(curr_id);
+    // 取出当前问题队列队首的问题
+    qDebug() << "done";
+    if(this->questions.empty()){
+      qDebug() << "wtf";
     }
-  // 如果问题答对即ok == false，将当前问题加到问题队列队尾
-  } else {
-    this->questions.push(curr_question);
-  }
+    ques curr_question = this->questions.front();
+    this->questions.pop();
+    qint64 curr_id = this->questions.front().word_id;
 
-  // 如果问题队列为空，说明已经做完，发出finish信号，状态置为空闲
-  if (this->questions.empty()) {
-    emit finish();
-    st = state::free;
-  // 如果问题队列非空，调用start()取出下一题
-  } else {
-    start();
-  }
+    // 如果问题答对即ok == true，当前问题的当前单词的完成计数加1，如果达到2，向数据库发出完成信号
+    if (ok) {
+      this->finished_cnt[curr_id]++;
+      if (this->finished_cnt[curr_id] == 2) {
+        if(this->task_id == -1)
+          emit word_learnt(curr_id);
+      }
+    // 如果问题答对即ok == false，将当前问题加到问题队列队尾
+    } else {
+      this->questions.push(curr_question);
+    }
+
+    // 如果问题队列为空，说明已经做完，发出finish信号，状态置为空闲
+    if (this->questions.empty()) {
+      st = state::free;
+      this->hide();
+
+      // 清空完成计数
+      this->finished_cnt.clear();
+      emit finish();
+    // 如果问题队列非空，调用start()取出下一题
+    } else {
+      start();
+    }
 }
 
 

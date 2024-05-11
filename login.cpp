@@ -127,11 +127,7 @@ void login::actionSet()
           Tip->show();
         }
         else{
-          auto &teacher = man->get_teacher();
-          teacher.SetId(id);
-          teacher.SetName("Mamba");
-          teacher.SetPassword(ui->pwd_edit->text());
-          teacher.SetProfilePhotoUrl("askjhfoie");
+          man->init_teacher(id,"Mamba",ui->pwd_edit->text(),false);
           this->hide();
           emit turn_to(true);
         }
@@ -139,17 +135,14 @@ void login::actionSet()
       }
       else{
         //学生
+
         correct_pwd = sys.returnStudentPassword(id).toString();
         if(correct_pwd != ui->pwd_edit->text()){
           Tip->set_content("warning","密码错误");
           Tip->show();
         }
         else{
-          auto &student = man->get_student();
-          student.SetId(id);
-          student.SetName("Mamba");
-          student.SetPassword(ui->pwd_edit->text());
-          student.SetProfilePhotoUrl("askjhfoie");
+          man->init_student(id,"Mamba",ui->pwd_edit->text(), false);
           this->show();
           emit turn_to(false);
         }
@@ -181,8 +174,6 @@ void login::actionSet()
           Tip->show();
         }
         else{
-          Tip->set_content("","账号创建成功");
-          Tip->show();
           if((ui->checkBox->checkState() == Qt::Checked)){
             emit turn_to(true);
           }

@@ -292,7 +292,7 @@ auto db::System::importWordBank(const qint64 &word_bank_id,
   return addWordBankRelation(query, word_bank_id, word_id);
 }
 
-auto db::System::generateWords(const qint64 &student_id, const qint64 &word_bank_id) -> QList<WordInfo> {
+auto db::System::generateWords(const qint64 &student_id, const qint64 &word_bank_id, const qint64 plan) -> QList<WordInfo> {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(returnUnLearnedWords)) {
     throw std::runtime_error("Failed to prepare returnUnLearnedWords sql");
@@ -302,7 +302,7 @@ auto db::System::generateWords(const qint64 &student_id, const qint64 &word_bank
   int count = 0;
   QList<WordInfo> generate_words;
   for(const auto &word : unlearned_words) {
-    if(count == 20) {
+    if(count == plan) {
       break;
     }
 

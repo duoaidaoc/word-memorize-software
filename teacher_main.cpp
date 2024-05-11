@@ -221,29 +221,25 @@ void teacher_main::connection_setup()
   });
   // 任务完成创建
   QObject::connect(ui->btn_commit,&QPushButton::clicked,[&](){
-    clearlayout(word_layout);
-    word_frames.clear();
-
     auto man = resource_manager::getInstance();
     auto teacher = man->get_teacher();
     QList<QString> words;
     for(const auto &wf: word_frames){
       words.push_back(wf->get_content().english);
     }
-    int tid = teacher.importTaskWordBank(words) ;
+    int tid = teacher.importTaskWordBank(words);
+    qDebug() << "tid:" << tid;
     if(tid >= 0){
       Tip->set_content("","创建成功");
       Tip->show();
       teacher.createTask(tid, current_cls.id, ui->lineEdit->text(), QDateTime::currentDateTime(), QDateTime::currentDateTime(), QTime::currentTime());
-      clearlayout(word_layout);
-      word_frames.clear();
     }
     else{
       Tip->set_content("warning", "创建失败");
-      Tip->show();
-      clearlayout(word_layout);
-      word_frames.clear();
+      Tip->show();      
     }
+    clearlayout(word_layout);
+    word_frames.clear();
     clearNowTask();
     setNowTask();
     ui->stackedWidget->setCurrentIndex(3);

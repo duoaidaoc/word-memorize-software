@@ -41,8 +41,8 @@ public:
     db::Student &get_student();
     db::Teacher &get_teacher();
 
-    QVariant init_student(const qint64 id, const QString name, const QString password);
-    QVariant init_teacher(const qint64 id, const QString name, const QString password);
+    QVariant init_student(const qint64 id, const QString name, const QString password, bool reg = true);
+    QVariant init_teacher(const qint64 id, const QString name, const QString password, bool reg = true);
     void init_init_student();
     void init_init_teacher();
     void destroy_student();

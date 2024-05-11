@@ -70,6 +70,8 @@ void student_main::setup()
     ui->student_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->wordlib_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->wordlib_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->progressBar->setMinimum(0); // 设置最小值
+    ui->progressBar->setMaximum(100); // 设置最大值
 
     Tip = new tip();
 
@@ -89,6 +91,7 @@ void student_main::setup()
       update_class();
       ui->stackedWidget_2->setCurrentIndex(3);
     });
+
 }
 
 void student_main::setaction()
@@ -157,10 +160,34 @@ void student_main::setaction()
       update_class();
     });
     QObject::connect(ui->exi_class_btn,&QPushButton::clicked,[&](){
-      // TODO(): 学生退出课堂
       signaltip_2->show();
     });
+    auto &tmp = ui->lineEdit_2;
+    QObject::connect(tmp,&QLineEdit::returnPressed,tmp,[this,tmp](){
+      bool ok;
+      qint64 plan = tmp->text().toLongLong(&ok);
+      auto man = resource_manager::getInstance();
+      auto &student = man->get_student();
+      student.updatePlan(plan);
+      ui->stackedWidget_2->setCurrentIndex(7);
+    });
+    QObject::connect(ui->plan_btn,&QPushButton::clicked,[&](){
+      ui->stackedWidget_2->setCurrentIndex(0);
+    });
+    QObject::connect(que_widget,&question::finish,[&](){
+      Tip->set_content("","做题完毕");
+      Tip->show();
+      // 刷新任务列表
+      clearNowTask();
+      setNowTask();
 
+      ui->stackedWidget_2->setCurrentIndex(7);
+
+    });
+    QObject::connect(que_widget,&question::word_learnt,[&](qint64 word_id){
+      auto &student = resource_manager::getInstance()->get_student();
+      student.learnWordRecord(word_id);
+    });
 }
 
 
@@ -208,9 +235,7 @@ void student_main::setNowWord(qint64 tid)
     }
     else{
       auto sys = man->get_system();
-
-      // @test
-      words = sys.generateWords(student.GetId(), nowWordBank);
+      words = sys.generateWords(student.GetId(), student.returnStudentBank().toLongLong(), student.infoPlan().toLongLong());
     }
     if(words.empty()){
         Tip->set_content("warning","没有单词！");
@@ -246,6 +271,11 @@ void student_main::setNowTask()
         auto cls = class_frame->getclass();
         auto tasks = student.infoTaskInClass(cls.id);
         for(const auto& tsk: tasks){
+          // 过滤已学习的任务
+//          if(student.infoTaskCondition(student.GetId(),tsk.taskId) > 0.99999){
+//            return;
+//          }
+
           task_frame* tf = new task_frame(ui->task_contents);
           tf->settask(cls, tsk);
           task_frames.push_back(tf);
@@ -271,14 +301,18 @@ void student_main::setNowTask()
 void student_main::data_setup()
 {
     auto &student = resource_manager::getInstance()->get_student();
-    ui->label_user_id->setText(QString::number(student.GetId()));
-    ui->label_user_name->setText(student.GetName());
+    ui->label_user_id->setText(QString("账号 :") + QString::number(student.GetId()));
+    ui->label_user_name->setText(QString("姓名 :") + student.GetName());
     update_class();
     // TODO():头像没完成
-    qDebug() << "1111111111111111111";
     //词库只需要在开始的时候初始化
     auto man = resource_manager::getInstance();
     auto sys = man->get_system();
+    int ll =  student.returnStudentBank().toLongLong();
+    if(ll != -1){
+      double rate = sys.returnLearnedRateForWordBank(student.GetId(), ll);
+      ui->progressBar->setValue(int(rate * 100));
+    }
 
     const auto &idlist = sys.returnWordBankInfo();
     QHBoxLayout *hbox = new QHBoxLayout(ui->wordlib_display);
@@ -305,10 +339,16 @@ void student_main::data_setup()
 
       QObject::connect(name,&QPushButton::clicked,name,[this, name]{
         QVariant tmp = name->property("wordBankInfo");
+        auto man = resource_manager::getInstance();
+        auto student = man->get_student();
         if(tmp.canConvert<db::WordBankInfo>()){
           db::WordBankInfo info = tmp.value<db::WordBankInfo>();
-          ui->n_label->setText(QString("当前正在学习的词库") + name->text());
-          nowWordBank = info.id;
+          if(name->text() == "") ui->n_label->setText(QString("当前没有正在学习的词库"));
+          else ui->n_label->setText(QString("当前正在学习的词库") + name->text());
+          student.learnWordBanks(info.id);
+          auto system = man->get_system();
+          double rate = system.returnLearnedRateForWordBank(student.GetId(), info.id);
+          ui->progressBar->setValue(int(rate * 100));
         }
         else{
           qDebug()<< "frame 没有 wordBankInfo属性";
@@ -328,6 +368,8 @@ void student_main::update_class()
 {
     // 非常重要，不能删掉，yo!
     clearlayout(class_layout);
+    class_frames.clear();
+
     auto &student = resource_manager::getInstance()->get_student();
     auto list = student.infoStudentClass();
     for(const auto& [id, name] : list){

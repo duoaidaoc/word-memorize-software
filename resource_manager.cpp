@@ -96,14 +96,19 @@ db::System &resource_manager::get_system()
   return *system;
 }
 
-QVariant resource_manager::init_student(const qint64 id, const QString name, const QString password)
+QVariant resource_manager::init_student(const qint64 id, const QString name, const QString password, bool reg)
 {
     // @测试版本 正确的应该是在数据库中查询 student id 的所有信息
     student->SetId(id);
     student->SetName(name);
     student->SetPassword(password);
     student->SetProfilePhotoUrl("eeueueuL");
-    return student->registerRole();
+    QVariant a;
+    if(reg) {
+      a = student->registerRole();
+      student->learnWordBanks(-1);
+    }
+    return a;
 }
 
 db::Student &resource_manager::get_student()
@@ -111,13 +116,15 @@ db::Student &resource_manager::get_student()
     return *student;
 }
 
-QVariant resource_manager::init_teacher(const qint64 id, const QString name, const QString password)
+QVariant resource_manager::init_teacher(const qint64 id, const QString name, const QString password, bool reg)
 {
     teacher->SetId(id);
     teacher->SetName(name);
     teacher->SetPassword(password);
     teacher->SetProfilePhotoUrl("eeueueuL");
-    return teacher->registerRole();
+    QVariant a;
+    if(reg) a = teacher->registerRole();
+    return a;
 }
 
 void resource_manager::init_init_student()
