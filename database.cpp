@@ -3,11 +3,11 @@
 // 构建数据库
 bool db::Database::createDatabase(const QString &dbName) {
   db_ = QSqlDatabase::addDatabase("QMYSQL");
-  db_.setHostName("rm-cn-o843qi5it0001jko.rwlb.rds.aliyuncs.com");
+  db_.setHostName("rm-cn-v8q3qjarr00026go.rwlb.rds.aliyuncs.com");
   db_.setPort(3306);
-  db_.setUserName("word");
+  db_.setUserName("leondou");
   db_.setPassword("BUPT310@");
-  db_.setDatabaseName(dbName);
+  db_.setDatabaseName("wordmemorize");
 
   if (!db_.open()) {
     qDebug() << "Error: connection with database fail";

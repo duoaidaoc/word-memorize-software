@@ -14,7 +14,12 @@ auto db::Word::addWord(QSqlQuery& q,
   q.addBindValue(audio_url);
   q.exec();
 
-  return q.lastInsertId();
+  q.exec("SELECT LAST_INSERT_ID()");
+  if (q.next()) {
+    return q.value(0);
+  } else {
+    return QVariant();
+  }
 }
 
 //--------------------------- semantic functions --------------------------//

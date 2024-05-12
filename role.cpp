@@ -299,7 +299,12 @@ auto db::Teacher::addTeacher(QSqlQuery &q,
   q.addBindValue(profile_photo_url);
   q.exec();
 
-  return q.lastInsertId();
+  q.exec("SELECT LAST_INSERT_ID()");
+  if (q.next()) {
+    return q.value(0);
+  } else {
+    return QVariant();
+  }
 }
 
 auto db::Teacher::deleteTeacher(QSqlQuery &q, const qint64 &id) -> bool {
@@ -314,7 +319,12 @@ auto db::Teacher::addTeacherClass(QSqlQuery &q,
   q.addBindValue(class_id);
   q.exec();
 
-  return q.lastInsertId();
+  q.exec("SELECT LAST_INSERT_ID()");
+  if (q.next()) {
+    return q.value(0);
+  } else {
+    return QVariant();
+  }
 }
 
 auto db::Teacher::teacherDeleteClassTable(QSqlQuery &q, const qint64 &class_id) -> bool {
@@ -360,7 +370,12 @@ auto db::Teacher::addTeacherTaskClass(QSqlQuery &q,
   q.addBindValue(class_id);
   q.exec();
 
-  return q.lastInsertId();
+  q.exec("SELECT LAST_INSERT_ID()");
+  if (q.next()) {
+    return q.value(0);
+  } else {
+    return QVariant();
+  }
 }
 
 auto db::Teacher::teacherDeleteAssignmentDistributionTable(QSqlQuery &q, const qint64 &teacher_id, const qint64 &task_id, const qint64 &class_id) -> int {
@@ -394,7 +409,12 @@ auto db::Teacher::addTaskWord(QSqlQuery &q,
   q.addBindValue(word_id);
   q.exec();
 
-  return q.lastInsertId();
+  q.exec("SELECT LAST_INSERT_ID()");
+  if (q.next()) {
+    return q.value(0);
+  } else {
+    return QVariant();
+  }
 }
 
 //--------------------------- semantic functions --------------------------//
@@ -601,8 +621,12 @@ auto db::Student::addStudent(QSqlQuery &q,
   q.addBindValue(profile_photo_url);
   q.addBindValue(plan);
   q.exec();
-
-  return q.lastInsertId();
+  q.exec("SELECT LAST_INSERT_ID()");
+  if (q.next()) {
+    return q.value(0);
+  } else {
+    return QVariant();
+  }
 }
 
 auto db::Student::deleteStudent(QSqlQuery &q, const qint64 &id) -> bool {
@@ -618,7 +642,12 @@ auto db::Student::addStudentClass(QSqlQuery &q,
   if (!q.exec()) {
     qDebug() << "Error inserting data:" << q.lastError().text();
   }
-  return q.lastInsertId();
+  q.exec("SELECT LAST_INSERT_ID()");
+  if (q.next()) {
+    return q.value(0);
+  } else {
+    return QVariant();
+  }
 }
 
 void db::Student::displayStudent(QSqlQuery &q, const qint64 &id) {
@@ -674,7 +703,12 @@ auto db::Student::insertStudentWordLearningTable(QSqlQuery &q, const qint64 &stu
   if (!q.exec()) {
     qDebug() << "insertStudentWordLearningTable:" << q.lastError().text();
   }
-  return q.lastInsertId();
+  q.exec("SELECT LAST_INSERT_ID()");
+  if (q.next()) {
+    return q.value(0);
+  } else {
+    return QVariant();
+  }
 }
 
 QVariant db::Student::addSysWord(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id)
@@ -684,7 +718,12 @@ QVariant db::Student::addSysWord(QSqlQuery &q, const qint64 &student_id, const q
   if (!q.exec()) {
     qDebug() << "insertStudentSysLearning:" << q.lastError().text();
   }
-  return q.lastInsertId();
+  q.exec("SELECT LAST_INSERT_ID()");
+  if (q.next()) {
+    return q.value(0);
+  } else {
+    return QVariant();
+  }
 }
 
 auto db::Student::addWordBank(QSqlQuery &q, const qint64 &student_id, const qint64 &word_bank_id) -> QVariant
@@ -694,25 +733,13 @@ auto db::Student::addWordBank(QSqlQuery &q, const qint64 &student_id, const qint
   if (!q.exec()) {
     qDebug() << "addWordBank:" << q.lastError().text();
   }
-  return q.lastInsertId();
-}
-
-QVariant db::Student::sinfoStudentPlan(QSqlQuery &q, const qint64 &student_id)
-{
-  q.addBindValue(student_id);
-  if (!q.exec()) {
-    qDebug() << "sinfoStudentPlan:" << q.lastError().text();
-    return QVariant(); // 返回一个空的 QVariant 表示出错
-  }
-
+  q.exec("SELECT LAST_INSERT_ID()");
   if (q.next()) {
-    return q.value(0); // 获取第一个字段的值
+    return q.value(0);
   } else {
-    qDebug() << "No results found.";
-    return QVariant(); // 返回一个空的 QVariant 表示没有结果
+    return QVariant();
   }
 }
-
 
 //--------------------------- semantic functions --------------------------//
 // 增删改查

@@ -21,10 +21,10 @@ private:
   //int task_number_;
 
   const QLatin1String insertWordBook = QLatin1String(R"(
-        insert into wordbank(id, name, picture_url) values(?, ?, ?)
+        INSERT INTO wordbank(id, name, picture_url) values(?, ?, ?)  -- 将 INSERT INTO 中的关键字修改为 INSERT INTO
     )");
   const QLatin1String insertWordBankRelation = QLatin1String(R"(
-        insert into WordBankRelationTable(word_bank_id, word_id) values(?, ?)
+        INSERT INTO WordBankRelationTable(word_bank_id, word_id) values(?, ?)  -- 将 INSERT INTO 中的关键字修改为 INSERT INTO
     )");
   const QLatin1String studentsLoginPassword = QLatin1String(R"(
         SELECT password from students where id = ?
@@ -36,18 +36,13 @@ private:
         SELECT id from words where english = ?
     )");
   const QLatin1String returnUnLearnedWords = QLatin1String(R"(
-        SELECT id, english, chinese, phonetic, audio_url
+        SELECT words.id, words.english, words.chinese, words.phonetic, words.audio_url
         FROM words
-        WHERE id NOT IN (
-          SELECT word_id
-          FROM StudentSysLearn
-          WHERE student_id = ?
-        ) AND id IN (
-          SELECT word_id
-          FROM WordBankRelationTable
-          WHERE word_bank_id = ?
-        )
-        ORDER BY english;
+        LEFT JOIN StudentSysLearn ON words.id = StudentSysLearn.word_id AND StudentSysLearn.student_id = ?
+        JOIN WordBankRelationTable ON words.id = WordBankRelationTable.word_id AND WordBankRelationTable.word_bank_id = ?
+        WHERE StudentSysLearn.word_id IS NULL
+        ORDER BY words.english;
+
     )");
   const QLatin1String returnTaskN = QLatin1String(R"(
         SELECT COUNT(*) AS total_count FROM tasktable

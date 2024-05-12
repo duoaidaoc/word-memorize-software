@@ -10,7 +10,12 @@ auto db::System::addWordBook(QSqlQuery &q,
   q.addBindValue(picture_url);
   q.exec();
 
-  return q.lastInsertId();
+  q.exec("SELECT LAST_INSERT_ID()");
+  if (q.next()) {
+    return q.value(0);
+  } else {
+    return QVariant();
+  }
 }
 
 auto db::System::addWordBankRelation(QSqlQuery &q,
@@ -20,7 +25,12 @@ auto db::System::addWordBankRelation(QSqlQuery &q,
   q.addBindValue(word_id);
   q.exec();
 
-  return q.lastInsertId();
+  q.exec("SELECT LAST_INSERT_ID()");
+  if (q.next()) {
+    return q.value(0);
+  } else {
+    return QVariant();
+  }
 }
 
 auto db::System::returnPassword(QSqlQuery &q, const qint64 &id) -> QVariant {

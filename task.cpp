@@ -14,7 +14,12 @@ auto db::Task::addTask(QSqlQuery &q,
   q.addBindValue(time);
   q.exec();
 
-  return q.lastInsertId();
+  q.exec("SELECT LAST_INSERT_ID()");
+  if (q.next()) {
+    return q.value(0);
+  } else {
+    return QVariant();
+  }
 }
 
 //--------------------------- semantic functions --------------------------//
