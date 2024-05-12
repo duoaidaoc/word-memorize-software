@@ -181,6 +181,7 @@ void student_main::setaction()
       auto man = resource_manager::getInstance();
       auto student = man->get_student();
       auto sys = man->get_system();
+
       int ll =  student.returnStudentBank().toLongLong();
       if(ll != -1){
         double rate = sys.returnLearnedRateForWordBank(student.GetId(), ll);
@@ -323,12 +324,12 @@ void student_main::data_setup()
     //词库只需要在开始的时候初始化
     auto man = resource_manager::getInstance();
     auto sys = man->get_system();
+
     int ll =  student.returnStudentBank().toLongLong();
     if(ll != -1){
-      double rate = sys.returnLearnedRateForWordBank(student.GetId(), ll);
-      ui->progressBar->setValue(int(rate * 100));
+        double rate = sys.returnLearnedRateForWordBank(student.GetId(), ll);
+        ui->progressBar->setValue(int(rate * 100));
     }
-
     const auto &idlist = sys.returnWordBankInfo();
     QHBoxLayout *hbox = new QHBoxLayout(ui->wordlib_display);
     for (int i = 0; i < idlist.size(); ++i) { // 添加九个 QFrame 作为示例
@@ -362,8 +363,13 @@ void student_main::data_setup()
           else ui->n_label->setText(QString("当前正在学习的词库") + name->text());
           student.learnWordBanks(info.id);
           auto system = man->get_system();
-          double rate = system.returnLearnedRateForWordBank(student.GetId(), info.id);
-          ui->progressBar->setValue(int(rate * 100));
+
+          int ll =  student.returnStudentBank().toLongLong();
+          if(ll != -1){
+            double rate = system.returnLearnedRateForWordBank(student.GetId(), ll);
+            ui->progressBar->setValue(int(rate * 100));
+          }
+
         }
         else{
           qDebug()<< "frame 没有 wordBankInfo属性";
