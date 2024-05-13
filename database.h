@@ -166,6 +166,13 @@ private:
     )
 )");
 
+  const QLatin1String radioStore = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS radio (
+        name    VARCHAR(255),
+        audio   MEDIUMBLOB,
+        PRIMARY KEY (name)
+    )
+)");
 
 public:
   Database(const QString &dbName)

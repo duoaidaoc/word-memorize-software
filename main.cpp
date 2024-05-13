@@ -379,6 +379,11 @@ int main(int argc, char *argv[])
 
   // auto system = man->get_system();
   // qDebug() << system.returnStudentInfo(student2.GetId());
+
+  // 生成音频
+  auto system = man->get_system();
+  //system.importAudioDB();
+  system.runMp3("germ");
 ////========================================== 前端测试 ==========================================//
 
 

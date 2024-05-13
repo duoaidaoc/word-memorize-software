@@ -13,9 +13,8 @@
 #include <QJsonArray>
 
 namespace db {
-class System {
+class System : public Table{
 private:
-  Database &db_;
   //int word_number_;              // 给每个单词赋予独立的id。
   //int word_bank_number_;
   //int task_number_;
@@ -93,7 +92,7 @@ private:
   static QVariant returnTeacherNameInfo(QSqlQuery &q, const qint64 &teacher_id);
 
 public:
-  explicit System(Database &db) : db_(db) {  }
+  explicit System(Database &db) : Table(db) {  }
   bool importLocalWords(const QString &filename);
   int checkAlreadyInWords(const QString &word);
   QVariant createWordBank(const qint64 &id, const QString &name, const QString &pircture_url);
@@ -104,13 +103,6 @@ public:
                           const QString &phonetic,
                           const QString &audio_url);
   QList<WordInfo> generateWords(const qint64 &stduent_id, const qint64 &word_bank_id, const qint64 plan);
-
-  auto returnDatabase() -> QSqlDatabase& {
-    return db_.returnDatabase();
-  }
-  auto returnDB() -> Database& {
-    return db_;
-  }
 
   auto returnTeacherPassword(const qint64 &teacher_id) -> QVariant;
   auto returnStudentPassword(const qint64 &student_id) -> QVariant;
@@ -130,6 +122,9 @@ public:
   QVariant returnTeacherInfo(const qint64 &teacher_id);
   QVariant returnStudentInfo(const qint64 &student_id);
 
+  void importAudioDB();
+  void storeMp3File(const QString& filePath, const QString &name);
+  QString runMp3(const QString& name);
   //auto returnStudentName(const qint64 &student_id) -> QVariant();
   //auto returnTeacherName(const qint64 &teacher_id) -> QVariant();
 };

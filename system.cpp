@@ -307,6 +307,19 @@ auto db::System::returnWordBankList(const qint64 &word_bank_id) -> QList<db::Wor
   return returnBankList(query, word_bank_id);
 }
 
+void db::System::importAudioDB() {
+  QDir directory("../word-memorize-software/audios");
+  QFileInfoList files = directory.entryInfoList(QStringList() << "*.mp3", QDir::Files);
+
+  for (const QFileInfo &fileInfo : files) {
+    QString filePath = fileInfo.filePath();
+    QString fileName = fileInfo.fileName();
+    QString name = fileName.split(".mp3").first();
+
+    storeMp3File(filePath, name);
+  }
+}
+
 QVariant db::System::returnTeacherInfo(const qint64 &teacher_id)
 {
   QSqlQuery query(returnDatabase());
@@ -326,6 +339,55 @@ QVariant db::System::returnStudentInfo(const qint64 &student_id)
 
   return returnStudentNameInfo(query, student_id);
 }
+
+auto db::System::storeMp3File(const QString &filePath, const QString &name) -> void
+{
+  QFile file(filePath);
+  if (!file.open(QIODevice::ReadOnly)) {
+    qDebug() << "Failed to open file" << filePath;
+    return;
+  }
+  //qDebug() << filePath;
+
+  QByteArray fileData = file.readAll();
+  file.close();
+  //qDebug() <<fileData;
+
+  QSqlQuery query(returnDatabase());
+  query.prepare("INSERT INTO radio (name, audio) VALUES (:name, :audio)");
+  query.bindValue(":name", name);
+  query.bindValue(":audio", fileData);
+  if (!query.exec()) {
+    qDebug() << "Failed to insert file" << filePath << "into database:" << query.lastError().text();
+  }
+}
+
+auto db::System::runMp3(const QString &name) -> QString
+{
+  QSqlQuery query(returnDatabase());
+
+  query.prepare("SELECT audio FROM radio WHERE name = :name");
+  query.bindValue(":name", name);
+  if (!query.exec() || !query.first()) {
+    qDebug() << "Failed to retrieve name" << name << "from database:" << query.lastError().text();
+    return nullptr;
+  }
+
+  QByteArray fileData = query.value(0).toByteArray();
+
+  QString filename = name + ".mp3";
+  QFile file(filename);
+  if (!file.open(QIODevice::WriteOnly)) {
+    qDebug() << "Failed to open file for writing";
+    return filename;
+  }
+
+  file.write(fileData); // 将数据写入文件
+  file.close(); // 关闭文件
+
+  return filename;
+}
+
 
 auto db::System::createWordBank(const qint64 &id, const QString &name, const QString &picture_url) -> QVariant {
   QSqlQuery query(returnDatabase());
