@@ -99,12 +99,6 @@ bool db::Database::initDataBase() {
       return false;
     }
 
-    // Attempt to create StudentTaskProgress
-    if (!tables.contains("StudentTaskProgress", Qt::CaseInsensitive) && !query.exec(createStudentTaskProgressTable)) {
-      qWarning() << "Failed to create Student Task Progress Table:" << query.lastError().text();
-      return false;
-    }
-
     // Attempt to create StudentWordLearning
     if (!tables.contains("StudentWordLearning", Qt::CaseInsensitive) && !query.exec(createStudentWordLearningTable)) {
       qWarning() << "Failed to create Student Word Learning Table:" << query.lastError().text();

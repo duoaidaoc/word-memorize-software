@@ -452,51 +452,92 @@ auto db::Teacher::displayInfo() ->void {
 // 扩展操作
 // @todo
 auto db::Teacher::createClass(const qint64 &class_id, const QString &class_name, const QString &class_cue) -> QVariant {
-  Class class_(returnDB());
-  class_.SetId(class_id);
-  class_.SetName(class_name);
-  class_.SetCue(class_cue);
-
-  // @todo 在老师class表格中插入条目。
-  QSqlQuery query(returnDatabase());
-  if(!query.prepare(insertTeacherClassTable)) {
-    throw std::runtime_error("Failed to prepare TearcherClassTable insert sql");
+  QSqlDatabase db = returnDatabase();
+  if (!db.transaction()) {
+    throw std::runtime_error("Failed to start transaction");
   }
-  addTeacherClass(query, GetId(), class_id);
 
-  // 将创建的班级在班级表中插入。
-  return class_.registerClass();
+  try {
+    Class class_(returnDB());
+    class_.SetId(class_id);
+    class_.SetName(class_name);
+    class_.SetCue(class_cue);
+
+    // 先将班级在班级表中插入。
+    QVariant result = class_.registerClass();
+    if (result.isNull()) {
+      throw std::runtime_error("Failed to register class");
+    }
+
+    // 在老师class表格中插入条目。
+    QSqlQuery query(returnDatabase());
+    if (!query.prepare(insertTeacherClassTable)) {
+      throw std::runtime_error("Failed to prepare TeacherClassTable insert sql");
+    }
+    QVariant tmp = addTeacherClass(query, GetId(), class_id);
+    if (tmp.isNull()) {
+      throw std::runtime_error("Failed to insert sql");
+    }
+
+    if (!db.commit()) {
+      throw std::runtime_error("Failed to commit transaction");
+    }
+
+    return result;
+  } catch (std::exception& e) {
+    qWarning() << "Error creating class:" << e.what();
+    db.rollback();
+    return QVariant();
+  }
 }
 
-// @todo
-// 需要删除三张表格：
-// （1）class表格。
-// （2）teacherclass表格里面所有带有class_id的。
-// （3）studentclass表格里面所有带有class_id的。
 auto db::Teacher::deleteClass(const qint64 &class_id) -> bool {
-  QSqlQuery query(returnDatabase());
-
-  if(!query.prepare(teacherDeleteTeacherClass)) {
-    throw std::runtime_error("Failed to prepare teacherclass delete sql");
+  QSqlDatabase db = returnDatabase();
+  if (!db.transaction()) {
+    throw std::runtime_error("Failed to start transaction");
   }
-  int rowsDeleted = teacherDeleteTeacherClassTable(query, GetId(), class_id);
 
-  // 考虑到安全性，老师先删除老师班级表格，如果可以删除，说明班级存在，且老师有权限删除该表格。
-  // 删除行数大于零，则老师有权限删除班级表格和学生班级表格。
-  if(rowsDeleted > 0) {
+  try {
+    QSqlQuery query(returnDatabase());
+
+    // 删除 teacherclass 表中所有带有指定 class_id 的记录
+    if(!query.prepare(teacherDeleteTeacherClass)) {
+      throw std::runtime_error("Failed to prepare teacherclass delete sql");
+    }
+    int rowsDeleted = teacherDeleteTeacherClassTable(query, GetId(), class_id);
+
+    // 删除 studentclass 表中所有带有指定 class_id 的记录
+    if(rowsDeleted > 0) {
+      if(!query.prepare(teacherDeleteStudentClass)) {
+        throw std::runtime_error("Failed to prepare studentclass delete sql");
+      }
+      if(!teacherDeleteStudentClassTable(query, class_id)) {
+        qWarning() << "Failed to delete student-class relationship for class: " << class_id << "\n";
+        db.rollback();
+        return false;
+      }
+    }
+
+    // 删除 class 表中指定 class_id 的记录
     if(!query.prepare(teacherDeleteClass)) {
       throw std::runtime_error("Failed to prepare class delete sql");
     }
     if(!teacherDeleteClassTable(query, class_id)) {
-      qWarning() << "Student failed to leave class: " << GetId() << "\n";
+      qWarning() << "Failed to delete class: " << class_id << "\n";
+      db.rollback();
+      return false;
     }
-    if(!query.prepare(teacherDeleteStudentClass)) {
-      throw std::runtime_error("Failed to prepare studentclass delete sql");
-    }
-    return teacherDeleteStudentClassTable(query, class_id);
-  }
 
-  return false;
+    if (!db.commit()) {
+      throw std::runtime_error("Failed to commit transaction");
+    }
+
+    return true;
+  } catch (std::exception& e) {
+    qWarning() << "Error deleting class:" << e.what();
+    db.rollback();
+    return false;
+  }
 }
 
 // 老师创建任务
@@ -506,47 +547,85 @@ auto db::Teacher::createTask(const qint64 &task_id,
                              const QDateTime &create_time,
                              const QDateTime &deadline,
                              const QTime &time_limit) -> QVariant {
-  Task task_(returnDB());
-  task_.SetId(task_id);
-  task_.SetTaskName(task_name);
-  task_.SetCreateTime(create_time);
-  task_.SetDeadline(deadline);
-  task_.SetTime(time_limit);
-
-  // @todo 在班级task中插入。
-  QSqlQuery query(returnDatabase());
-  if(!query.prepare(insertAssignmentDistribution)) {
-    throw std::runtime_error("Failed to prepare TeacherClassTask insert sql");
+  QSqlDatabase db = returnDatabase();
+  if (!db.transaction()) {
+    throw std::runtime_error("Failed to start transaction");
   }
-  addTeacherTaskClass(query, GetId(), task_id, class_id);
 
-  // 将创建的班级在班级表中插入。
-  return task_.registerTask();
+  try {
+    // 创建任务
+    Task task_(returnDB());
+    task_.SetId(task_id);
+    task_.SetTaskName(task_name);
+    task_.SetCreateTime(create_time);
+    task_.SetDeadline(deadline);
+    task_.SetTime(time_limit);
+
+    QVariant result = task_.registerTask();
+
+    // 插入任务与班级关联
+    QSqlQuery query(returnDatabase());
+    if(!query.prepare(insertAssignmentDistribution)) {
+      throw std::runtime_error("Failed to prepare TeacherClassTask insert sql");
+    }
+    QVariant tmp = addTeacherTaskClass(query, GetId(), task_id, class_id);
+    if(tmp.isNull())
+      throw std::runtime_error("Failed to insert sql");
+
+    if (!db.commit()) {
+      throw std::runtime_error("Failed to commit transaction");
+    }
+
+    return result;
+  } catch (std::exception& e) {
+    qWarning() << "Error creating task:" << e.what();
+    db.rollback();
+    return QVariant();
+  }
 }
 
-// @todo
-// 需要删除三张表格：
-// （1）class表格。
-// （2）teacherclass表格里面所有带有class_id的。
-// （3）studentclass表格里面所有带有class_id的。
 auto db::Teacher::deleteTask(const qint64 &task_id, const qint64 &class_id) -> bool {
-  QSqlQuery query(returnDatabase());
-
-  if(!query.prepare(teacherDeleteAssignmentDistribution)) {
-    throw std::runtime_error("Failed to prepare assignmentDistribution delete sql");
+  QSqlDatabase db = returnDatabase();
+  if (!db.transaction()) {
+    throw std::runtime_error("Failed to start transaction");
   }
-  int rowsDeleted = teacherDeleteAssignmentDistributionTable(query, GetId(), task_id, class_id);
 
-  // 考虑到安全性，老师先删除老师班级表格，如果可以删除，说明班级存在，且老师有权限删除该表格。
-  // 删除行数大于零，则老师有权限删除班级表格和学生班级表格。
-  if(rowsDeleted > 0) {
-    if(!query.prepare(teacherDeleteTask)) {
-      throw std::runtime_error("Failed to prepare task delete sql");
+  try {
+    QSqlQuery query(returnDatabase());
+
+    // 删除教师任务表格中与指定任务和班级相关的记录
+    if(!query.prepare(teacherDeleteAssignmentDistribution)) {
+      throw std::runtime_error("Failed to prepare assignmentDistribution delete sql");
     }
-    return teacherDeleteTaskTable(query, task_id);
-  }
+    int rowsDeleted = teacherDeleteAssignmentDistributionTable(query, GetId(), task_id, class_id);
 
-  return false;
+    // 删除学生班级表格中与指定班级相关的记录
+    if(!query.prepare(teacherDeleteStudentClass)) {
+      throw std::runtime_error("Failed to prepare studentclass delete sql");
+    }
+    if(!teacherDeleteStudentClassTable(query, class_id)) {
+      qWarning() << "Failed to delete student-class relationship for class: " << class_id << "\n";
+      db.rollback();
+      return false;
+    }
+
+    // 删除任务表格中指定任务的记录
+    if(!teacherDeleteTaskTable(query, task_id)) {
+      qWarning() << "Failed to delete task: " << task_id << "\n";
+      db.rollback();
+      return false;
+    }
+
+    if (!db.commit()) {
+      throw std::runtime_error("Failed to commit transaction");
+    }
+
+    return rowsDeleted > 0;
+  } catch (std::exception& e) {
+    qWarning() << "Error deleting task:" << e.what();
+    db.rollback();
+    return false;
+  }
 }
 
 auto db::Teacher::createTaskWord(const qint64 &task_id, const qint64 &word_id) -> QVariant {
@@ -576,11 +655,11 @@ auto db::Teacher::infoTeacherClass() -> QList<QPair<qint64, QString>> {
 }
 
 auto db::Teacher::importTaskWordBank(const QList<QString> &englishList) -> int {
-  // 向系统索要独一的task_id。
+  QList<qint64> legalWords;
   auto man = resource_manager::getInstance();
   auto system = man->get_system();
   qint64 task_id = system.returnTaskNumber();
-  QList<qint64> legalWords;
+
   for(auto &english : englishList) {
     // 在单词表里面找到单词，则添加成功。
     auto word_id = checkAlreadyInWords(english);

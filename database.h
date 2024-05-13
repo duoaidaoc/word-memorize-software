@@ -11,190 +11,190 @@ namespace db {
 class Database
 {
 private:
-    QSqlDatabase db_;
-    bool createDatabase(const QString &dbName);
+  QSqlDatabase db_;
+  bool createDatabase(const QString &dbName);
 
-    // 封装查询表格是否重复的接口。
-    bool hasTable(const QString &tableName);
-    // 初始化数据库
-    bool initDataBase();
+  // 封装查询表格是否重复的接口。
+  bool hasTable(const QString &tableName);
+  // 初始化数据库
+  bool initDataBase();
 
-    // 构建表格SQL语句
-    const QLatin1String createStudentTable = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS students (
-            id BIGINT PRIMARY KEY,
-            name VARCHAR(255),
-            password VARCHAR(255),
-            profile_photo_url VARCHAR(255),
-            plan BIGINT
-        )
-    )");
+  // 构建表格SQL语句
+  const QLatin1String createStudentTable = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS students (
+        id BIGINT PRIMARY KEY,
+        name VARCHAR(255),
+        password VARCHAR(255),
+        profile_photo_url VARCHAR(255),
+        plan BIGINT
+    )
+)");
 
-    const QLatin1String createTeacherTable = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS teachers (
-            id BIGINT PRIMARY KEY,
-            name VARCHAR(255),
-            password VARCHAR(255),
-            profile_photo_url VARCHAR(255)
-        )
-    )");
+  const QLatin1String createTeacherTable = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS teachers (
+        id BIGINT PRIMARY KEY,
+        name VARCHAR(255),
+        password VARCHAR(255),
+        profile_photo_url VARCHAR(255)
+    )
+)");
 
-    const QLatin1String createWordBook = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS wordbank (
-            id BIGINT PRIMARY KEY,
-            name VARCHAR(255),
-            picture_url VARCHAR(255)
-        )
-    )");
+  const QLatin1String createWordBook = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS wordbank (
+        id BIGINT PRIMARY KEY,
+        name VARCHAR(255),
+        picture_url VARCHAR(255)
+    )
+)");
 
-    const QLatin1String createWordTable = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS words (
-            id BIGINT PRIMARY KEY,
-            english   VARCHAR(255),
-            chinese   VARCHAR(255),
-            phonetic  VARCHAR(255),
-            audio_url VARCHAR(255)
-        )
-    )");
+  const QLatin1String createWordTable = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS words (
+        id BIGINT PRIMARY KEY,
+        english   VARCHAR(255),
+        chinese   VARCHAR(255),
+        phonetic  VARCHAR(255),
+        audio_url VARCHAR(255)
+    )
+)");
 
-    const QLatin1String createClassTable = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS class (
-            id BIGINT PRIMARY KEY,
-            name      VARCHAR(255),
-            cue       VARCHAR(255)
-        )
-    )");
+  const QLatin1String createClassTable = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS class (
+        id BIGINT PRIMARY KEY,
+        name      VARCHAR(255),
+        cue       VARCHAR(255)
+    )
+)");
 
-    const QLatin1String createTeacherClassTable = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS teacherclass (
-            teacher_id BIGINT,
-            class_id   BIGINT,
-            primary key(teacher_id, class_id)
-        )
-    )");
+  const QLatin1String createTeacherClassTable = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS teacherclass (
+        teacher_id BIGINT,
+        class_id   BIGINT,
+        primary key(teacher_id, class_id),
+        FOREIGN KEY (teacher_id) REFERENCES teachers(id),
+        FOREIGN KEY (class_id) REFERENCES class(id)
+    )
+)");
 
-    const QLatin1String createStudentClassTable = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS studentclass (
-            student_id BIGINT,
-            class_id   BIGINT,
-            primary key(student_id, class_id)
-        )
-    )");
+  const QLatin1String createStudentClassTable = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS studentclass (
+        student_id BIGINT,
+        class_id   BIGINT,
+        primary key(student_id, class_id),
+        FOREIGN KEY (student_id) REFERENCES students(id),
+        FOREIGN KEY (class_id) REFERENCES class(id)
+    )
+)");
 
-    const QLatin1String createTaskTable = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS tasktable (
-            id BIGINT PRIMARY KEY,
-            task_name VARCHAR(255),
-            create_time DATETIME,
-            deadline DATETIME,
-            time_limit TIME
-        )
-    )");
+  const QLatin1String createTaskTable = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS tasktable (
+        id BIGINT PRIMARY KEY,
+        task_name VARCHAR(255),
+        create_time DATETIME,
+        deadline DATETIME,
+        time_limit TIME
+    )
+)");
 
-    // 老师布置任务
-    const QLatin1String createAssignmentDistributionTable = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS AssignmentDistributionTable (
-            teacher_id BIGINT,
-            task_id BIGINT,
-            class_id BIGINT,
-            PRIMARY KEY (teacher_id, task_id, class_id)
-        )
-    )");
+  const QLatin1String createAssignmentDistributionTable = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS AssignmentDistributionTable (
+        teacher_id BIGINT,
+        task_id BIGINT,
+        class_id BIGINT,
+        PRIMARY KEY (teacher_id, task_id, class_id),
+        FOREIGN KEY (teacher_id) REFERENCES teachers(id),
+        FOREIGN KEY (task_id) REFERENCES tasktable(id),
+        FOREIGN KEY (class_id) REFERENCES class(id)
+    )
+)");
 
-    // 任务单词关系
-    const QLatin1String createTaskWordTable = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS TaskWordTable (
-            task_id BIGINT,
-            word_id BIGINT,
-            PRIMARY KEY (task_id, word_id)
-        )
-    )");
+  const QLatin1String createTaskWordTable = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS TaskWordTable (
+        task_id BIGINT,
+        word_id BIGINT,
+        PRIMARY KEY (task_id, word_id),
+        FOREIGN KEY (word_id) REFERENCES words(id)
+    )
+)");
 
-    const QLatin1String createStudentLearnWordBank = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS createStudentLearnWordBank (
-            student_id    BIGINT,
-            word_bank_id  BIGINT,
-            PRIMARY KEY (student_id)
-        )
-    )");
+  const QLatin1String createStudentLearnWordBank = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS createStudentLearnWordBank (
+        student_id    BIGINT,
+        word_bank_id  BIGINT,
+        PRIMARY KEY (student_id),
+        FOREIGN KEY (student_id) REFERENCES students(id),
+        FOREIGN KEY (word_bank_id) REFERENCES wordbank(id)
+    )
+)");
 
-    // 学生学习词库
-    // todo
-    const QLatin1String createStudentWordBank = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS StudentWordBankTable (
-            student_id BIGINT,
-            word_id    BIGINT,
-            PRIMARY KEY (student_id, word_id)
-        )
-    )");
+  const QLatin1String createStudentWordBank = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS StudentWordBankTable (
+        student_id BIGINT,
+        word_id    BIGINT,
+        PRIMARY KEY (student_id, word_id),
+        FOREIGN KEY (student_id) REFERENCES students(id),
+        FOREIGN KEY (word_id) REFERENCES words(id)
+    )
+)");
 
-    // 学生任务进度表格
-    // todo
-    const QLatin1String createStudentTaskProgressTable = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS StudentTaskProgress (
-            student_id BIGINT,
-            task_id BIGINT,
-            start_time TIME,
-            learned_tag BOOLEAN,
-            PRIMARY KEY (student_id, task_id)
-        )
-    )");
+  const QLatin1String createStudentWordLearningTable = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS StudentWordLearning (
+        student_id BIGINT,
+        word_id BIGINT,
+        PRIMARY KEY (student_id, word_id),
+        FOREIGN KEY (student_id) REFERENCES students(id),
+        FOREIGN KEY (word_id) REFERENCES words(id)
+    )
+)");
 
-    // 学生单词进度表格
-    // todo
-    const QLatin1String createStudentWordLearningTable = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS StudentWordLearning (
-            student_id BIGINT,
-            word_id BIGINT,
-            PRIMARY KEY (student_id, word_id)
-        )
-    )");
+  const QLatin1String createWordWordBank = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS WordBankRelationTable (
+        word_bank_id BIGINT,
+        word_id    BIGINT,
+        PRIMARY KEY (word_bank_id, word_id),
+        FOREIGN KEY (word_bank_id) REFERENCES wordbank(id),
+        FOREIGN KEY (word_id) REFERENCES words(id)
+    )
+)");
 
-    // 词库单词关系表格
-    const QLatin1String createWordWordBank = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS WordBankRelationTable (
-            word_bank_id BIGINT,
-            word_id    BIGINT,
-            PRIMARY KEY (word_bank_id, word_id)
-        )
-    )");
+  const QLatin1String createStudentSysLearn = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS StudentSysLearn (
+        student_id BIGINT,
+        word_id    BIGINT,
+        PRIMARY KEY (student_id, word_id),
+        FOREIGN KEY (student_id) REFERENCES students(id),
+        FOREIGN KEY (word_id) REFERENCES words(id)
+    )
+)");
 
-    const QLatin1String createStudentSysLearn = QLatin1String(R"(
-        CREATE TABLE IF NOT EXISTS StudentSysLearn (
-            student_id BIGINT,
-            word_id    BIGINT,
-            PRIMARY KEY (student_id, word_id)
-        )
-    )");
 
 public:
-    Database(const QString &dbName)
-    {
-        // 创建数据库，并初始化。
-        if (!createDatabase(dbName))
-            qDebug() << "Failed to open database:" << db_.lastError().text();
-        if (!initDataBase())
-            qDebug() << "Failed to init database:" << db_.lastError().text();
-    }
+  Database(const QString &dbName)
+  {
+    // 创建数据库，并初始化。
+    if (!createDatabase(dbName))
+      qDebug() << "Failed to open database:" << db_.lastError().text();
+    if (!initDataBase())
+      qDebug() << "Failed to init database:" << db_.lastError().text();
+  }
 
-    ~Database()
-    {
-        // 关闭数据库连接
-        db_.close();
-    }
+  ~Database()
+  {
+    // 关闭数据库连接
+    db_.close();
+  }
 
-    auto returnDatabase() -> QSqlDatabase& {
-        return db_;
-    }
+  auto returnDatabase() -> QSqlDatabase& {
+    return db_;
+  }
 
-    auto isOpen() -> bool {
-        return db_.open();
-    }
+  auto isOpen() -> bool {
+    return db_.open();
+  }
 
-    // 系统自行生成词库，用来学生直接匹配比赛。
-    void generateWordBank() {
+  // 系统自行生成词库，用来学生直接匹配比赛。
+  void generateWordBank() {
 
-    }
+  }
 };
 } // end db
 
