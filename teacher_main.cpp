@@ -112,6 +112,8 @@ void teacher_main::connection_setup()
   // 班级内点击管理任务列表
   QObject::connect(ui->btn_view_task,&QPushButton::clicked,[&](){
     ui->label_class_of_task->setText(QString("班级: %1的任务列表").arg(current_cls.name));
+    clearNowTask();
+    setNowTask();
     ui->stackedWidget->setCurrentIndex(3);
   });
   // 任务管理内点击创建任务进入任务创建界面
@@ -273,8 +275,8 @@ void teacher_main::data_setup()
 {
   auto man = resource_manager::getInstance();
   auto &teacher = man->get_teacher();
-  ui->label_user_id->setText(QString::number(teacher.GetId()));
-  ui->label_user_name->setText(teacher.GetName());
+  ui->label_user_id->setText(QString("账号:") + QString::number(teacher.GetId()));
+  ui->label_user_name->setText(QString("姓名:") + teacher.GetName());
   update_class();
 }
 
@@ -336,8 +338,7 @@ void teacher_main::update_class()
           // 根据cls设置新的ui->student_vlayout中的frame
         });
     }
-    clearNowTask();
-    setNowTask();
+
 }
 
 void teacher_main::clearlayout(QBoxLayout *layout)
@@ -368,57 +369,54 @@ void teacher_main::clearNowTask()
 
 void teacher_main::setNowTask()
 {
-    if(!task_frames.empty()){
-        qDebug() << "在set前需要clear task";
-        abort();
-    }
-    auto man = resource_manager::getInstance();
-    auto teacher = man->get_teacher();
-    for(const auto& class_frame: class_frames){
-        auto cls = class_frame->getclass();
-        auto tasks = teacher.infoTaskInClass(cls.id);
-        for(const auto& tsk: tasks){
-          task_frame* tf = new task_frame(ui->task_contents);
-          tf->settask(cls, tsk);
-          task_frames.push_back(tf);
-          task_layout->addWidget(tf);
-          QObject::connect(tf, &task_frame::set_display_content, [&](db::TaskInfo tsk){
-            task_id = tsk.taskId;
-            auto man = resource_manager::getInstance();
-            auto teacher = man->get_teacher();
-            // 单词页清空
-            clearlayout(task_view_layout);
-            task_view_frames.clear();
-            // 学生页清空
-            stu_model->clear();
-            // 将tsk的单词添加到单词页面
-            const auto &words = teacher.infoWordsInTask(tsk.taskId);
-            for(const auto &word : words){
-              word_frame* wf = new word_frame();
-              wf->set_btn_disabled();
-              wf->set_content(word);
-              task_view_frames.push_back(wf);
-              task_view_layout->addWidget(wf);
-            }
-            // 将tsk的学生按完成情况排序
-            const auto &students = teacher.infoClassMembers(current_cls.id);
+  if(!task_frames.empty()){
+      qDebug() << "在set前需要clear task";
+      abort();
+  }
+  auto man = resource_manager::getInstance();
+  auto teacher = man->get_teacher();
+  auto tasks = teacher.infoTaskInClass(current_cls.id);
+  for(const auto& tsk: tasks){
+    task_frame* tf = new task_frame(ui->task_contents);
+    tf->settask(current_cls, tsk);
+    task_frames.push_back(tf);
+    task_layout->addWidget(tf);
+    QObject::connect(tf, &task_frame::set_display_content, [&](db::TaskInfo tsk){
+      task_id = tsk.taskId;
+      auto man = resource_manager::getInstance();
+      auto teacher = man->get_teacher();
+      // 单词页清空
+      clearlayout(task_view_layout);
+      task_view_frames.clear();
+      // 学生页清空
+      stu_model->clear();
+      // 将tsk的单词添加到单词页面
+      const auto &words = teacher.infoWordsInTask(tsk.taskId);
+      for(const auto &word : words){
+        word_frame* wf = new word_frame();
+        wf->set_btn_disabled();
+        wf->set_content(word);
+        task_view_frames.push_back(wf);
+        task_view_layout->addWidget(wf);
+      }
+      // 将tsk的学生按完成情况排序
+      const auto &students = teacher.infoClassMembers(current_cls.id);
 
-            stu_model->setRowCount(students.size());
-            stu_model->setColumnCount(3);
-            stu_model->setHorizontalHeaderItem(0, new QStandardItem("学生学号"));
-            stu_model->setHorizontalHeaderItem(1, new QStandardItem("姓名"));
-            stu_model->setHorizontalHeaderItem(2, new QStandardItem("完成率"));
+      stu_model->setRowCount(students.size());
+      stu_model->setColumnCount(3);
+      stu_model->setHorizontalHeaderItem(0, new QStandardItem("学生学号"));
+      stu_model->setHorizontalHeaderItem(1, new QStandardItem("姓名"));
+      stu_model->setHorizontalHeaderItem(2, new QStandardItem("完成率"));
 
-            for(int i = 0; i < students.size();i++){
-              QStandardItem *item = new QStandardItem(QString::number(students[i].studentId));
-              stu_model->setItem(i, 0, item);
-              QStandardItem *item_1 = new QStandardItem(students[i].studentName);
-              stu_model->setItem(i, 1, item_1);
-              QStandardItem *item_2 = new QStandardItem(QString::number(teacher.infoTaskCondition(students[i].studentId,tsk.taskId)));
-              stu_model->setItem(i, 2, item_2);
-            }
-            ui->stackedWidget->setCurrentIndex(6);
-          });
-        }
-    }
+      for(int i = 0; i < students.size();i++){
+        QStandardItem *item = new QStandardItem(QString::number(students[i].studentId));
+        stu_model->setItem(i, 0, item);
+        QStandardItem *item_1 = new QStandardItem(students[i].studentName);
+        stu_model->setItem(i, 1, item_1);
+        QStandardItem *item_2 = new QStandardItem(QString::number(teacher.infoTaskCondition(students[i].studentId,tsk.taskId)));
+        stu_model->setItem(i, 2, item_2);
+      }
+      ui->stackedWidget->setCurrentIndex(6);
+    });
+  }
 }
