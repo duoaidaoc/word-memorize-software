@@ -390,7 +390,7 @@ QScrollArea{
     border-radius: 20px;
 }
 
-#student_display,#word_display{
+#student_display, #wordlib_display{
     background-color: transparent;
 }
 

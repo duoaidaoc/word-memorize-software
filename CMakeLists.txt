@@ -79,12 +79,16 @@ set(PROJECT_SOURCES
         tip.h
         tip.cpp
         tip.ui
+        game.h
+        game.cpp
+        game.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 qt_add_executable(word-memorize-software
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        game.h game.cpp game.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET word-memorize-software APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

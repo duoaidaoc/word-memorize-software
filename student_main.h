@@ -10,6 +10,7 @@
 #include "question.h"
 #include "word.h"
 #include "tip.h"
+#include "game.h"
 
 namespace Ui {
 class student_main;
@@ -45,6 +46,8 @@ private:
     tip *Tip, *signaltip_1,*signaltip_2;
 
     CClass cls_;
+
+    game* game_widget;
 
     void setup();
     void setaction();

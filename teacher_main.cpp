@@ -349,7 +349,7 @@ void teacher_main::clearlayout(QBoxLayout *layout)
     while (QLayoutItem *item = layout->takeAt(0)) {
         if (QWidget *widget = item->widget()) {
         // 从布局中移除部件
-        class_layout->removeWidget(widget);
+        layout->removeWidget(widget);
         // 删除部件并释放内存
         delete widget;
         }

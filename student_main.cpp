@@ -92,6 +92,8 @@ void student_main::setup()
       ui->stackedWidget_2->setCurrentIndex(3);
     });
 
+    game_widget = new game();
+
 }
 
 void student_main::setaction()
@@ -204,6 +206,9 @@ void student_main::setaction()
       qDebug()<< "学习了sys";
       student.learnSysWordRecord(word_id);
     });
+    QObject::connect(ui->battle_btn,&QPushButton::clicked,[&](){
+      game_widget->show();
+    });
 }
 
 
@@ -215,7 +220,7 @@ void student_main::clearlayout(QBoxLayout *lo)
     while (QLayoutItem *item = lo->takeAt(0)) {
         if (QWidget *widget = item->widget()) {
           // 从布局中移除部件
-          class_layout->removeWidget(widget);
+          lo->removeWidget(widget);
           // 删除部件并释放内存
           delete widget;
         }
