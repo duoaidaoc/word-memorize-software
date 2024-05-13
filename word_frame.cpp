@@ -29,7 +29,9 @@ void word_frame::set_content(const db::WordInfo &wd, int seq_)
     });
 
     auto man = resource_manager::getInstance();
-    auto path = man->audio_select(content.english);
+//    auto path = man->audio_select(content.english);
+    auto sys = man->get_system();
+    auto path = sys.runMp3(content.english);
     player->setSource(path);
     player->setAudioOutput(audioOutput);
 

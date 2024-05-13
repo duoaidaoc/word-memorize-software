@@ -73,6 +73,14 @@ void resource_manager::init_database()
 
 void resource_manager::init_system()
 {
+  std::string path = "audios/";
+
+  // 检查文件夹是否存在
+  if (!std::filesystem::exists(path)) {
+    // 文件夹不存在，创建它
+    std::filesystem::create_directory(path);
+  }
+
     system = new db::System(*database);
 
     const auto &list = system->returnWordBankInfo();

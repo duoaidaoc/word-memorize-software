@@ -65,9 +65,12 @@ void word_display::set_content(const db::WordInfo &word, int seq_)
 
     ui->page_label->setText(QString::number(seq_ + 1));
 
-    auto man = resource_manager::getInstance();
-    auto path = man->audio_select(word.english);
+    // auto path = man->audio_select(word.english);
     // TODO(): player未打开文件必须检查
+
+    auto man = resource_manager::getInstance();
+    auto sys = man->get_system();
+    auto path = sys.runMp3(word.english);
     player->setSource(path);
     player->setAudioOutput(audioOutput);
 }

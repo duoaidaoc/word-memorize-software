@@ -375,7 +375,7 @@ auto db::System::runMp3(const QString &name) -> QString
 
   QByteArray fileData = query.value(0).toByteArray();
 
-  QString filename = name + ".mp3";
+  QString filename = "audios/" + name + ".mp3";
   QFile file(filename);
   if (!file.open(QIODevice::WriteOnly)) {
     qDebug() << "Failed to open file for writing";
