@@ -47,6 +47,15 @@ struct RankingInfo {
   qint64 score;
   QString nickname;
 };
+
+struct SettingsInfo {
+  qint64 id;
+  qint64 age;
+  QString phone;
+  QString message;
+  QString filepath;
+  QString school;
+};
 } // end namespace db
 
 #endif  // UTIL_H

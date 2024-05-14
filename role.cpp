@@ -686,7 +686,7 @@ auto db::Teacher::importTaskWordBank(const QList<QString> &englishList) -> int {
   }
 }
 
-auto db::Teacher::storeImageForStudent(const QString &filePath, qint64 studentId) -> void
+auto db::Teacher::storeSettingsForTeacher(const QString &filePath, const qint64 &age, const QString &phone, const QString &message, const qint64 &teacherId, const QString &school) -> void
 {
   QFile file(filePath);
   if (!file.open(QIODevice::ReadOnly)) {
@@ -699,48 +699,59 @@ auto db::Teacher::storeImageForStudent(const QString &filePath, qint64 studentId
 
   QSqlQuery query(returnDatabase());
   query.prepare(R"(
-        INSERT INTO pictureTeacher (id, pic)
-        VALUES (:id, :pic)
-        ON DUPLICATE KEY UPDATE pic = VALUES(pic)
+        INSERT INTO teacherSettings (id, pic, phone, age, message, school)
+        VALUES (:id, :pic, :phone, :age, :message, :school)
+        ON DUPLICATE KEY UPDATE pic = VALUES(pic), phone = VALUES(phone), age = VALUES(age), message = VALUES(message), school = VALUES(school)
     )");
-  query.bindValue(":id", studentId);
+  query.bindValue(":id", teacherId);
   query.bindValue(":pic", fileData);
+  query.bindValue(":phone", phone);
+  query.bindValue(":age", age);
+  query.bindValue(":message", message);
+  query.bindValue(":school", school);
 
   if (!query.exec()) {
-    qDebug() << "Failed to insert image" << filePath << "into database:" << query.lastError().text();
+    qDebug() << "Failed to insert/update teacher settings" << filePath << "into database:" << query.lastError().text();
   }
 }
 
-auto db::Teacher::retrieveImageForStudent(qint64 teacherId) -> QString
+auto db::Teacher::retrieveSettingsForTeacher(qint64 teacherId) -> SettingsInfo
 {
   QSqlQuery query(returnDatabase());
 
   query.prepare(R"(
-        SELECT pic FROM pictureTeacher WHERE id = :id
+        SELECT pic, phone, age, message, school FROM teacherSettings WHERE id = :id
     )");
   query.bindValue(":id", teacherId);
 
+  SettingsInfo settingsInfo;
+
   if (!query.exec() || !query.first()) {
-    qDebug() << "Failed to retrieve image for student ID" << teacherId << "from database:" << query.lastError().text();
-    return QString();
+    qDebug() << "Failed to retrieve settings for teacher ID" << teacherId << "from database:" << query.lastError().text();
+    return settingsInfo; // return an empty SettingsInfo
   }
 
-  QByteArray fileData = query.value(0).toByteArray();
+  QByteArray fileData = query.value("pic").toByteArray();
   QPixmap pixmap;
   if (!pixmap.loadFromData(fileData)) {
     qDebug() << "Failed to load image from database data";
-    return QString();
+    return settingsInfo; // return an empty SettingsInfo
   }
 
-  QString filename = GetName() + "png";
+  QString filename = "teacher_" + QString::number(teacherId) + ".png";
   if (!pixmap.save(filename, "PNG")) {
     qDebug() << "Failed to save image to file" << filename;
-    return QString();
+    return settingsInfo; // return an empty SettingsInfo
   }
 
-  return filename;
+  settingsInfo.id = teacherId;
+  settingsInfo.filepath = filename;
+  settingsInfo.age = query.value("age").toLongLong();
+  settingsInfo.phone = query.value("phone").toString();
+  settingsInfo.message = query.value("message").toString();
+  settingsInfo.school = query.value("school").toString();
+  return settingsInfo;
 }
-
 
 //====================================== Student part =====================================//
 //--------------------------- bind parameters --------------------------//
@@ -1116,7 +1127,7 @@ auto db::Teacher::checkAlreadyInWords(const QString &word) -> int {
   }
 }
 
-auto db::Student::storeImageForStudent(const QString &filePath, qint64 studentId) -> void
+auto db::Student::storeSettingsForStudent(const QString &filePath, const qint64 &age, const QString &phone, const QString &message, const qint64 &studentId, const QString &school) -> void
 {
   QFile file(filePath);
   if (!file.open(QIODevice::ReadOnly)) {
@@ -1129,47 +1140,61 @@ auto db::Student::storeImageForStudent(const QString &filePath, qint64 studentId
 
   QSqlQuery query(returnDatabase());
   query.prepare(R"(
-        INSERT INTO pictureStudent (id, pic)
-        VALUES (:id, :pic)
-        ON DUPLICATE KEY UPDATE pic = VALUES(pic)
+        INSERT INTO studentSettings (id, pic, phone, age, message, school)
+        VALUES (:id, :pic, :phone, :age, :message, :school)
+        ON DUPLICATE KEY UPDATE pic = VALUES(pic), phone = VALUES(phone), age = VALUES(age), message = VALUES(message), school = VALUES(school)
     )");
   query.bindValue(":id", studentId);
   query.bindValue(":pic", fileData);
+  query.bindValue(":phone", phone);
+  query.bindValue(":age", age);
+  query.bindValue(":message", message);
+  query.bindValue(":school", school);
 
   if (!query.exec()) {
-    qDebug() << "Failed to insert image" << filePath << "into database:" << query.lastError().text();
+    qDebug() << "Failed to insert/update student settings" << filePath << "into database:" << query.lastError().text();
   }
 }
 
-auto db::Student::retrieveImageForStudent(qint64 student_id) -> QString
+auto db::Student::retrieveSettingsForStudent(qint64 studentId) -> SettingsInfo
 {
   QSqlQuery query(returnDatabase());
 
   query.prepare(R"(
-        SELECT pic FROM pictureTeacher WHERE id = :id
+        SELECT pic, phone, age, message, school FROM studentSettings WHERE id = :id
     )");
-  query.bindValue(":id", student_id);
+  query.bindValue(":id", studentId);
+
+  SettingsInfo settingsInfo;
 
   if (!query.exec() || !query.first()) {
-    qDebug() << "Failed to retrieve image for student ID" << student_id << "from database:" << query.lastError().text();
-    return QString();
+    qDebug() << "Failed to retrieve settings for student ID" << studentId << "from database:" << query.lastError().text();
+    return settingsInfo; // return an empty SettingsInfo
   }
 
-  QByteArray fileData = query.value(0).toByteArray();
+  QByteArray fileData = query.value("pic").toByteArray();
   QPixmap pixmap;
   if (!pixmap.loadFromData(fileData)) {
     qDebug() << "Failed to load image from database data";
-    return QString();
+    return settingsInfo; // return an empty SettingsInfo
   }
 
-  QString filename = GetName() + "png";
+  QString filename = "student_" + QString::number(studentId) + ".png";
   if (!pixmap.save(filename, "PNG")) {
     qDebug() << "Failed to save image to file" << filename;
-    return QString();
+    return settingsInfo; // return an empty SettingsInfo
   }
 
-  return filename;
+  settingsInfo.id = studentId;
+  settingsInfo.filepath = filename;
+  settingsInfo.age = query.value("age").toLongLong();
+  settingsInfo.phone = query.value("phone").toString();
+  settingsInfo.message = query.value("message").toString();
+  settingsInfo.school = query.value("school").toString();
+
+  return settingsInfo;
 }
+
 
 
 

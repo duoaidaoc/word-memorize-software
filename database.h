@@ -174,19 +174,27 @@ private:
     )
 )");
 
-  const QLatin1String picStoreForTeacher = QLatin1String(R"(
-    CREATE TABLE IF NOT EXISTS pictureTeacher (
-        id      BIGINT
+  const QLatin1String settingsForTeacher = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS teacherSettings (
+        id      BIGINT,
         pic     MEDIUMBLOB,
+        phone   VARCHAR(255),
+        age     BIGINT,
+        message VARCHAR(255),
+        school  VARCHAR(255),
         PRIMARY KEY (id),
         FOREIGN KEY (id) REFERENCES teachers(id)
     )
 )");
 
-  const QLatin1String picStoreForStudent = QLatin1String(R"(
-    CREATE TABLE IF NOT EXISTS pictureStudent (
-        id      BIGINT
+  const QLatin1String settingsForStudent = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS studentSettings (
+        id      BIGINT,
         pic     MEDIUMBLOB,
+        phone   VARCHAR(255),
+        age     BIGINT,
+        message VARCHAR(255),
+        school  VARCHAR(255),
         PRIMARY KEY (id),
         FOREIGN KEY (id) REFERENCES students(id)
     )
@@ -197,7 +205,8 @@ private:
         id         BIGINT,
         score      BIGINT,
         nickname   VARCHAR(255),
-        PRIMARY KEY (id)
+        PRIMARY KEY (id),
+        FOREIGN KEY (id) REFERENCES students(id)
     )
 )");
 

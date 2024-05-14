@@ -171,8 +171,8 @@ public:
 
   // 查看系统的task_id到哪个值了。
   int getTaskId();
-  void storeImageForStudent(const QString &filePath, qint64 studentId);
-  QString retrieveImageForStudent(qint64 teacherId);
+  void storeSettingsForTeacher(const QString &filePath, const qint64 &age, const QString &phone, const QString &message, const qint64 &teacherId, const QString &school);
+  SettingsInfo retrieveSettingsForTeacher(qint64 teacherId);
 };
 
 class Student : public Role {
@@ -268,9 +268,8 @@ public:
   bool isClassExit(const qint64 &class_id);
   QVariant recordRanking(const qint64 &score, const QString &nickname);
   RankingInfo returnRanking(const qint64 &student_id);
-
-  void storeImageForStudent(const QString &filePath, qint64 studentId);
-  QString retrieveImageForStudent(qint64 student_id);
+  SettingsInfo retrieveSettingsForStudent(qint64 teacherId);
+  void storeSettingsForStudent(const QString &filePath, const qint64 &age, const QString &phone, const QString &message, const qint64 &teacherId, const QString &school);
 };
 } // end db
 

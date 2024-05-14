@@ -131,12 +131,12 @@ bool db::Database::initDataBase() {
       return false;
     }
 
-    if (!tables.contains("pictureStudent", Qt::CaseInsensitive) && !query.exec(picStoreForStudent)) {
+    if (!tables.contains("studentSettings", Qt::CaseInsensitive) && !query.exec(settingsForStudent)) {
       qWarning() << "Failed to create pictureStudent Table:" << query.lastError().text();
       return false;
     }
 
-    if (!tables.contains("pictureTeacher", Qt::CaseInsensitive) && !query.exec(picStoreForTeacher)) {
+    if (!tables.contains("teacherSettings", Qt::CaseInsensitive) && !query.exec(settingsForTeacher)) {
       qWarning() << "Failed to create pictureTeacher Table:" << query.lastError().text();
       return false;
     }
