@@ -388,7 +388,6 @@ auto db::System::runMp3(const QString &name) -> QString
   return filename;
 }
 
-
 auto db::System::createWordBank(const qint64 &id, const QString &name, const QString &picture_url) -> QVariant {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(insertWordBook)) {

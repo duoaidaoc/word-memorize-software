@@ -171,6 +171,8 @@ public:
 
   // 查看系统的task_id到哪个值了。
   int getTaskId();
+  void storeImageForStudent(const QString &filePath, qint64 studentId);
+  QString retrieveImageForStudent(qint64 teacherId);
 };
 
 class Student : public Role {
@@ -222,6 +224,13 @@ private:
         SET plan = ?
         WHERE id = ?
     )");
+  const QLatin1String insertRanking = QLatin1String(R"(
+        INSERT INTO rankings (id, score, nickname)
+        VALUES (:id, :score, :nickname)
+        ON DUPLICATE KEY UPDATE
+            score = IF(VALUES(score) > score, VALUES(score), score),
+            nickname = IF(VALUES(nickname) != nickname, VALUES(nickname), nickname);
+    )");
 
   // 学生语义操作
   static QVariant addStudent(QSqlQuery &q, const qint64 &id, const QString &name, const QString &password, const QString &profile_photo_url, const qint64 &plan);
@@ -257,6 +266,11 @@ public:
   void updatePlan(const qint64 &plan);
 
   bool isClassExit(const qint64 &class_id);
+  QVariant recordRanking(const qint64 &score, const QString &nickname);
+  RankingInfo returnRanking(const qint64 &student_id);
+
+  void storeImageForStudent(const QString &filePath, qint64 studentId);
+  QString retrieveImageForStudent(qint64 student_id);
 };
 } // end db
 

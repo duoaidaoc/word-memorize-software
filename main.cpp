@@ -381,9 +381,22 @@ int main(int argc, char *argv[])
   // qDebug() << system.returnStudentInfo(student2.GetId());
 
   // 生成音频
-  auto system = man->get_system();
-  //system.importAudioDB();
-  system.runMp3("germ");
+  // auto system = man->get_system();
+  // //system.importAudioDB();
+  // //system.runMp3("germ");
+
+  auto db = man->get_database();
+  db::Student student2(db);
+  student2.SetId(89);
+  student2.SetName("MIKE");
+  student2.SetPassword("eieiiedjjcncn");
+  student2.SetProfilePhotoUrl("llwlwl");
+  student2.registerRole();
+
+  student2.recordRanking(40, "hello");
+
+  db::RankingInfo rankInfo = student2.returnRanking(student2.GetId());
+  qDebug() << rankInfo.id << " " << rankInfo.nickname << " " << rankInfo.score;
 ////========================================== 前端测试 ==========================================//
 
 

@@ -41,6 +41,12 @@ struct WordBankInfo {
   QString name;
   QString picture_url;
 };
+
+struct RankingInfo {
+  qint64 id;
+  qint64 score;
+  QString nickname;
+};
 } // end namespace db
 
 #endif  // UTIL_H

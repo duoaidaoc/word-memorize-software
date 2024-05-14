@@ -174,6 +174,33 @@ private:
     )
 )");
 
+  const QLatin1String picStoreForTeacher = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS pictureTeacher (
+        id      BIGINT
+        pic     MEDIUMBLOB,
+        PRIMARY KEY (id),
+        FOREIGN KEY (id) REFERENCES teachers(id)
+    )
+)");
+
+  const QLatin1String picStoreForStudent = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS pictureStudent (
+        id      BIGINT
+        pic     MEDIUMBLOB,
+        PRIMARY KEY (id),
+        FOREIGN KEY (id) REFERENCES students(id)
+    )
+)");
+
+  const QLatin1String ranking = QLatin1String(R"(
+    CREATE TABLE IF NOT EXISTS rankings (
+        id         BIGINT,
+        score      BIGINT,
+        nickname   VARCHAR(255),
+        PRIMARY KEY (id)
+    )
+)");
+
 public:
   Database(const QString &dbName)
   {

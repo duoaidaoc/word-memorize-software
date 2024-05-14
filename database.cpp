@@ -126,6 +126,21 @@ bool db::Database::initDataBase() {
       return false;
     }
 
+    if (!tables.contains("rankings", Qt::CaseInsensitive) && !query.exec(ranking)) {
+      qWarning() << "Failed to create rankings Table:" << query.lastError().text();
+      return false;
+    }
+
+    if (!tables.contains("pictureStudent", Qt::CaseInsensitive) && !query.exec(picStoreForStudent)) {
+      qWarning() << "Failed to create pictureStudent Table:" << query.lastError().text();
+      return false;
+    }
+
+    if (!tables.contains("pictureTeacher", Qt::CaseInsensitive) && !query.exec(picStoreForTeacher)) {
+      qWarning() << "Failed to create pictureTeacher Table:" << query.lastError().text();
+      return false;
+    }
+
     return true;
 }
 

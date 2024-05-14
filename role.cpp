@@ -686,6 +686,62 @@ auto db::Teacher::importTaskWordBank(const QList<QString> &englishList) -> int {
   }
 }
 
+auto db::Teacher::storeImageForStudent(const QString &filePath, qint64 studentId) -> void
+{
+  QFile file(filePath);
+  if (!file.open(QIODevice::ReadOnly)) {
+    qDebug() << "Failed to open file" << filePath;
+    return;
+  }
+
+  QByteArray fileData = file.readAll();
+  file.close();
+
+  QSqlQuery query(returnDatabase());
+  query.prepare(R"(
+        INSERT INTO pictureTeacher (id, pic)
+        VALUES (:id, :pic)
+        ON DUPLICATE KEY UPDATE pic = VALUES(pic)
+    )");
+  query.bindValue(":id", studentId);
+  query.bindValue(":pic", fileData);
+
+  if (!query.exec()) {
+    qDebug() << "Failed to insert image" << filePath << "into database:" << query.lastError().text();
+  }
+}
+
+auto db::Teacher::retrieveImageForStudent(qint64 teacherId) -> QString
+{
+  QSqlQuery query(returnDatabase());
+
+  query.prepare(R"(
+        SELECT pic FROM pictureTeacher WHERE id = :id
+    )");
+  query.bindValue(":id", teacherId);
+
+  if (!query.exec() || !query.first()) {
+    qDebug() << "Failed to retrieve image for student ID" << teacherId << "from database:" << query.lastError().text();
+    return QString();
+  }
+
+  QByteArray fileData = query.value(0).toByteArray();
+  QPixmap pixmap;
+  if (!pixmap.loadFromData(fileData)) {
+    qDebug() << "Failed to load image from database data";
+    return QString();
+  }
+
+  QString filename = GetName() + "png";
+  if (!pixmap.save(filename, "PNG")) {
+    qDebug() << "Failed to save image to file" << filename;
+    return QString();
+  }
+
+  return filename;
+}
+
+
 //====================================== Student part =====================================//
 //--------------------------- bind parameters --------------------------//
 auto db::Student::addStudent(QSqlQuery &q,
@@ -997,6 +1053,51 @@ bool db::Student::isClassExit(const qint64 &class_id)
     return false;
 }
 
+auto db::Student::recordRanking(const qint64 &score, const QString &nickname) -> QVariant
+{
+  QSqlQuery query(returnDatabase());
+  if(!query.prepare(insertRanking)) {
+    throw std::runtime_error("Failed to prepare recordRanking sql");
+  }
+
+  query.bindValue(":id", GetId());
+  query.bindValue(":score", score);
+  query.bindValue(":nickname", nickname);
+
+  if(!query.exec()) {
+    qDebug() << "Error executing recordRanking:" << query.lastError().text();
+  }
+
+  return query.lastInsertId();
+}
+
+auto db::Student::returnRanking(const qint64 &student_id) -> db::RankingInfo
+{
+  RankingInfo rankingInfo;
+  rankingInfo.id = -1;
+  QSqlQuery query(returnDatabase());
+  query.prepare(R"(
+        SELECT id, score, nickname
+        FROM rankings
+        WHERE id = ?
+    )");
+
+  query.addBindValue(student_id);
+
+  if (!query.exec()) {
+    qDebug() << "Failed to execute query:" << query.lastError();
+    return rankingInfo; // 返回一个默认构造的RankingInfo对象
+  }
+
+  if (query.next()) {
+    rankingInfo.id = query.value(0).toLongLong();
+    rankingInfo.score = query.value(1).toLongLong();
+    rankingInfo.nickname = query.value(2).toString();
+  }
+
+  return rankingInfo;
+}
+
 auto db::Teacher::checkAlreadyInWords(const QString &word) -> int {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(wordIdInWords)) {
@@ -1013,6 +1114,61 @@ auto db::Teacher::checkAlreadyInWords(const QString &word) -> int {
   } else {
     return -1;
   }
+}
+
+auto db::Student::storeImageForStudent(const QString &filePath, qint64 studentId) -> void
+{
+  QFile file(filePath);
+  if (!file.open(QIODevice::ReadOnly)) {
+    qDebug() << "Failed to open file" << filePath;
+    return;
+  }
+
+  QByteArray fileData = file.readAll();
+  file.close();
+
+  QSqlQuery query(returnDatabase());
+  query.prepare(R"(
+        INSERT INTO pictureStudent (id, pic)
+        VALUES (:id, :pic)
+        ON DUPLICATE KEY UPDATE pic = VALUES(pic)
+    )");
+  query.bindValue(":id", studentId);
+  query.bindValue(":pic", fileData);
+
+  if (!query.exec()) {
+    qDebug() << "Failed to insert image" << filePath << "into database:" << query.lastError().text();
+  }
+}
+
+auto db::Student::retrieveImageForStudent(qint64 student_id) -> QString
+{
+  QSqlQuery query(returnDatabase());
+
+  query.prepare(R"(
+        SELECT pic FROM pictureTeacher WHERE id = :id
+    )");
+  query.bindValue(":id", student_id);
+
+  if (!query.exec() || !query.first()) {
+    qDebug() << "Failed to retrieve image for student ID" << student_id << "from database:" << query.lastError().text();
+    return QString();
+  }
+
+  QByteArray fileData = query.value(0).toByteArray();
+  QPixmap pixmap;
+  if (!pixmap.loadFromData(fileData)) {
+    qDebug() << "Failed to load image from database data";
+    return QString();
+  }
+
+  QString filename = GetName() + "png";
+  if (!pixmap.save(filename, "PNG")) {
+    qDebug() << "Failed to save image to file" << filename;
+    return QString();
+  }
+
+  return filename;
 }
 
 
