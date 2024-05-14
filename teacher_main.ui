@@ -43,7 +43,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="label_user_icon">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -54,6 +54,9 @@
      </property>
      <property name="text">
       <string>TextLabel</string>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -217,7 +220,7 @@
         <item>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_4">
+           <widget class="QLabel" name="detail_nick_label">
             <property name="text">
              <string>姓名：小明他王叔叔</string>
             </property>
@@ -234,7 +237,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_5">
+           <widget class="QLabel" name="detail_age_label">
             <property name="text">
              <string>年龄：18</string>
             </property>
@@ -256,26 +259,12 @@
             </property>
            </spacer>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>性别：沃尔玛购物袋</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>电话号码：110</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1" rowspan="3">
-           <widget class="QLabel" name="label_11">
+           <widget class="QLabel" name="detail_say_label">
             <property name="text">
              <string>备注：你无敌了孩子</string>
             </property>
@@ -284,15 +273,15 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_9">
+          <item row="0" column="0">
+           <widget class="QLabel" name="detail_phone_label">
             <property name="text">
-             <string>对战积分：1000</string>
+             <string>电话号码：110</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_10">
+          <item row="1" column="0">
+           <widget class="QLabel" name="detail_school_label">
             <property name="text">
              <string>学校：北京邮电大学包子铺</string>
             </property>

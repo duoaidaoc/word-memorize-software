@@ -5,6 +5,7 @@
 #include "newclass_frame.h"
 #include "qboxlayout.h"
 #include "qstandarditemModel.h"
+#include "settings.h"
 #include "task_frame.h"
 #include "word_frame.h"
 #include <QWidget>
@@ -43,6 +44,10 @@ private:
   int task_id;
 
   tip *Tip;
+
+  QImage *profile_pic;
+
+  Settings* settings;
 
   QStandardItemModel *model,*stu_model;
   void ui_setup();

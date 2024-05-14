@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "class_frame.h"
 #include "classcue_frame.h"
+#include "settings.h"
 #include "task_frame.h"
 #include "word_frame.h"
 #include "word_display.h"
@@ -48,6 +49,10 @@ private:
     CClass cls_;
 
     game* game_widget;
+
+    Settings *settings;
+
+    QImage* profile_pic;
 
     void setup();
     void setaction();
