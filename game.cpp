@@ -50,8 +50,8 @@ void game::setup_ui()
   ImageProcesser::GaussiamBlur(20 ,20 ,*bg);
 
   timer = new QTimer(this);
-//  TODO(): 设置计时器初始时间
-   // 初始时间设置为100
+  //  TODO(): 设置计时器初始时间
+  // 初始时间设置为100
 
 
   layout = new QVBoxLayout(ui->game_rank_scrollArea_contents);
@@ -92,9 +92,19 @@ void game::setup_connection()
   //游戏正常结束
   QObject::connect(ui->game_rank_btn,&QPushButton::clicked,[&](){
     clearlayout(layout);
+    auto man = resource_manager::getInstance();
+    auto system = man->get_system();
+    rank.clear();
+    QList<db::RankingInfo> rankInfoList = system.returnRanking();
+    for(const auto &rankInfo : rankInfoList) {
+      rank.append({rankInfo.score, QString("%1. ") + QString("%2 得分 %3 分").arg(rankInfo.nickname)});
+    }
+
     int pos = qMin(5, rank.size()) - 1; // 4
+
     for(int i = pos; i >=0 ; i--){
       QLabel* label = new QLabel();
+
       label->setText(rank[i].second.arg(pos - i + 1).arg(rank[i].first));
       layout->addWidget(label);
     }
@@ -115,6 +125,9 @@ void game::setup_connection()
     hide();
   });
   QObject::connect(timer, &QTimer::timeout, this, [=]() mutable {
+    auto man = resource_manager::getInstance();
+    auto student = man->get_student();
+
     // mutable关键字使Lambda表达式可变
     nowTime--; // 每次定时器超时，时间减少一秒
     ui->game_timer_label->setText(QString::number(nowTime) + "s");
@@ -124,7 +137,10 @@ void game::setup_connection()
       //游戏结束
       Tip->set_content("游戏结束",QString("本局游戏得分: %1 分").arg(now_score));
       Tip->show();
-      rank.append({now_score,QString("%1. ") + QString("%2 得分 %3 分").arg(name)});
+
+      // 添加新的score到数据库。
+      student.recordRanking(now_score, name);
+
       std::sort(rank.begin(),rank.end());
       ui->stackedWidget->setCurrentIndex(0);
     }
@@ -172,5 +188,3 @@ void game::clearlayout(QBoxLayout *lo)
     delete item;
   }
 }
-
-

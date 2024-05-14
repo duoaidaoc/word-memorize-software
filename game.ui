@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="game_start_page">
     <widget class="AcrylicFrame" name="frame">
@@ -353,7 +353,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>本地排行</string>
+       <string>排行榜</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>

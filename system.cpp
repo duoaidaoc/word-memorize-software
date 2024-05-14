@@ -537,7 +537,7 @@ auto db::System::returnRanking() -> QList<db::RankingInfo>
   query.prepare(R"(
         SELECT id, score, nickname
         FROM rankings
-        ORDER BY score DESC
+        ORDER BY score ASC
     )");
 
   if (!query.exec()) {

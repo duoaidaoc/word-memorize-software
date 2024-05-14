@@ -191,8 +191,6 @@ void teacher_main::connection_setup()
       model->setItem(row, 0, item);
     }
 
-    // 6. 创建 QTableView，并设置模型
-
   });
   // 清空导入内容
   QObject::connect(ui->btn_discard,&QPushButton::clicked,[&](){
