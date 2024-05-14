@@ -1,4 +1,5 @@
 #include "QString"
+#include "qimage.h"
 #ifndef WORD_H
 #define WORD_H
 
@@ -41,5 +42,14 @@ typedef struct ques{
   int right;        // 选择题的正确选项(1-a,2-b,3-c)
   QString eng,chn;  // 填空题的中英文
 }ques;
+
+typedef struct detailed_info{
+  QString nickname;
+  QString age;
+  QString school;
+  QString phone;
+  QString say;
+  QImage* img;
+}detailed_info;
 
 #endif // WORD_H

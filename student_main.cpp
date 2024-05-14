@@ -93,6 +93,8 @@ void student_main::setup()
     });
 
     game_widget = new game();
+    settings = new Settings();
+    profile_pic = new QImage();
 
 }
 
@@ -208,6 +210,30 @@ void student_main::setaction()
     });
     QObject::connect(ui->battle_btn,&QPushButton::clicked,[&](){
       game_widget->show();
+    });
+    // 打开设置界面
+    QObject::connect(ui->setting_btn,&QPushButton::clicked,[&](){
+      detailed_info info = {
+          ui->detail_nick_label->text().mid(QString("昵称：").length()),
+          ui->detail_age_label->text().mid(QString("年龄：").length()),
+          ui->detail_school_label->text().mid(QString("学校：").length()),
+          ui->detail_phone_label->text().mid(QString("电话号码：").length()),
+          ui->detail_say_label->text().mid(QString("备注：").length()),
+          profile_pic
+      };
+      settings->get_info(info);
+      settings->show();
+    });
+    // 确认了更改
+    QObject::connect(settings,&Settings::set_outer_info,[&](detailed_info info){
+      ui->detail_nick_label->setText(QString("昵称：") + info.nickname);
+      ui->detail_age_label->setText(QString("年龄：") + info.age);
+      ui->detail_school_label->setText(QString("学校：") + info.school);
+      ui->detail_phone_label->setText(QString("电话号码：") + info.phone);
+      ui->detail_say_label->setText(QString("备注：") + info.say);
+      *profile_pic = *info.img;
+      ui->label_user_icon->setPixmap(QPixmap::fromImage(*profile_pic));
+      // TODO(): 修改数据库
     });
 }
 

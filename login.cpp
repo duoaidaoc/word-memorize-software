@@ -114,6 +114,7 @@ void login::actionSet()
       else if(ui->checkBox->checkState() == Qt::Unchecked && ui->checkBox_2->checkState() == Qt::Unchecked){
         Tip->set_content("warning","老师和学生必须勾选一项");
         Tip->show();
+        return;
       }
       auto man = resource_manager::getInstance();
       auto &sys = man->get_system();
@@ -131,11 +132,9 @@ void login::actionSet()
           this->hide();
           emit turn_to(true);
         }
-
       }
       else{
         //学生
-
         correct_pwd = sys.returnStudentPassword(id).toString();
         if(correct_pwd != ui->pwd_edit->text()){
           Tip->set_content("warning","密码错误");
