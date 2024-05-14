@@ -1082,33 +1082,6 @@ auto db::Student::recordRanking(const qint64 &score, const QString &nickname) ->
   return query.lastInsertId();
 }
 
-auto db::Student::returnRanking(const qint64 &student_id) -> db::RankingInfo
-{
-  RankingInfo rankingInfo;
-  rankingInfo.id = -1;
-  QSqlQuery query(returnDatabase());
-  query.prepare(R"(
-        SELECT id, score, nickname
-        FROM rankings
-        WHERE id = ?
-    )");
-
-  query.addBindValue(student_id);
-
-  if (!query.exec()) {
-    qDebug() << "Failed to execute query:" << query.lastError();
-    return rankingInfo; // 返回一个默认构造的RankingInfo对象
-  }
-
-  if (query.next()) {
-    rankingInfo.id = query.value(0).toLongLong();
-    rankingInfo.score = query.value(1).toLongLong();
-    rankingInfo.nickname = query.value(2).toString();
-  }
-
-  return rankingInfo;
-}
-
 auto db::Teacher::checkAlreadyInWords(const QString &word) -> int {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(wordIdInWords)) {

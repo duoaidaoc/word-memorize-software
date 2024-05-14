@@ -377,7 +377,7 @@ int main(int argc, char *argv[])
   // student2.SetProfilePhotoUrl("llwlwl");
   // student2.registerRole();
 
-  // auto system = man->get_system();
+   auto system = man->get_system();
   // qDebug() << system.returnStudentInfo(student2.GetId());
 
   // 生成音频
@@ -395,8 +395,10 @@ int main(int argc, char *argv[])
 
   student2.recordRanking(40, "hello");
 
-  db::RankingInfo rankInfo = student2.returnRanking(student2.GetId());
-  qDebug() << rankInfo.id << " " << rankInfo.nickname << " " << rankInfo.score;
+  //db::RankingInfo rankInfo = student2.returnRanking(student2.GetId());
+  QList<db::RankingInfo> infoList = system.returnRanking();
+  for (const auto rankInfo : infoList)
+     qDebug() << rankInfo.id << " " << rankInfo.nickname << " " << rankInfo.score;
 
   student2.storeSettingsForStudent("../word-memorize-software/pics/choice/R-C.jpg", 13, "b", "c", student2.GetId(), "a");
   db::SettingsInfo set = student2.retrieveSettingsForStudent(student2.GetId());

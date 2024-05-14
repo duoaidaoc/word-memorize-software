@@ -530,3 +530,29 @@ auto db::System::checkAlreadyInWords(const QString &word) -> int {
   }
 }
 
+auto db::System::returnRanking() -> QList<db::RankingInfo>
+{
+  QList<db::RankingInfo> rankings;
+  QSqlQuery query(returnDatabase());
+  query.prepare(R"(
+        SELECT id, score, nickname
+        FROM rankings
+        ORDER BY score DESC
+    )");
+
+  if (!query.exec()) {
+    qDebug() << "Failed to execute query:" << query.lastError();
+    return rankings; // 返回一个空的QList
+  }
+
+  while (query.next()) {
+    db::RankingInfo rankingInfo;
+    rankingInfo.id = query.value(0).toLongLong();
+    rankingInfo.score = query.value(1).toLongLong();
+    rankingInfo.nickname = query.value(2).toString();
+    rankings.append(rankingInfo);
+  }
+
+  return rankings;
+}
+

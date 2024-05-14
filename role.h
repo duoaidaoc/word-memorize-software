@@ -267,7 +267,6 @@ public:
 
   bool isClassExit(const qint64 &class_id);
   QVariant recordRanking(const qint64 &score, const QString &nickname);
-  RankingInfo returnRanking(const qint64 &student_id);
   SettingsInfo retrieveSettingsForStudent(qint64 teacherId);
   void storeSettingsForStudent(const QString &filePath, const qint64 &age, const QString &phone, const QString &message, const qint64 &teacherId, const QString &school);
 };

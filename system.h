@@ -127,6 +127,7 @@ public:
   QString runMp3(const QString& name);
   //auto returnStudentName(const qint64 &student_id) -> QVariant();
   //auto returnTeacherName(const qint64 &teacher_id) -> QVariant();
+  QList<db::RankingInfo> returnRanking();
 };
 } // end namespace db
 
