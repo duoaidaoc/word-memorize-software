@@ -25,6 +25,7 @@ private:
   QImage *bg;
   detailed_info info_;
   QImage *loaded_img;
+  QString now_img_path;
   void setup_ui();
   void setup_connection();
   void reset_info();

@@ -50,6 +50,7 @@ typedef struct detailed_info{
   QString phone;
   QString say;
   QImage* img;
+  QString img_url;
 }detailed_info;
 
 #endif // WORD_H

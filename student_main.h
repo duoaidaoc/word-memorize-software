@@ -53,6 +53,7 @@ private:
     Settings *settings;
 
     QImage* profile_pic;
+    QString profile_pic_url;
 
     void setup();
     void setaction();

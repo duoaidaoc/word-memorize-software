@@ -15,8 +15,6 @@ student_main::student_main(QWidget *parent) :
     auto &database = man->get_database();
     auto &student = man->get_student();
 
-
-    Word wd = {7,"abandon","abandon.txt ","v. 抛弃、放弃"};
     setup();
     setaction();
     data_setup();
@@ -95,6 +93,7 @@ void student_main::setup()
     game_widget = new game();
     settings = new Settings();
     profile_pic = new QImage();
+
 
 }
 
@@ -219,7 +218,8 @@ void student_main::setaction()
           ui->detail_school_label->text().mid(QString("学校：").length()),
           ui->detail_phone_label->text().mid(QString("电话号码：").length()),
           ui->detail_say_label->text().mid(QString("备注：").length()),
-          profile_pic
+          profile_pic,
+          profile_pic_url
       };
       settings->get_info(info);
       settings->show();
@@ -233,7 +233,12 @@ void student_main::setaction()
       ui->detail_say_label->setText(QString("备注：") + info.say);
       *profile_pic = *info.img;
       ui->label_user_icon->setPixmap(QPixmap::fromImage(*profile_pic));
+      ui->detail_pic_label->setPixmap(QPixmap::fromImage(*profile_pic));
+      profile_pic_url = info.img_url;
       // TODO(): 修改数据库
+      auto &student = resource_manager::getInstance()->get_student();
+      student.storeSettingsForStudent(info.img_url,info.age.toLongLong(),info.phone,info.school,student.GetId(),info.say);
+
     });
 }
 
@@ -353,6 +358,19 @@ void student_main::data_setup()
     ui->label_user_name->setText(QString("姓名 :") + student.GetName());
     update_class();
     // TODO():头像没完成
+    // 设置个人信息
+    const auto &info = student.retrieveSettingsForStudent(student.GetId());
+    // nickname
+    ui->detail_age_label->setText(QString("年龄：") + QString::number(info.age));
+    ui->detail_school_label->setText(QString("学校：") + info.school);
+    ui->detail_phone_label->setText(QString("电话号码：") + info.phone);
+    ui->detail_say_label->setText(QString("备注：") + info.message);
+    profile_pic->load(info.filepath);
+    profile_pic_url = info.filepath;
+    ui->label_user_icon->setPixmap(QPixmap::fromImage(*profile_pic));
+    ui->detail_pic_label->setPixmap(QPixmap::fromImage(*profile_pic));
+
+    // 设置个人信息结束
     //词库只需要在开始的时候初始化
     auto man = resource_manager::getInstance();
     auto sys = man->get_system();
@@ -364,7 +382,7 @@ void student_main::data_setup()
     }
     const auto &idlist = sys.returnWordBankInfo();
     QHBoxLayout *hbox = new QHBoxLayout(ui->wordlib_display);
-    for (int i = 0; i < idlist.size(); ++i) { // 添加九个 QFrame 作为示例
+    for (int i = 0; i < idlist.size(); ++i) { // 添加 QFrame
       QFrame *itemFrame = new QFrame;
       itemFrame->setFixedSize(80, 100); // 固定大小为 80*100
       itemFrame->setAttribute(Qt::WA_TranslucentBackground, true);

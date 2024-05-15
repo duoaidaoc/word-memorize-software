@@ -279,7 +279,8 @@ void teacher_main::connection_setup()
         ui->detail_school_label->text().mid(QString("学校：").length()),
         ui->detail_phone_label->text().mid(QString("电话号码：").length()),
         ui->detail_say_label->text().mid(QString("备注：").length()),
-        profile_pic
+        profile_pic,
+        profile_pic_url
     };
     settings->get_info(info);
     settings->show();
@@ -292,8 +293,11 @@ void teacher_main::connection_setup()
     ui->detail_phone_label->setText(QString("电话号码：") + info.phone);
     ui->detail_say_label->setText(QString("备注：") + info.say);
     *profile_pic = *info.img;
+    profile_pic_url = info.img_url;
     ui->label_user_icon->setPixmap(QPixmap::fromImage(*profile_pic));
-    // TODO(): 修改数据库
+    ui->detail_pic_label->setPixmap(QPixmap::fromImage(*profile_pic));
+    auto& teacher = resource_manager::getInstance()->get_teacher();
+    teacher.storeSettingsForTeacher(profile_pic_url,info.age.toLongLong(),info.phone,info.school,teacher.GetId(),info.say);
   });
 }
 
@@ -303,6 +307,20 @@ void teacher_main::data_setup()
   auto &teacher = man->get_teacher();
   ui->label_user_id->setText(QString("账号:") + QString::number(teacher.GetId()));
   ui->label_user_name->setText(QString("姓名:") + teacher.GetName());
+
+  // 设置个人信息
+  const auto &info = teacher.retrieveSettingsForTeacher(teacher.GetId());
+  //
+  ui->detail_age_label->setText(QString("昵称：") + QString::number(info.age));
+  ui->detail_age_label->setText(QString("年龄：") + QString::number(info.age));
+  ui->detail_school_label->setText(QString("学校：") + info.school);
+  ui->detail_phone_label->setText(QString("电话号码：") + info.phone);
+  ui->detail_say_label->setText(QString("备注：") + info.message);
+  profile_pic->load(info.filepath);
+  profile_pic_url = info.filepath;
+
+  ui->label_user_icon->setPixmap(QPixmap::fromImage(*profile_pic));
+  ui->detail_pic_label->setPixmap(QPixmap::fromImage(*profile_pic));
   update_class();
 }
 
@@ -316,6 +334,7 @@ void teacher_main::update_class()
 
     auto &teacher = resource_manager::getInstance()->get_teacher();
     auto list = teacher.infoTeacherClass();
+
     if(list.size() > 0){
       ui->class_label->hide();
     }

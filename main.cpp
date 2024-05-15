@@ -8,7 +8,6 @@
 #include "role.h"
 #include "system.h"
 #include "teacher_main.h"
-#include "tip.h"
 
 int main(int argc, char *argv[])
 {
@@ -397,7 +396,7 @@ int main(int argc, char *argv[])
 
   //db::RankingInfo rankInfo = student2.returnRanking(student2.GetId());
   QList<db::RankingInfo> infoList = system.returnRanking();
-  for (const auto rankInfo : infoList)
+  for (const auto &rankInfo : infoList)
      qDebug() << rankInfo.id << " " << rankInfo.nickname << " " << rankInfo.score;
 
   student2.storeSettingsForStudent("../word-memorize-software/pics/choice/R-C.jpg", 13, "b", "c", student2.GetId(), "a", "h");

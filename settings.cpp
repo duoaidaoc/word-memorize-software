@@ -71,7 +71,8 @@ void Settings::setup_connection()
         ui->settings_school_edit->text(),
         ui->settings_phone_edit->text(),
         ui->settings_say_edit->toPlainText(),
-        loaded_img
+        loaded_img,
+        now_img_path
     };
     emit set_outer_info(info);
     hide();
@@ -90,7 +91,7 @@ void Settings::setup_connection()
     }
     // 为label设置图片
     ui->settings_pic_label->setPixmap(QPixmap::fromImage(*loaded_img));
-
+    now_img_path = fileName;
   });
 }
 
@@ -104,4 +105,5 @@ void Settings::reset_info()
   if(info_.img == nullptr || info_.img->isNull())
     return;
   ui->settings_pic_label->setPixmap(QPixmap::fromImage(*info_.img));
+  now_img_path = info_.img_url;
 }

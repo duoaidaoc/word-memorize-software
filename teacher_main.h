@@ -49,6 +49,8 @@ private:
 
   Settings* settings;
 
+  QString profile_pic_url;
+
   QStandardItemModel *model,*stu_model;
   void ui_setup();
   void connection_setup();
