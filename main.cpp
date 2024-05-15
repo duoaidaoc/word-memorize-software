@@ -400,9 +400,9 @@ int main(int argc, char *argv[])
   for (const auto rankInfo : infoList)
      qDebug() << rankInfo.id << " " << rankInfo.nickname << " " << rankInfo.score;
 
-  student2.storeSettingsForStudent("../word-memorize-software/pics/choice/R-C.jpg", 13, "b", "c", student2.GetId(), "a");
+  student2.storeSettingsForStudent("../word-memorize-software/pics/choice/R-C.jpg", 13, "b", "c", student2.GetId(), "a", "h");
   db::SettingsInfo set = student2.retrieveSettingsForStudent(student2.GetId());
-  qDebug() << set.id << " " << set.filepath << " " << set.message << " " << set.phone << " " <<  set.school << " " <<  set.age;
+  qDebug() << set.id << " " << set.filepath << " " << set.message << " " << set.phone << " " <<  set.school << " " <<  set.age << " " << set.nickname;
 
   db::Teacher teacher2(db);
   teacher2.SetId(89);
@@ -411,9 +411,9 @@ int main(int argc, char *argv[])
   teacher2.SetProfilePhotoUrl("llwlwl");
   teacher2.registerRole();
 
-  teacher2.storeSettingsForTeacher("../word-memorize-software/pics/choice/R-C.jpg", 13, "b", "c", teacher2.GetId(), "a");
+  teacher2.storeSettingsForTeacher("../word-memorize-software/pics/choice/R-C.jpg", 13, "b", "c", teacher2.GetId(), "a", "h");
   set = teacher2.retrieveSettingsForTeacher(teacher2.GetId());
-  qDebug() << set.id << " " << set.filepath << " " << set.message << " " << set.phone << " " <<  set.school << " " <<  set.age;
+  qDebug() << set.id << " " << set.filepath << " " << set.message << " " << set.phone << " " <<  set.school << " " <<  set.age << " " << set.nickname;
 ////========================================== 前端测试 ==========================================//
 
 

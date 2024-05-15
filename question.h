@@ -56,7 +56,7 @@ signals:
   // 题目做完时触发finish()信号
   void finish();
   // 一个单词学会时发出word_learnt()信号
-  void word_learnt(qint64 word_id);
+  void word_learnt(qint64 word_id,qint64 task_id);
   void word_learnt_sys(qint64 word_id);
 
 public:

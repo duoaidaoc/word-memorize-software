@@ -171,7 +171,13 @@ public:
 
   // 查看系统的task_id到哪个值了。
   int getTaskId();
-  void storeSettingsForTeacher(const QString &filePath, const qint64 &age, const QString &phone, const QString &message, const qint64 &teacherId, const QString &school);
+  void storeSettingsForTeacher(const QString &filePath,
+                               const qint64 &age,
+                               const QString &phone,
+                               const QString &message,
+                               const qint64 &teacherId,
+                               const QString &school,
+                               const QString &nickname);
   SettingsInfo retrieveSettingsForTeacher(qint64 teacherId);
 };
 
@@ -202,7 +208,7 @@ private:
         WHERE studentclass.student_id = ?
     )");
   const QLatin1String learnWord = QLatin1String(R"(
-        INSERT INTO StudentWordLearning(student_id ,word_id) VALUES(?, ?)
+        INSERT INTO StudentWordLearning(student_id ,word_id, task_id) VALUES(?, ?, ?)
     )");
   const QLatin1String learnSysWords = QLatin1String(R"(
         INSERT INTO StudentSysLearn(student_id, word_id) VALUES(?, ?)
@@ -239,7 +245,7 @@ private:
   static QVariant addStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id);
   static bool deleteStudentClass(QSqlQuery &q, const qint64 &student_id, const qint64 &class_id);
   static QList<QPair<qint64, QString>> displayStudentClass(QSqlQuery &q, const qint64 &student_id);
-  static QVariant insertStudentWordLearningTable(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id);
+  static QVariant insertStudentWordLearningTable(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id, const qint64 &task_id);
   static QVariant addSysWord(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id);
   static QVariant addWordBank(QSqlQuery &q, const qint64 &student_id, const qint64 &word_bank_id);
 
@@ -256,7 +262,7 @@ public:
   bool leaveClass(const qint64 &class_id);
 
   QList<QPair<qint64, QString>> infoStudentClass();
-  QVariant learnWordRecord(const qint64 &word_id);
+  QVariant learnWordRecord(const qint64 &word_id, const qint64 &task_id);
   QVariant learnSysWordRecord(const qint64 &word_id);
 
   QVariant learnWordBanks(const qint64 &word_bank_id);
@@ -268,7 +274,13 @@ public:
   bool isClassExit(const qint64 &class_id);
   QVariant recordRanking(const qint64 &score, const QString &nickname);
   SettingsInfo retrieveSettingsForStudent(qint64 teacherId);
-  void storeSettingsForStudent(const QString &filePath, const qint64 &age, const QString &phone, const QString &message, const qint64 &teacherId, const QString &school);
+  void storeSettingsForStudent(const QString &filePath,
+                               const qint64 &age,
+                               const QString &phone,
+                               const QString &message,
+                               const qint64 &teacherId,
+                               const QString &school,
+                               const QString &nickname);
 };
 } // end db
 

@@ -198,10 +198,10 @@ void student_main::setaction()
       ui->stackedWidget_2->setCurrentIndex(7);
 
     });
-    QObject::connect(que_widget,&question::word_learnt,[&](qint64 word_id){
+    QObject::connect(que_widget,&question::word_learnt,[&](qint64 word_id, qint64 task_id){
       auto &student = resource_manager::getInstance()->get_student();
       qDebug()<< "学习了task";
-      student.learnWordRecord(word_id);
+      student.learnWordRecord(word_id, task_id);
     });
     QObject::connect(que_widget,&question::word_learnt_sys,[&](qint64 word_id){
       auto &student = resource_manager::getInstance()->get_student();

@@ -140,9 +140,11 @@ private:
     CREATE TABLE IF NOT EXISTS StudentWordLearning (
         student_id BIGINT,
         word_id BIGINT,
-        PRIMARY KEY (student_id, word_id),
+        task_id BIGINT,
+        PRIMARY KEY (student_id, word_id, task_id),
         FOREIGN KEY (student_id) REFERENCES students(id),
-        FOREIGN KEY (word_id) REFERENCES words(id)
+        FOREIGN KEY (word_id) REFERENCES words(id),
+        FOREIGN KEY (task_id) REFERENCES tasktable(id)
     )
 )");
 
@@ -182,6 +184,7 @@ private:
         age     BIGINT,
         message VARCHAR(255),
         school  VARCHAR(255),
+        nickname VARCHAR(255),
         PRIMARY KEY (id),
         FOREIGN KEY (id) REFERENCES teachers(id)
     )
@@ -195,6 +198,7 @@ private:
         age     BIGINT,
         message VARCHAR(255),
         school  VARCHAR(255),
+        nickname VARCHAR(255),
         PRIMARY KEY (id),
         FOREIGN KEY (id) REFERENCES students(id)
     )

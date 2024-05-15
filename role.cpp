@@ -686,7 +686,13 @@ auto db::Teacher::importTaskWordBank(const QList<QString> &englishList) -> int {
   }
 }
 
-auto db::Teacher::storeSettingsForTeacher(const QString &filePath, const qint64 &age, const QString &phone, const QString &message, const qint64 &teacherId, const QString &school) -> void
+auto db::Teacher::storeSettingsForTeacher(const QString &filePath,
+                                          const qint64 &age,
+                                          const QString &phone,
+                                          const QString &message,
+                                          const qint64 &teacherId,
+                                          const QString &school,
+                                          const QString &nickname) -> void
 {
   QFile file(filePath);
   if (!file.open(QIODevice::ReadOnly)) {
@@ -699,9 +705,9 @@ auto db::Teacher::storeSettingsForTeacher(const QString &filePath, const qint64 
 
   QSqlQuery query(returnDatabase());
   query.prepare(R"(
-        INSERT INTO teacherSettings (id, pic, phone, age, message, school)
-        VALUES (:id, :pic, :phone, :age, :message, :school)
-        ON DUPLICATE KEY UPDATE pic = VALUES(pic), phone = VALUES(phone), age = VALUES(age), message = VALUES(message), school = VALUES(school)
+        INSERT INTO teacherSettings (id, pic, phone, age, message, school, nickname)
+        VALUES (:id, :pic, :phone, :age, :message, :school, :nickname)
+        ON DUPLICATE KEY UPDATE pic = VALUES(pic), phone = VALUES(phone), age = VALUES(age), message = VALUES(message), school = VALUES(school), nickname = VALUES(nickname)
     )");
   query.bindValue(":id", teacherId);
   query.bindValue(":pic", fileData);
@@ -709,6 +715,7 @@ auto db::Teacher::storeSettingsForTeacher(const QString &filePath, const qint64 
   query.bindValue(":age", age);
   query.bindValue(":message", message);
   query.bindValue(":school", school);
+  query.bindValue(":nickname", nickname);
 
   if (!query.exec()) {
     qDebug() << "Failed to insert/update teacher settings" << filePath << "into database:" << query.lastError().text();
@@ -720,7 +727,7 @@ auto db::Teacher::retrieveSettingsForTeacher(qint64 teacherId) -> SettingsInfo
   QSqlQuery query(returnDatabase());
 
   query.prepare(R"(
-        SELECT pic, phone, age, message, school FROM teacherSettings WHERE id = :id
+        SELECT pic, phone, age, message, school, nickname FROM teacherSettings WHERE id = :id
     )");
   query.bindValue(":id", teacherId);
 
@@ -750,6 +757,7 @@ auto db::Teacher::retrieveSettingsForTeacher(qint64 teacherId) -> SettingsInfo
   settingsInfo.phone = query.value("phone").toString();
   settingsInfo.message = query.value("message").toString();
   settingsInfo.school = query.value("school").toString();
+  settingsInfo.nickname = query.value("nickname").toString();
   return settingsInfo;
 }
 
@@ -843,9 +851,10 @@ auto db::Student::deleteStudentClass(QSqlQuery &q, const qint64 &student_id, con
   }
 }
 
-auto db::Student::insertStudentWordLearningTable(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id) -> QVariant {
+auto db::Student::insertStudentWordLearningTable(QSqlQuery &q, const qint64 &student_id, const qint64 &word_id, const qint64 &task_id) -> QVariant {
   q.addBindValue(student_id);
   q.addBindValue(word_id);
+  q.addBindValue(task_id);
   if (!q.exec()) {
     qDebug() << "insertStudentWordLearningTable:" << q.lastError().text();
   }
@@ -961,13 +970,13 @@ auto db::Student::infoStudentClass() -> QList<QPair<qint64, QString>> {
   return classList;
 }
 
-auto db::Student::learnWordRecord(const qint64 &word_id) -> QVariant {
+auto db::Student::learnWordRecord(const qint64 &word_id, const qint64 &task_id) -> QVariant {
   QSqlQuery query(returnDatabase());
   if(!query.prepare(learnWord)) {
     throw std::runtime_error("Failed to prepare retrieveWordFromTask sql");
   }
 
-  return insertStudentWordLearningTable(query, GetId(), word_id);
+  return insertStudentWordLearningTable(query, GetId(), word_id, task_id);
 }
 
 QVariant db::Student::learnSysWordRecord(const qint64 &word_id)
@@ -1100,7 +1109,13 @@ auto db::Teacher::checkAlreadyInWords(const QString &word) -> int {
   }
 }
 
-auto db::Student::storeSettingsForStudent(const QString &filePath, const qint64 &age, const QString &phone, const QString &message, const qint64 &studentId, const QString &school) -> void
+auto db::Student::storeSettingsForStudent(const QString &filePath,
+                                          const qint64 &age,
+                                          const QString &phone,
+                                          const QString &message,
+                                          const qint64 &studentId,
+                                          const QString &school,
+                                          const QString &nickname) -> void
 {
   QFile file(filePath);
   if (!file.open(QIODevice::ReadOnly)) {
@@ -1113,9 +1128,9 @@ auto db::Student::storeSettingsForStudent(const QString &filePath, const qint64 
 
   QSqlQuery query(returnDatabase());
   query.prepare(R"(
-        INSERT INTO studentSettings (id, pic, phone, age, message, school)
-        VALUES (:id, :pic, :phone, :age, :message, :school)
-        ON DUPLICATE KEY UPDATE pic = VALUES(pic), phone = VALUES(phone), age = VALUES(age), message = VALUES(message), school = VALUES(school)
+        INSERT INTO studentSettings (id, pic, phone, age, message, school, nickname)
+        VALUES (:id, :pic, :phone, :age, :message, :school, :nickname)
+        ON DUPLICATE KEY UPDATE pic = VALUES(pic), phone = VALUES(phone), age = VALUES(age), message = VALUES(message), school = VALUES(school), nickname = VALUES(nickname)
     )");
   query.bindValue(":id", studentId);
   query.bindValue(":pic", fileData);
@@ -1123,6 +1138,7 @@ auto db::Student::storeSettingsForStudent(const QString &filePath, const qint64 
   query.bindValue(":age", age);
   query.bindValue(":message", message);
   query.bindValue(":school", school);
+  query.bindValue(":nickname", nickname);
 
   if (!query.exec()) {
     qDebug() << "Failed to insert/update student settings" << filePath << "into database:" << query.lastError().text();
@@ -1134,7 +1150,7 @@ auto db::Student::retrieveSettingsForStudent(qint64 studentId) -> SettingsInfo
   QSqlQuery query(returnDatabase());
 
   query.prepare(R"(
-        SELECT pic, phone, age, message, school FROM studentSettings WHERE id = :id
+        SELECT pic, phone, age, message, school, nickname FROM studentSettings WHERE id = :id
     )");
   query.bindValue(":id", studentId);
 
@@ -1164,6 +1180,7 @@ auto db::Student::retrieveSettingsForStudent(qint64 studentId) -> SettingsInfo
   settingsInfo.phone = query.value("phone").toString();
   settingsInfo.message = query.value("message").toString();
   settingsInfo.school = query.value("school").toString();
+  settingsInfo.nickname = query.value("nickname").toString();
 
   return settingsInfo;
 }

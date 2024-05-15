@@ -235,7 +235,7 @@ void question::done(bool ok)
       qDebug() << "*******************" << this->finished_cnt[curr_id] << "********" << curr_id;
       if (this->finished_cnt[curr_id] == 2) {
         if(task_id >= 0)
-          emit word_learnt(curr_id);
+          emit word_learnt(curr_id, task_id);
         else
           emit word_learnt_sys(curr_id);
       }

@@ -41,7 +41,6 @@ private:
         JOIN WordBankRelationTable ON words.id = WordBankRelationTable.word_id AND WordBankRelationTable.word_bank_id = ?
         WHERE StudentSysLearn.word_id IS NULL
         ORDER BY words.english;
-
     )");
   const QLatin1String returnTaskN = QLatin1String(R"(
         SELECT COUNT(*) AS total_count FROM tasktable

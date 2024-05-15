@@ -55,6 +55,7 @@ struct SettingsInfo {
   QString message;
   QString filepath;
   QString school;
+  QString nickname;
 };
 } // end namespace db
 
