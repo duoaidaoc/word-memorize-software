@@ -2,8 +2,12 @@
 #ifndef IMAGE_PROCESSING_H
   #define IMAGE_PROCESSING_H
 
+#include "qbitmap.h"
 #include "qimage.h"
 #include "qmath.h"
+#include "qpainter.h"
+#include "qpainterpath.h"
+#include "qpixmap.h"
 class ImageProcesser{
 public:
     //参数说明：模糊半径r，方差variance，QImage图像
@@ -111,6 +115,44 @@ public:
         }
       }
     }
+    static QPixmap pixmapToCircle(const QPixmap &pixmap) {
+      // 获取 QPixmap 的大小
+      QSize size = pixmap.size();
+
+      // 创建一个新的 QPixmap 用于存放圆形图像
+      QPixmap circlePixmap(size);
+      circlePixmap.fill(Qt::transparent); // 填充为透明
+
+      // 创建一个 QPainter 用于绘制圆形图像
+      QPainter painter(&circlePixmap);
+
+      // 函数接受一个矩形区域并返回一个圆形区域的副本
+      auto createCircleMask = [](const QSize &size) -> QBitmap {
+        QBitmap mask(size);
+        mask.fill(Qt::color0); // 全部填充为透明
+
+        QPainter painter(&mask);
+        painter.setRenderHint(QPainter::Antialiasing); // 抗锯齿
+        painter.setBrush(Qt::color1); // 非透明颜色
+        painter.setPen(Qt::NoPen); // 没有边框
+
+        // 绘制圆形
+        painter.drawEllipse(mask.rect());
+
+        return mask;
+      };
+
+      // 创建一个圆形的裁剪区域
+      QBitmap mask = createCircleMask(size);
+      painter.setClipRegion(QRegion(mask));
+
+      // 绘制原始 QPixmap
+      painter.drawPixmap(circlePixmap.rect(), pixmap);
+
+      return circlePixmap;
+    }
+
+
 };
 
 #endif // IMAGE_PROCESSING_H

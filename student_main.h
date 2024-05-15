@@ -54,6 +54,7 @@ private:
 
     QImage* profile_pic;
     QString profile_pic_url;
+    QPixmap* profile_pic_pix;
 
     void setup();
     void setaction();

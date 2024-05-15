@@ -46,6 +46,7 @@ private:
   tip *Tip;
 
   QImage *profile_pic;
+  QPixmap *profile_pic_pix;
 
   Settings* settings;
 

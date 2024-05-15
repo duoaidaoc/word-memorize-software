@@ -2,7 +2,7 @@
 #include "ui_student_main.h"
 #include <QGraphicsDropShadowEffect>
 #include "resource_manager.h"
-
+#include "Image_processing.h"
 
 student_main::student_main(QWidget *parent) :
     QWidget(parent),
@@ -93,7 +93,7 @@ void student_main::setup()
     game_widget = new game();
     settings = new Settings();
     profile_pic = new QImage();
-
+    profile_pic_pix = new QPixmap();
 
 }
 
@@ -231,10 +231,14 @@ void student_main::setaction()
       ui->detail_school_label->setText(QString("学校：") + info.school);
       ui->detail_phone_label->setText(QString("电话号码：") + info.phone);
       ui->detail_say_label->setText(QString("备注：") + info.say);
-      *profile_pic = *info.img;
-      ui->label_user_icon->setPixmap(QPixmap::fromImage(*profile_pic));
-      ui->detail_pic_label->setPixmap(QPixmap::fromImage(*profile_pic));
       profile_pic_url = info.img_url;
+
+      *profile_pic = *info.img;
+      ui->detail_pic_label->setPixmap(QPixmap::fromImage(*profile_pic));
+
+      profile_pic_pix->convertFromImage(*profile_pic);
+      ui->label_user_icon->setPixmap(ImageProcesser::pixmapToCircle(*profile_pic_pix));
+
       auto &student = resource_manager::getInstance()->get_student();
       student.storeSettingsForStudent(info.img_url,info.age.toLongLong(),info.phone,info.school,student.GetId(),info.say,info.nickname);
     });
@@ -364,9 +368,10 @@ void student_main::data_setup()
     ui->detail_say_label->setText(QString("备注：") + info.message);
     profile_pic->load(info.filepath);
     profile_pic_url = info.filepath;
-    ui->label_user_icon->setPixmap(QPixmap::fromImage(*profile_pic));
-    ui->detail_pic_label->setPixmap(QPixmap::fromImage(*profile_pic));
 
+    ui->detail_pic_label->setPixmap(QPixmap::fromImage(*profile_pic));
+    profile_pic_pix->convertFromImage(*profile_pic);
+    ui->label_user_icon->setPixmap(ImageProcesser::pixmapToCircle(*profile_pic_pix));
     // 设置个人信息结束
     //词库只需要在开始的时候初始化
     auto man = resource_manager::getInstance();

@@ -1,4 +1,5 @@
 #include "teacher_main.h"
+#include "Image_processing.h"
 #include "qpainter.h"
 #include "qpainterpath.h"
 #include "task_frame.h"
@@ -93,6 +94,7 @@ void teacher_main::ui_setup()
   profile_pic = new QImage();
 
   settings = new Settings();
+  profile_pic_pix = new QPixmap();
 }
 
 void teacher_main::connection_setup()
@@ -294,8 +296,12 @@ void teacher_main::connection_setup()
     ui->detail_say_label->setText(QString("备注：") + info.say);
     *profile_pic = *info.img;
     profile_pic_url = info.img_url;
-    ui->label_user_icon->setPixmap(QPixmap::fromImage(*profile_pic));
+
     ui->detail_pic_label->setPixmap(QPixmap::fromImage(*profile_pic));
+
+    profile_pic_pix->convertFromImage(*profile_pic);
+    ui->label_user_icon->setPixmap(ImageProcesser::pixmapToCircle(*profile_pic_pix));
+
     auto& teacher = resource_manager::getInstance()->get_teacher();
     teacher.storeSettingsForTeacher(profile_pic_url,info.age.toLongLong(),info.phone,info.school,teacher.GetId(),info.say,info.nickname);
   });
@@ -316,11 +322,14 @@ void teacher_main::data_setup()
   ui->detail_school_label->setText(QString("学校：") + info.school);
   ui->detail_phone_label->setText(QString("电话号码：") + info.phone);
   ui->detail_say_label->setText(QString("备注：") + info.message);
-  profile_pic->load(info.filepath);
   profile_pic_url = info.filepath;
 
-  ui->label_user_icon->setPixmap(QPixmap::fromImage(*profile_pic));
+  profile_pic->load(info.filepath);
   ui->detail_pic_label->setPixmap(QPixmap::fromImage(*profile_pic));
+
+  profile_pic_pix->convertFromImage(*profile_pic);
+  ui->label_user_icon->setPixmap(ImageProcesser::pixmapToCircle(*profile_pic_pix));
+
   update_class();
 }
 
