@@ -297,7 +297,7 @@ void teacher_main::connection_setup()
     ui->label_user_icon->setPixmap(QPixmap::fromImage(*profile_pic));
     ui->detail_pic_label->setPixmap(QPixmap::fromImage(*profile_pic));
     auto& teacher = resource_manager::getInstance()->get_teacher();
-    teacher.storeSettingsForTeacher(profile_pic_url,info.age.toLongLong(),info.phone,info.school,teacher.GetId(),info.say);
+    teacher.storeSettingsForTeacher(profile_pic_url,info.age.toLongLong(),info.phone,info.school,teacher.GetId(),info.say,info.nickname);
   });
 }
 
@@ -311,7 +311,7 @@ void teacher_main::data_setup()
   // 设置个人信息
   const auto &info = teacher.retrieveSettingsForTeacher(teacher.GetId());
   //
-  ui->detail_age_label->setText(QString("昵称：") + QString::number(info.age));
+  ui->detail_age_label->setText(QString("昵称：") + info.nickname);
   ui->detail_age_label->setText(QString("年龄：") + QString::number(info.age));
   ui->detail_school_label->setText(QString("学校：") + info.school);
   ui->detail_phone_label->setText(QString("电话号码：") + info.phone);

@@ -235,10 +235,8 @@ void student_main::setaction()
       ui->label_user_icon->setPixmap(QPixmap::fromImage(*profile_pic));
       ui->detail_pic_label->setPixmap(QPixmap::fromImage(*profile_pic));
       profile_pic_url = info.img_url;
-      // TODO(): 修改数据库
       auto &student = resource_manager::getInstance()->get_student();
-      student.storeSettingsForStudent(info.img_url,info.age.toLongLong(),info.phone,info.school,student.GetId(),info.say);
-
+      student.storeSettingsForStudent(info.img_url,info.age.toLongLong(),info.phone,info.school,student.GetId(),info.say,info.nickname);
     });
 }
 
@@ -357,10 +355,9 @@ void student_main::data_setup()
     ui->label_user_id->setText(QString("账号 :") + QString::number(student.GetId()));
     ui->label_user_name->setText(QString("姓名 :") + student.GetName());
     update_class();
-    // TODO():头像没完成
     // 设置个人信息
     const auto &info = student.retrieveSettingsForStudent(student.GetId());
-    // nickname
+    ui->detail_nick_label->setText(QString("昵称：") + info.nickname);
     ui->detail_age_label->setText(QString("年龄：") + QString::number(info.age));
     ui->detail_school_label->setText(QString("学校：") + info.school);
     ui->detail_phone_label->setText(QString("电话号码：") + info.phone);
